@@ -35,8 +35,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     const mappedError = mapAxiosErrorToApiError(error);
+    const shouldSkipToast =
+      error.config?.headers?.["x-silent-error"] === "true";
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !shouldSkipToast) {
       toast.error(mappedError.message);
     }
 

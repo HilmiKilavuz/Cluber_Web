@@ -13,6 +13,12 @@ export const mapAxiosErrorToApiError = (error: unknown): ApiError => {
   }
 
   const payload = error.response?.data as ApiErrorPayload | undefined;
+
+  // Debug log for troubleshooting 400 errors
+  if (error.response?.status === 400) {
+    console.error("API 400 Error Details:", payload);
+  }
+
   const statusCode = error.response?.status ?? payload?.statusCode ?? 500;
   const message = payload?.message ?? error.message ?? getDefaultError().message;
 
