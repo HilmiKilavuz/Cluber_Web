@@ -30,7 +30,7 @@ Cluber is a modern platform designed to bring people together through clubs, rea
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/cluber-web.git
+   git clone https://github.com/HilmiKilavuz/Cluber_Web.git
    cd cluber-web
    ```
 
