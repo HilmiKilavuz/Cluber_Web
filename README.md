@@ -91,7 +91,7 @@ Proje şu yeteneklere doğru genişlemeye devam etmektedir:
 
 ---
 
-## 🚀 Projeyi Yerel Ortamda Çalıştırmak 
+##  Projeyi Yerel Ortamda Çalıştırmak 
 
 Projeyi bilgisayarında hatasız olarak ayağa kaldırabilmek için aşağıdaki yönergeleri uygulayınız:
 
