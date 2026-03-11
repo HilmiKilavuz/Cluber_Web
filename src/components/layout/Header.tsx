@@ -13,6 +13,7 @@ import {
     Sparkles
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 export default function Header() {
     const { sessionQuery, logoutMutation } = useAuth();
@@ -40,8 +41,8 @@ export default function Header() {
         try {
             await logoutMutation.mutateAsync();
             window.location.href = "/";
-        } catch (error) {
-            console.error("Logout failed", error);
+        } catch {
+            toast.error("Çıkış yapılırken bir sorun oluştu. Lütfen tekrar deneyin.");
         }
     };
 

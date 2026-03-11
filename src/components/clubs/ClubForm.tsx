@@ -55,11 +55,18 @@ export const ClubForm = ({ initialData }: ClubFormProps) => {
 
     const onSubmit = async (data: ClubFormValues) => {
         try {
+            const payload = {
+                name: data.name,
+                description: data.description,
+                category: data.category,
+                imageUrl: data.avatarUrl || undefined,
+            };
+
             if (initialData) {
-                await updateMutation.mutateAsync(data);
+                await updateMutation.mutateAsync(payload);
                 toast.success("Kulüp başarıyla güncellendi.");
             } else {
-                const newClub = await createMutation.mutateAsync(data as CreateClubDto);
+                const newClub = await createMutation.mutateAsync(payload as CreateClubDto);
                 toast.success("Kulüp başarıyla oluşturuldu!");
                 router.push(`/clubs/${newClub.id}`);
             }

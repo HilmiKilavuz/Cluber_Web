@@ -18,17 +18,24 @@ import type {
 
 const AUTH_SESSION_QUERY_KEY = ["auth", "session"] as const;
 
-const persistAccessToken = (accessToken?: string): void => {
+const persistAccessToken = (accessToken?: string, remember: boolean = false): void => {
   if (typeof window === "undefined") {
     return;
   }
 
   if (!accessToken) {
     window.localStorage.removeItem("access_token");
+    window.sessionStorage.removeItem("access_token");
     return;
   }
 
-  window.localStorage.setItem("access_token", accessToken);
+  if (remember) {
+    window.localStorage.setItem("access_token", accessToken);
+    window.sessionStorage.removeItem("access_token");
+  } else {
+    window.sessionStorage.setItem("access_token", accessToken);
+    window.localStorage.removeItem("access_token");
+  }
 };
 
 const resolveUser = (response: AuthSuccessResponse): AuthUser => response.user;
@@ -46,8 +53,12 @@ export const useAuth = (): UseAuthResult => {
   const sessionQuery = useQuery<AuthUser | null, Error>({
     queryKey: AUTH_SESSION_QUERY_KEY,
     queryFn: async () => {
-      const response = await authService.getSession();
-      return response.user;
+      try {
+        const response = await authService.getSession();
+        return response ?? null;
+      } catch {
+        return null;
+      }
     },
     retry: false,
   });
@@ -55,7 +66,7 @@ export const useAuth = (): UseAuthResult => {
   const loginMutation = useMutation<AuthUser, Error, LoginDto>({
     mutationFn: async (payload) => {
       const response = await authService.login(payload);
-      persistAccessToken(response.accessToken);
+      persistAccessToken(response.accessToken, payload.rememberMe);
       return resolveUser(response);
     },
     onSuccess: (user) => {
@@ -66,7 +77,7 @@ export const useAuth = (): UseAuthResult => {
   const registerMutation = useMutation<AuthUser, Error, RegisterDto>({
     mutationFn: async (payload) => {
       const response = await authService.register(payload);
-      persistAccessToken(response.accessToken);
+      persistAccessToken(response.accessToken, true); // default to remember for registration
       return resolveUser(response);
     },
     onSuccess: (user) => {

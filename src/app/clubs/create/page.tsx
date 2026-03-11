@@ -1,12 +1,31 @@
 "use client";
 
 import { ClubForm } from "@/components/clubs/ClubForm";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft, Sparkles, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/auth/useAuth";
+import { useEffect } from "react";
 
 export default function CreateClubPage() {
     const router = useRouter();
+    const { sessionQuery } = useAuth();
+    const user = sessionQuery.data;
+    const isLoadingAuth = sessionQuery.isLoading;
+
+    useEffect(() => {
+        if (!isLoadingAuth && !user) {
+            router.push("/login");
+        }
+    }, [user, isLoadingAuth, router]);
+
+    if (isLoadingAuth || !user) {
+        return (
+            <div className="flex min-h-[60vh] items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+            </div>
+        );
+    }
 
     return (
         <main className="container mx-auto max-w-3xl px-4 py-12 sm:px-6">
@@ -38,8 +57,8 @@ export default function CreateClubPage() {
             {/* Form Container */}
             <div className="relative">
                 {/* Decorative background element */}
-                <div className="absolute -left-12 -top-12 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
-                <div className="absolute -right-12 -bottom-12 h-64 w-64 rounded-full bg-indigo-500/5 blur-3xl" />
+                <div className="pointer-events-none absolute -left-12 -top-12 h-64 w-64 rounded-full bg-blue-500/5 blur-3xl" />
+                <div className="pointer-events-none absolute -right-12 -bottom-12 h-64 w-64 rounded-full bg-indigo-500/5 blur-3xl" />
 
                 <ClubForm />
             </div>

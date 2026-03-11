@@ -2,7 +2,9 @@
 
 import { useClub, useJoinClub, useLeaveClub, useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useEvents } from "@/hooks/events/useEvents";
 import { useParams, useRouter } from "next/navigation";
+import { EventCard } from "@/components/events/EventCard";
 import {
     Users,
     Calendar,
@@ -31,6 +33,8 @@ export default function ClubDetailPage() {
     const isMember = joinedClubs?.some((c) => c.id === id) || false;
     const isOwner = user?.id === club?.ownerId;
     const isLoading = clubLoading || joinedLoading;
+
+    const { data: events } = useEvents({ clubId: id });
 
     const handleJoin = async () => {
         try {
@@ -185,13 +189,32 @@ export default function ClubDetailPage() {
                             </p>
                         </section>
 
-                        {/* Placeholder for Events/Posts */}
+                        {/* Upcoming Events */}
                         <section className="mt-10">
-                            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Yaklaşan Etkinlikler</h2>
-                            <div className="mt-6 rounded-3xl border-2 border-dashed border-zinc-200 p-12 text-center dark:border-zinc-800">
-                                <Calendar className="mx-auto mb-4 text-zinc-300 dark:text-zinc-700" size={48} />
-                                <p className="font-medium text-zinc-500">Henüz planlanmış bir etkinlik bulunmuyor.</p>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Yaklaşan Etkinlikler</h2>
+                                <Link href={`/clubs/${club.id}/events`} className="text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
+                                    Tümünü Gör →
+                                </Link>
                             </div>
+                            {events && events.length > 0 ? (
+                                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                    {[...events]
+                                        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                                        .slice(0, 3)
+                                        .map((event) => (
+                                            <EventCard key={event.id} event={event} />
+                                        ))}
+                                </div>
+                            ) : (
+                                <div className="rounded-3xl border-2 border-dashed border-zinc-200 p-12 text-center dark:border-zinc-800">
+                                    <Calendar className="mx-auto mb-4 text-zinc-300 dark:text-zinc-700" size={48} />
+                                    <p className="font-medium text-zinc-500">Henüz planlanmış bir etkinlik bulunmuyor.</p>
+                                    <Link href={`/clubs/${club.id}/events`} className="mt-4 inline-block text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
+                                        Etkinlik oluştur →
+                                    </Link>
+                                </div>
+                            )}
                         </section>
                     </div>
 

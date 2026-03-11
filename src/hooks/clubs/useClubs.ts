@@ -1,5 +1,3 @@
-"use client";
-
 import {
     useMutation,
     useQuery,
@@ -11,6 +9,7 @@ import { clubService } from "@/services/clubs/club.service";
 import type {
     Club,
     ClubFilters,
+    ClubMember,
     CreateClubDto,
     UpdateClubDto,
 } from "@/types/club";
@@ -114,3 +113,10 @@ export const useJoinedClubs = () => {
     });
 };
 
+export const useClubMembers = (clubId: string): UseQueryResult<ClubMember[], Error> => {
+    return useQuery({
+        queryKey: ["clubs", "members", clubId],
+        queryFn: () => clubService.getClubMembers(clubId),
+        enabled: !!clubId,
+    });
+};

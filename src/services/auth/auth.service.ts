@@ -10,9 +10,10 @@ const AUTH_BASE_PATH = "/auth";
 
 export const authService = {
   login: async (payload: LoginDto): Promise<AuthSuccessResponse> => {
+    const { rememberMe, ...apiPayload } = payload;
     const response = await axiosInstance.post<AuthSuccessResponse>(
       `${AUTH_BASE_PATH}/login`,
-      payload,
+      apiPayload,
     );
 
     return response.data;

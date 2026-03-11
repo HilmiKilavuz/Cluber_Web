@@ -9,7 +9,7 @@ import { Calendar, MapPin, AlignLeft, Image as ImageIcon, Users } from "lucide-r
 const eventSchema = z.object({
     title: z.string().min(3, "Başlık en az 3 karakter olmalıdır."),
     description: z.string().min(10, "Açıklama en az 10 karakter olmalıdır."),
-    startDate: z.string().min(1, "Başlangıç tarihi seçilmelidir."),
+    date: z.string().min(1, "Başlangıç tarihi seçilmelidir."),
     location: z.string().min(3, "Konum belirtilmelidir."),
     imageUrl: z.string().url("Geçerli bir görsel URL'si girin.").optional().or(z.literal("")),
     maxParticipants: z.string().optional().refine(v => !v || !isNaN(Number(v)), "Geçerli bir sayı girin."),
@@ -37,7 +37,7 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
         defaultValues: {
             title: "",
             description: "",
-            startDate: "",
+            date: "",
             location: "",
             imageUrl: "",
             maxParticipants: "",
@@ -46,12 +46,18 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
     });
 
     const onSubmit = async (values: EventFormValues) => {
-        await createEventMutation.mutateAsync({
-            ...values,
-            clubId,
-            maxParticipants: values.maxParticipants ? parseInt(values.maxParticipants) : undefined,
-        });
-        onSuccess?.();
+        try {
+            const payload = {
+                ...values,
+                clubId,
+                maxParticipants: values.maxParticipants ? parseInt(values.maxParticipants) : undefined,
+                imageUrl: values.imageUrl || undefined,
+            };
+            await createEventMutation.mutateAsync(payload);
+            onSuccess?.();
+        } catch {
+            // Error is already handled by the mutation's onError callback and axios interceptor
+        }
     };
 
 
@@ -88,11 +94,11 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
                     <div className="relative">
                         <input
                             type="datetime-local"
-                            {...register("startDate")}
+                            {...register("date")}
                             className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100"
                         />
                     </div>
-                    {errors.startDate && <p className="text-xs text-red-500">{errors.startDate.message}</p>}
+                    {errors.date && <p className="text-xs text-red-500">{errors.date.message}</p>}
                 </div>
 
                 <div className="space-y-1.5">

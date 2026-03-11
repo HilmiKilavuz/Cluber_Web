@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 
 import { useAuth } from "@/hooks/auth/useAuth";
 import {
@@ -30,26 +29,16 @@ export function RegisterForm() {
     },
   });
 
-  // Log errors whenever they change
-  useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.log("Form errors:", errors);
-    }
-  }, [errors]);
-
   const onSubmit = async (values: RegisterFormValues): Promise<void> => {
-    console.log("Registering with:", values);
     try {
       await registerMutation.mutateAsync({
         email: values.email,
-        username: values.username,
-        displayName: values.username, // Using username as displayName too
+        displayName: values.username,
         password: values.password,
       });
-      console.log("Registration successful");
       router.push("/");
     } catch (error) {
-      console.error("Registration failed:", error);
+      // Hata yönetimi mutation tarafından ele alınıyor
     }
   };
 
@@ -131,6 +120,15 @@ export function RegisterForm() {
           <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
         ) : null}
       </div>
+
+      {registerMutation.isError && registerMutation.error ? (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-400"
+        >
+          {registerMutation.error.message}
+        </div>
+      ) : null}
 
       <button
         type="submit"

@@ -19,8 +19,7 @@ export interface Event {
     creatorId: string;
     title: string;
     description: string;
-    startDate: string;
-    endDate?: string | null;
+    date: string;
     location: string;
     imageUrl?: string | null;
     maxParticipants?: number | null;
@@ -37,8 +36,7 @@ export interface CreateEventDto {
     clubId: string;
     title: string;
     description: string;
-    startDate: string;
-    endDate?: string;
+    date: string;
     location: string;
     imageUrl?: string;
     maxParticipants?: number;
@@ -49,6 +47,5 @@ export interface UpdateEventDto extends Partial<CreateEventDto> { }
 
 export interface EventFilters {
     clubId?: string;
-    startDate?: string;
-    endDate?: string;
+    date?: string;
 }

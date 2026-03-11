@@ -5,14 +5,22 @@ import { ClubCard } from "@/components/clubs/ClubCard";
 import { Search, Loader2, Compass, Plus } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 
 export default function ClubsPage() {
     const [search, setSearch] = useState("");
-    const { data: clubs, isLoading, error } = useClubs({ search });
-
-    const categories = ["Tümü", "Teknoloji", "Spor", "Müzik", "Sanat", "Oyun", "Eğitim"];
     const [activeCategory, setActiveCategory] = useState("Tümü");
+
+    const { data: clubs, isLoading, error } = useClubs({
+        search: search || undefined,
+        category: activeCategory === "Tümü" ? undefined : activeCategory,
+    });
+    
+    const { sessionQuery } = useAuth();
+    const user = sessionQuery.data;
+
+    const categories = ["Tümü", "Teknoloji", "Spor", "Müzik", "Sanat", "Bilim", "İş & Kariyer", "Oyun", "Edebiyat", "Sinema", "Diğer"];
 
     return (
         <main className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -29,15 +37,17 @@ export default function ClubsPage() {
                     İlgi alanlarına göre kulüplere katıl, yeni insanlar tanı ve birlikte etkinlikler düzenle.
                 </p>
 
-                <div className="mt-8">
-                    <Link
-                        href="/clubs/create"
-                        className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
-                    >
-                        <Plus size={18} />
-                        Kulüp Oluştur
-                    </Link>
-                </div>
+                {user && (
+                    <div className="mt-8">
+                        <Link
+                            href="/clubs/create"
+                            className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
+                        >
+                            <Plus size={18} />
+                            Kulüp Oluştur
+                        </Link>
+                    </div>
+                )}
 
                 {/* Search Bar */}
                 <div className="mt-8 flex w-full max-w-lg items-center gap-2 rounded-2xl border border-zinc-200 bg-white p-2.5 shadow-sm transition-all focus-within:ring-2 focus-within:ring-blue-500/20 dark:border-zinc-800 dark:bg-zinc-900">

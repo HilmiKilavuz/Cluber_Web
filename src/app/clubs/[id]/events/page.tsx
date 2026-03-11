@@ -21,7 +21,7 @@ export default function ClubEventsPage({ params }: ClubEventsPageProps) {
 
     // Group and sort events
     const sortedEvents = events ? [...events].sort((a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        new Date(a.date).getTime() - new Date(b.date).getTime()
     ) : [];
 
     if (isLoadingClub || isLoadingEvents) {

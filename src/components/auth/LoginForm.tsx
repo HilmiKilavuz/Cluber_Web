@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 
 import { useAuth } from "@/hooks/auth/useAuth";
 import { type LoginFormValues, loginSchema } from "@/lib/auth/authSchemas";
@@ -22,24 +21,18 @@ export function LoginForm() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
 
-  // Log errors whenever they change
-  useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      console.log("Login form errors:", errors);
-    }
-  }, [errors]);
+
 
   const onSubmit = async (values: LoginFormValues): Promise<void> => {
-    console.log("Logging in with:", values);
     try {
       await loginMutation.mutateAsync(values);
-      console.log("Login successful");
       router.push("/");
     } catch (error) {
-      console.error("Login failed:", error);
+      // Hata yönetimi mutation tarafından ele alınıyor
     }
   };
 
@@ -81,6 +74,29 @@ export function LoginForm() {
         {errors.password ? (
           <p className="text-xs text-red-500">{errors.password.message}</p>
         ) : null}
+      </div>
+      {loginMutation.isError && loginMutation.error ? (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-400"
+        >
+          {loginMutation.error.message}
+        </div>
+      ) : null}
+
+      <div className="flex items-center">
+        <input
+          id="rememberMe"
+          type="checkbox"
+          className="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:checked:bg-zinc-100 dark:focus:ring-zinc-100"
+          {...register("rememberMe")}
+        />
+        <label
+          htmlFor="rememberMe"
+          className="ml-2 block text-sm text-zinc-800 dark:text-zinc-200"
+        >
+          Beni Hatırla
+        </label>
       </div>
 
       <button

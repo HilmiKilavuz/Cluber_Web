@@ -2,6 +2,7 @@ import { axiosInstance } from "@/services/axiosInstance";
 import type {
     Club,
     ClubFilters,
+    ClubMember,
     CreateClubDto,
     UpdateClubDto,
 } from "@/types/club";
@@ -54,6 +55,11 @@ export const clubService = {
 
     getJoinedClubs: async (): Promise<Club[]> => {
         const response = await axiosInstance.get<Club[]>(`${CLUBS_BASE_PATH}/my/joined`);
+        return Array.isArray(response.data) ? response.data : [];
+    },
+
+    getClubMembers: async (clubId: string): Promise<ClubMember[]> => {
+        const response = await axiosInstance.get<ClubMember[]>(`${CLUBS_BASE_PATH}/${clubId}/members`);
         return Array.isArray(response.data) ? response.data : [];
     },
 };

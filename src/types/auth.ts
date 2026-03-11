@@ -9,11 +9,11 @@ export interface AuthUser {
 export interface LoginDto {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export interface RegisterDto {
   email: string;
-  username: string;
   displayName: string;
   password: string;
 }
@@ -24,7 +24,5 @@ export interface AuthSuccessResponse {
   accessToken?: string;
 }
 
-export interface SessionResponse {
-  user: AuthUser;
-}
+export type SessionResponse = AuthUser;
 
