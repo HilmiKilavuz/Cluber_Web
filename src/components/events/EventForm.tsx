@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateEvent } from "@/hooks/events/useEvents";
 import { Calendar, MapPin, AlignLeft, Image as ImageIcon, Users } from "lucide-react";
+import { toast } from "sonner";
 
 const eventSchema = z.object({
     title: z.string().min(3, "Başlık en az 3 karakter olmalıdır."),
@@ -47,16 +48,36 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
 
     const onSubmit = async (values: EventFormValues) => {
         try {
+            // Convert local datetime string to proper ISO-8601 string for the backend
+            const isoDateString = new Date(values.date).toISOString();
+            
+            // Create a perfectly mapped payload based strictly on the backend DTO.
+            // Any extra properties (like maxParticipants, imageUrl, category) will cause
+            // a 400 Bad Request if the backend ValidationPipe uses forbidNonWhitelisted.
             const payload = {
-                ...values,
-                clubId,
-                maxParticipants: values.maxParticipants ? parseInt(values.maxParticipants) : undefined,
-                imageUrl: values.imageUrl || undefined,
+                title: values.title,
+                description: values.description || undefined,
+                date: isoDateString,
+                location: values.location,
+                clubId: clubId,
             };
+            
+            console.log("Submitting Event Payload:", JSON.stringify(payload, null, 2));
+            
             await createEventMutation.mutateAsync(payload);
             onSuccess?.();
-        } catch {
-            // Error is already handled by the mutation's onError callback and axios interceptor
+        } catch (error: any) {
+            // Log the exact error and show to the user
+            console.error("Event creation failed payload:", error.response?.data || error.details || error);
+            const backendError = error.details || error.response?.data;
+            if (backendError?.message) {
+                const errorMsg = Array.isArray(backendError.message) 
+                    ? backendError.message.join(", ") 
+                    : backendError.message;
+                toast.error(`Kayıt başarısız: ${errorMsg}`);
+            } else {
+                toast.error("Etkinlik oluşturulurken bir hata meydana geldi.");
+            }
         }
     };
 

@@ -10,7 +10,8 @@ import {
     Home as HomeIcon,
     Menu,
     X,
-    Sparkles
+    Sparkles,
+    CalendarPlus
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -34,6 +35,7 @@ export default function Header() {
     ];
 
     if (isAuthenticated) {
+        navLinks.push({ name: "Etkinlik Oluştur", href: "/events/create", icon: CalendarPlus });
         navLinks.push({ name: "Profilim", href: "/profile", icon: User });
     }
 

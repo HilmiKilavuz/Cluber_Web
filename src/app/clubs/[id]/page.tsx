@@ -31,7 +31,7 @@ export default function ClubDetailPage() {
 
     const user = sessionQuery.data;
     const isMember = joinedClubs?.some((c) => c.id === id) || false;
-    const isOwner = user?.id === club?.ownerId;
+    const isOwner = user?.id === club?.creatorId;
     const isLoading = clubLoading || joinedLoading;
 
     const { data: events } = useEvents({ clubId: id });
@@ -200,7 +200,7 @@ export default function ClubDetailPage() {
                             {events && events.length > 0 ? (
                                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                                     {[...events]
-                                        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
                                         .slice(0, 3)
                                         .map((event) => (
                                             <EventCard key={event.id} event={event} />
@@ -224,17 +224,17 @@ export default function ClubDetailPage() {
                             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Kulüp Sahibi</h3>
                             <div className="mt-4 flex items-center gap-3">
                                 <div className="h-10 w-10 flex-shrink-0 rounded-full bg-zinc-200 dark:bg-zinc-800">
-                                    {club.owner?.avatarUrl ? (
-                                        <img src={club.owner.avatarUrl} alt={club.owner.username} className="h-full w-full rounded-full object-cover" />
+                                    {club.creator?.avatarUrl ? (
+                                        <img src={club.creator.avatarUrl} alt={club.creator.displayName} className="h-full w-full rounded-full object-cover" />
                                     ) : (
                                         <div className="flex h-full w-full items-center justify-center font-bold text-zinc-400">
-                                            {club.owner?.username?.charAt(0) || club.ownerId?.charAt(0) || "U"}
+                                            {club.creator?.displayName?.charAt(0) || club.creatorId?.charAt(0) || "U"}
                                         </div>
                                     )}
                                 </div>
                                 <div>
                                     <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                                        {club.owner?.username || "Admin"}
+                                        {club.creator?.displayName || "Admin"}
                                     </p>
                                     <p className="text-xs text-zinc-500">Kurucu Üye</p>
                                 </div>

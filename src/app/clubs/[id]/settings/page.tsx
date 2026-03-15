@@ -64,7 +64,7 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
     const updateClubMutation = useUpdateClub(clubId);
     const deleteClubMutation = useDeleteClub();
 
-    const isOwner = !!user && !!club && user.id === club.ownerId;
+    const isOwner = !!user && !!club && user.id === club.creatorId;
 
     const {
         register,

@@ -9,8 +9,8 @@ export interface Club {
     bannerUrl?: string | null;
     category: string;
     memberCount: number;
-    ownerId: string;
-    owner?: AuthUser;
+    creatorId: string;
+    creator?: AuthUser;
     createdAt: string;
     updatedAt: string;
 }

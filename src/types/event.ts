@@ -35,7 +35,7 @@ export interface Event {
 export interface CreateEventDto {
     clubId: string;
     title: string;
-    description: string;
+    description?: string;
     date: string;
     location: string;
     imageUrl?: string;
