@@ -1,18 +1,13 @@
 "use client";
 
-import { use } from "react";
-import { useClub } from "@/hooks/clubs/useClubs";
-import { useClubMembers } from "@/hooks/clubs/useClubs";
+import { useParams, useRouter } from "next/navigation";
+import { useClub, useClubMembers } from "@/hooks/clubs/useClubs";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { useRouter } from "next/navigation";
 import { Users, Crown, Shield, User, ChevronLeft, Loader2, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
-interface ClubMembersPageProps {
-    params: Promise<{ id: string }>;
-}
 
 const ROLE_LABELS: Record<string, string> = {
     OWNER: "Kurucu",
@@ -35,8 +30,9 @@ const ROLE_STYLES: Record<string, string> = {
     MEMBER: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
 };
 
-export default function ClubMembersPage({ params }: ClubMembersPageProps) {
-    const { id: clubId } = use(params);
+export default function ClubMembersPage() {
+    const params = useParams<{ id: string }>();
+    const clubId = params.id;
     const router = useRouter();
     const { data: club, isLoading: clubLoading } = useClub(clubId);
     const { data: members, isLoading: membersLoading } = useClubMembers(clubId);
@@ -89,7 +85,7 @@ export default function ClubMembersPage({ params }: ClubMembersPageProps) {
                         {members.map((member) => {
                             const isMe = member.userId === user?.id;
                             const initial =
-                                member.user?.username?.charAt(0)?.toUpperCase() || "?";
+                                member.user?.displayName?.charAt(0)?.toUpperCase() || "?";
 
                             return (
                                 <li
@@ -101,7 +97,7 @@ export default function ClubMembersPage({ params }: ClubMembersPageProps) {
                                         {member.user?.avatarUrl ? (
                                             <img
                                                 src={member.user.avatarUrl}
-                                                alt={member.user.username}
+                                                alt={member.user.displayName || "Kullanıcı Avatarı"}
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
@@ -115,7 +111,7 @@ export default function ClubMembersPage({ params }: ClubMembersPageProps) {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <p className="truncate font-semibold text-zinc-900 dark:text-zinc-100">
-                                                {member.user?.username || "Kullanıcı"}
+                                                {member.user?.displayName || "Kullanıcı"}
                                             </p>
                                             {isMe && (
                                                 <span className="rounded-full bg-zinc-900 px-2 py-0.5 text-xs font-bold text-white dark:bg-zinc-100 dark:text-zinc-900">

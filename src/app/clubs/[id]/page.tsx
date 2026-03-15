@@ -121,7 +121,7 @@ export default function ClubDetailPage() {
                         <div className="mt-2 flex flex-wrap items-center gap-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">
                             <div className="flex items-center gap-1.5">
                                 <Users size={18} className="text-zinc-400" />
-                                <span>{club.memberCount} Üye</span>
+                                <span>{club._count?.memberships || club.memberships?.length || 0} Üye</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Clock size={18} className="text-zinc-400" />

@@ -56,7 +56,7 @@ export const ClubCard = ({ club }: ClubCardProps) => {
                 <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
                     <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">
                         <Users size={14} />
-                        <span>{club.memberCount} üye</span>
+                        <span>{club._count?.memberships || club.memberships?.length || 0} üye</span>
                     </div>
 
                     <Link

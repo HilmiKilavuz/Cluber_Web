@@ -6,6 +6,7 @@ import { tr } from "date-fns/locale";
 import type { Event } from "@/types/event";
 import { useRSVP, useCancelRSVP } from "@/hooks/events/useEvents";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useUIStore } from "@/store/ui.store";
 import { toast } from "sonner";
 
 interface EventCardProps {
@@ -16,11 +17,11 @@ export function EventCard({ event }: EventCardProps) {
     const { sessionQuery } = useAuth();
     const user = sessionQuery.data;
 
+    const rsvpMutation = useRSVP(event?.id || "");
+    const cancelRSVPMutation = useCancelRSVP(event?.id || "");
+    const { openParticipantsModal } = useUIStore();
+
     if (!event) return null;
-
-    const rsvpMutation = useRSVP(event.id);
-
-    const cancelRSVPMutation = useCancelRSVP(event.id);
 
     const isParticipant = event.participants?.some((p) => p.userId === user?.id);
     const participantCount = event._count?.participants || event.participants?.length || 0;
@@ -76,18 +77,21 @@ export function EventCard({ event }: EventCardProps) {
                     </div>
                     <div className="flex items-center gap-2">
                         <Users className="h-4 w-4" />
-                        <span>
+                        <button 
+                            onClick={() => openParticipantsModal(event.id)}
+                            className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left"
+                        >
                             {participantCount} Katılımcı
                             {event.maxParticipants && ` / ${event.maxParticipants} (Kontenjan)`}
-                        </span>
+                        </button>
                     </div>
                 </div>
 
                 <button
                     onClick={handleRSVP}
                     disabled={rsvpMutation.isPending || cancelRSVPMutation.isPending}
-                    className={`flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all ${isParticipant
-                        ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400"
+                    className={`group/btn flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all ${isParticipant
+                        ? "bg-emerald-50 text-emerald-600 hover:bg-red-50 hover:text-red-600 dark:bg-emerald-950/30 dark:text-emerald-400 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                         : isFull
                             ? "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
                             : "bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200"
@@ -95,8 +99,9 @@ export function EventCard({ event }: EventCardProps) {
                 >
                     {isParticipant ? (
                         <>
-                            <CheckCircle2 className="h-4 w-4" />
-                            Katılıyorsun
+                            <CheckCircle2 className="h-4 w-4 group-hover/btn:hidden" />
+                            <span className="group-hover/btn:hidden">Katılıyorsun</span>
+                            <span className="hidden group-hover/btn:inline">İptal Et</span>
                         </>
                     ) : isFull ? (
                         "Kontenjan Dolu"

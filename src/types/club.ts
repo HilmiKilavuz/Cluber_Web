@@ -8,7 +8,10 @@ export interface Club {
     avatarUrl?: string | null;
     bannerUrl?: string | null;
     category: string;
-    memberCount: number;
+    _count?: {
+        memberships: number;
+    };
+    memberships?: ClubMember[];
     creatorId: string;
     creator?: AuthUser;
     createdAt: string;
@@ -32,7 +35,7 @@ export interface CreateClubDto {
     bannerUrl?: string;
 }
 
-export interface UpdateClubDto extends Partial<CreateClubDto> { }
+export type UpdateClubDto = Partial<CreateClubDto>;
 
 export interface ClubFilters {
     category?: string;

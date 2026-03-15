@@ -43,7 +43,7 @@ export interface CreateEventDto {
     category?: string;
 }
 
-export interface UpdateEventDto extends Partial<CreateEventDto> { }
+export type UpdateEventDto = Partial<CreateEventDto>;
 
 export interface EventFilters {
     clubId?: string;
