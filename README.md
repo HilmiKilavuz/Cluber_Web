@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://via.placeholder.com/150x150/4F46E5/FFFFFF?text=Cluber" alt="Cluber Logo" width="120" height="120">
   <br/>
-  <h1> Cluber Web</h1>
-  <p><strong>Üniversite ve Topluluk Kulüplerini Dijitalleştiren Modern Yönetim Platformu</strong></p>
+  <h1>Cluber Web</h1>
+  <p><strong>Universite ve Topluluk Kuluplerini Dijitallastiran Modern Yonetim Platformu</strong></p>
   <p>
     <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white" alt="Next.js" />
     <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
@@ -13,133 +13,273 @@
 
 ---
 
-**Cluber**, kullanıcıların topluluk kulüplerini dijital ortamda yönetebilmelerini, yeni kulüpler keşfedip katılabilmelerini ve kulüp üyeleriyle gerçek zamanlı etkileşimde bulunabilmelerini sağlayan modern bir web uygulamasıdır. 
-
-Bu depo (repository), genel Cluber platformunun **Frontend (Önyüz)** kısmını oluşturur ve en güncel web teknolojileri kullanılarak donatılmıştır. Uygulama tamamen Türkçe dil desteği ile tasarlanmıştır.
+**Cluber**, universite ogrencileri ve topluluk uyelerinin kulup olusturabilecegi, kuluplere katilabilecegi, etkinlikler duzenleyebilecegi ve uyeleriyle gercek zamanli olarak etkilesimde bulunabilecegi kapsamli bir web platformudur. Bu depo, Cluber platformunun **on yuz (Frontend)** kismini barindirmakta olup en guncel web teknolojileri kullanilarak gelistirilmistir. Uygulama tamamen Turkce dil destegi ile sunulmaktadir.
 
 ---
 
-##  Projenin Amacı ve Temel İşlevler
-Kullanıcı deneyimini modern, kesintisiz ve hızlı bir arayüzle sunmayı hedefleyen Cluber'da şu ana senaryolar mevcuttur:
-- **Keşfet & Katıl:** Çeşitli ilgi alanlarına hitap eden kulüpleri bulma ve doğrudan katılma.
-- **Yönetim:** Kullanıcıların kendi kulüplerini oluşturup üye ve etkinlik süreçlerini yönetmesi.
-- **Anlık İletişim:** Kulüp bazlı entegre chat odalarında gecikmesiz sohbet.
-- **Etkinlik Takibi & Otomasyon:** Geçmiş/gelecek etkinliklerin takibi, RSVP sistemi ve otomatik e-posta hatırlatıcıları.
+## Projenin Amaci ve Temel Islevler
+
+Cluber, topluluk yonetimi sureclerini dijital ortama tasiyarak geleneksel kulup faaliyetlerini modernize etmeyi hedeflemektedir. Platform, kullanici deneyimini on planda tutarak kesintisiz ve hizli bir arayuz sunmaktadir.
+
+### Temel Ozellikler
+
+| Modul | Aciklama |
+|-------|----------|
+| **Kulup Keşfi ve Katilim** | Cesitli ilgi alanlarina hitap eden kulupleri bulma, filtreleme ve dogrudan katilma imkani |
+| **Kulup Yonetimi** | Kullanicilarin kendi kuluplerint olusturmasi, uye ve etkinlik sureclerini yonetmesi |
+| **Gercek Zamanli Iletisim** | Kulup bazli entegre chat odalarinda anlik mesajlasma (Socket.IO) |
+| **Etkinlik Yonetim** | Gecmis ve gelecek etkinliklerin takibi, RSVP sistemi ile katilim takibi |
+| **Otomatik Hatirlatici** | Etkinlik baslangicina 24 saat kalan katilimcilara otomatik e-posta hatirlaticilari |
 
 ---
 
-##  Kullanılan Teknolojiler
+## Teknoloji Yigini
 
-Cluber Web, sağlam bir mimari ve performans önceliği ile geliştirilmektedir:
+Cluber Web, performans ve olceklenebilirlik onceligi ile gelistirilmektedir. Asagidaki tablo projenin kullandigi temel teknolojileri ve kutuphaneleri ozetlemektedir:
 
-### Temel Stack
-- **Framework & Dil:** [Next.js 16](https://nextjs.org/) (App Router mimarisi) & **TypeScript 5**, **React 19** (`"use client"` ağırlıklı etkileşim)
-- **Stil Yönetimi (UI):** [Tailwind CSS v4](https://tailwindcss.com/) (Özel ayarlar ve "Dark Mode-first" yaklaşımıyla)
-- **Sunucu & Cache Yönetimi:** [@tanstack/react-query v5](https://tanstack.com/query/latest)
-- **HTTP İstemcisi:** [Axios](https://axios-http.com/) (Merkezi konfigürasyon, header/JWT proxy ayarlamaları vb.)
-
-### Ek Araçlar ve Kütüphaneler
-- **Gerçek Zamanlı İletişim:** [Socket.IO Client v4](https://socket.io/) (Kulüp içi anlık sohbet)
-- **Form İşlemleri & Validasyon:** [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
-- **İkonlar ve Bildirimler:** [Lucide React](https://lucide.dev/) & [Sonner](https://sonner.emilkowal.ski/) (Toast uyarıları)
-- **State Yönetimi:** Zustand (Gelecekte entegre edilecek)
-- **Tarih Formatlama:** date-fns
+| Kategori | Teknoloji | Versiyon |
+|----------|-----------|----------|
+| Framework | Next.js | 16 (App Router) |
+| Programlama Dili | TypeScript | 5 |
+| UI Kutuphanesi | React | 19 |
+| Stil Cesitlemesi | Tailwind CSS | v4 |
+| Sunucu Durum Yonetimi | @tanstack/react-query | v5 |
+| HTTP Istemci | Axios | - |
+| Gercek Zamanli Haberlesme | Socket.IO Client | v4 |
+| Form Yonetimi | React Hook Form | - |
+| Veri Dogrulama | Zod | - |
+| Ikon Kutuphanesi | Lucide React | - |
+| Toast Bildirimleri | Sonner | - |
+| Tarih Isleme | date-fns | - |
+| Global Durum Yonetimi | Zustand | - |
 
 ---
 
-##  Geliştirme Yaklaşımı & Proje/Dosya Klasör Yapısı
+## Mimari ve Klasor Yapisi
 
-Proje dosyaları işlevlerine göre ayrılarak modüler ve ölçeklenebilir bir biçimde `src/` altında toplanmıştır:
+Proje dosyalari islevsel olarak ayrilmis ve moduler bir yapi izlenerek `src/` dizini altinda organize edilmistir. Asagidaki diyagram projenin klasor hierarsisini gostermektedir:
 
-```text
+```
 Cluber_Web/
-├── src/
-│   ├── app/                    # Next.js App Router (Sayfalar ve Layout'lar)
-│   │   ├── page.tsx            # Ana Sayfa (Landing Page)
-│   │   ├── login/ & register/  # Kimlik doğrulama sayfaları
-│   │   ├── profile/            # Profil sayfası
-│   │   └── clubs/              # Kulüp listeleme, detay (/[id]), chat ve oluşturma (/create) yönergeleri
-│   │
-│   ├── components/             # Uygulama genelinde tekrar edebilir UI yapıları
-│   │   ├── auth/               # Giriş & Kayıt Formları
-│   │   ├── clubs/ & events/    # Kulüp & Etkinlik kartları ile form bileşenleri
-│   │   ├── chat/               # Mesaj giriş ve listeleme arayüzleri
-│   │   └── layout/             # Global Başlık (Header), Yönlendirme barları
-│   │
-│   ├── hooks/                  # Tekrar kullanılabilir özel (Custom) React hook'ları
-│   │   └── auth/, clubs/, events/, chat/ (Socket dinleme ve API bağlamı)
-│   │
-│   ├── services/               # Saf Axios API Çağrıları (`club.service.ts`, `auth.service.ts` vb.)
-│   ├── types/                  # TypeScript interface tanımlamaları (Models & DTO'lar)
-│   └── lib/                    # Yardımcılar (Utils, Socket ayarları, Hata yönetimi vb.)
-└── middleware.ts               # Next.js Middleware (Korumalı rootlar ve Token analizi için)
+├── middleware.ts                    # Route korumasi (JWT cookie kontrolu)
+├── next.config.ts                   # Next.js konfigurasyonu
+├── package.json                     # Proje bagimliliklari
+├── tsconfig.json                    # TypeScript konfigurasyonu
+├── postcss.config.mjs               # PostCSS konfigurasyonu
+│
+└── src/
+    ├── app/                         # Next.js App Router sayfalari
+    │   ├── layout.tsx               # Root layout (Providers sarmalayici)
+    │   ├── providers.tsx             # QueryClientProvider + Toaster
+    │   ├── globals.css               # Tailwind temel stilleri
+    │   ├── page.tsx                 # Ana sayfa (Landing Page)
+    │   ├── login/                    # Giris sayfasi
+    │   ├── register/                 # Kayit sayfasi
+    │   ├── profile/                  # Kullanici profili
+    │   ├── clubs/                    # Kulup listesi ve olusturma
+    │   │   ├── page.tsx              # Kulup keşif sayfasi
+    │   │   ├── create/               # Kulup olusturma formu
+    │   │   └── [id]/                 # Kulup detay sayfasi
+    │   │       ├── page.tsx          # Kulup detaylari
+    │   │       ├── chat/             # Kulup sohbet odasi
+    │   │       ├── events/           # Kulup etkinlikleri
+    │   │       ├── members/          # Kulup uyeleri
+    │   │       └── settings/         # Kulup ayarlari
+    │   └── events/
+    │       └── create/               # Etkinlik olusturma
+    │
+    ├── components/                   # Yeniden kullanilabilir UI bileşenleri
+    │   ├── auth/                     # AuthFormShell, LoginForm, RegisterForm
+    │   ├── clubs/                    # ClubCard, ClubForm
+    │   ├── events/                   # EventCard, EventForm, ParticipantsModal
+    │   ├── chat/                     # ChatWindow, MessageItem
+    │   ├── layout/                   # Header (navigasyon + dark mode)
+    │   └── profile/                  # ProfileComponents
+    │
+    ├── hooks/                        # Custom React hooks
+    │   ├── auth/                      # useAuth (oturum, login, register, logout)
+    │   ├── clubs/                     # useClubs (CRUD + join/leave)
+    │   ├── events/                    # useEvents (CRUD)
+    │   ├── chat/                      # useSocket (Socket.IO baglanti)
+    │   └── users/                     # useUser
+    │
+    ├── services/                     # API cagri katmani
+    │   ├── axiosInstance.ts           # Axios yapilandirmasi
+    │   ├── auth/                      # Auth servisleri
+    │   ├── clubs/                     # Kulup servisleri
+    │   ├── events/                    # Etkinlik servisleri
+    │   ├── chat/                      # Chat servisleri
+    │   └── users/                     # Kullanici servisleri
+    │
+    ├── types/                        # TypeScript arayuz tanimlari
+    │   ├── auth.ts                    # AuthUser, LoginDto, RegisterDto
+    │   ├── club.ts                    # Club, ClubMember, CreateClubDto
+    │   ├── event.ts                   # Event, EventParticipant, RSVPStatus
+    │   ├── chat.ts                    # Message, ChatRoom, Socket events
+    │   └── api.ts                     # Genel API hata tipi
+    │
+    ├── lib/                          # Yardimci araclar
+    │   ├── api/                       # handleApiError
+    │   ├── auth/                      # Auth yardimcilari
+    │   ├── constants/                 # Ortam degiskenleri (env.ts)
+    │   ├── socket/                    # Socket.IO baglanti (socket.ts)
+    │   └── utils/                     # Genel utility fonksiyonlar
+    │
+    └── store/                        # Global durum yonetimi
+        └── ui.store.ts                # Zustand store (UI durumu)
 ```
 
 ---
 
-##  Neler Yapıldı (Tamamlanan Özellikler)
-Projede aşağıdaki temel işlevlerin ve sayfaların tamamı geliştirilmiş ve çalışmaktadır:
+## Kimlik Dorsrulama Akisi
 
-1. **Kimlik Doğrulama & Güvenlik:** 
-   - JWT Tabanlı login/register akışı. 
-   - `localStorage` ve `cookie` destekli Next.js Middleware route güvenliği.
-   -  **E-posta Doğrulama:** Kayıt olan kullanıcılara gönderilen 6 haneli doğrulama kodu (Nodemailer).
-2. **Genel Sayfalar:** Modern bir vitrin olan Ana Sayfa (Landing Page) ve kullanıcının kişisel alanını yansıtan Profil Sayfası.
-3. **Kulüp Modülleri:** 
-    -  **Gelişmiş Filtreleme:** SSPA mimarisine uygun ve URL parametreleriyle senkronize debounce arama fonksiyonları.
-    - Tüm detayları (banner, üye bilgileri) barındıran Kulüp Detay Sayfası.
-    - Yönetim için özel sayfalar (`/clubs/[id]/settings`, `/clubs/[id]/members`).
-    - Kulüp Oluşturma akışı.
-4. **Etkinlikler & Otomasyon:** 
-    - Kulüp içi etkinliklerin planlandığı, kullanıcıların RSVP olarak dahil olabildiği özel arayüz.
-    - *Akıllı Hatırlatıcılar (Cron Job):** Başlangıcına 24 saat kalmış etkinlikler için katılımcılara otomatik, görseli yüksek HTML bülten (E-posta) gönderimleri devreye alındı.
-5. **Canlı Sohbet:** Socket.IO WebSocket alt yapısıyla desteklenen, anlık mesajlaşılan ve geçmiş mesaj okunan odalar.
-6. **Tema ve Kullanıcı Arayüzü (UI):** Proje Tailwind v4 kullanılarak tasarlanmış, global `Header` eşliğinde "Dark Mode" seçeneği aktifleştirilmiştir.
+Cluber, güvenli bir oturum yonetimi saglamak icin JWT tabanli kimlik dogrulama sistemi kullanmaktadır. Sistem su adimlari izlemektedir:
 
----
+```
+Kullanici Girisi/Kayit
+        ↓
+authService.login() → POST /auth/login
+        ↓
+accessToken alinir → localStorage'a kaydedilir
+        ↓
+axiosInstance her istekte Authorization: Bearer <token> ekler
+        ↓
+authService.getSession() → GET /auth/me (silent error)
+        ↓
+useAuth hook → React Query cache guncellenir
+        ↓
+middleware.ts → Cookie tabanli koruma
+        ↓
+Korumali rotalar: /clubs/create, /clubs/[id]/settings
+```
 
-##  Neler Yapılacak (Eksikler ve Gelecek Özellikler)
-Projenin büyümesi adına sıradaki gelişim yol haritası (Roadmap):
-- **Admin Paneli:** "Admin" rolündeki yöneticilere özel detaylı moderasyon ekranları.
-- **Medya Entegrasyonu:** Gerçek kullanıcı fotoğraf (avatar) ve kulüp bannerlarının sisteme yüklenebilmesi (Cloudinary / S3).
-- **Zustand Stabilizasyonu:** Tüm global state öğelerinin tam kapsamlı olarak Zustand (store) yapısına entegrasyonu.
-- **Pagination (Sayfalama):** Veri hacmi arttığında kulüp, etkinlik ve mesaj listelerinde sonsuz kaydırma veya klasik alt sayfalama işlemleri.
-- **Etkin Dosya Yönetimi:** Sohbet ortamında görsellerin veya dokümanların paylaşılabileceği upload (medya) altyapısı.
+Sistem, `localStorage` uzerinden istemci tarafinda token yonetimi yaparken, backend tarafindan HTTP-only cookie de kullanilmaktadir. Middleware bu cookie'yi kontrol ederek route korumasi saglamaktadir.
 
 ---
 
-##  Projeyi Yerel Ortamda Çalıştırmak 
+## Tamamlanan Ozellikler
 
-Projeyi bilgisayarında hatasız olarak ayağa kaldırabilmek için aşağıdaki yönergeleri uygulayınız:
+Asagidaki tablo proje kapsaminda tamamlanan ana ozellikleri ve islevleri gostermektedir:
 
-### Ön Koşullar
-- **[Node.js](https://nodejs.org/)** sürüm 20.x veya daha güncel.
-- Projede paket yürütücüsü olarak **npm** gereklidir.
-- Backend, Veritabanı (PostgreSQL) ve Redis sistemleri ayrı bir Docker Compose aracılığıyla çalışmaktadır.
-
-### Kurulum Adımları
-1. **Projeyi Klonlayarak Çekme:**
-    ```bash
-    git clone https://github.com/HilmiKilavuz/Cluber_Web.git
-    cd Cluber_Web
-    ```
-2. **Kütüphaneleri ve Bağımlılıkları Yükleme:**
-    ```bash
-    npm install
-    ```
-3. **Çevre Değişkenleri (.env) Tanımlaması:**
-    Ana dizindeki sistemde bir `.env.local` dosyası oluşturun. Next.js istemcisinin backend ile konuşabilmesi için temel API yolunu verin:
-    ```env
-    NEXT_PUBLIC_API_URL=http://localhost:3000
-    ```
-4. **Projeyi Başlatma:**
-    Ortam hazır. İzleyen komutla uygulamayı lokal ortamınızda hızlı bir şekilde başlatıp deneyimleyebilirsiniz.
-    ```bash
-    npm run dev
-    ```
-    İlgili işlem ardından Frontend sunucusu **[http://localhost:3001](http://localhost:3001)** üzerinde hizmet verecektir.
+| Ozellik | Durum | Aciklama |
+|----------|-------|----------|
+| Landing Page | Tamamlandi | Hero section, ozellik kartlari, istatistikler, CTA, footer |
+| Kimlik Dogrulama | Tamamlandi | JWT tabanli giris/kayit akisi, react-hook-form + zod |
+| Route Korumasi | Tamamlandi | middleware.ts ile cookie tabanli koruma |
+| Kulup Listesi | Tamamlandi | Filtreleme desteği, URL parametre senkronizasyonu |
+| Kulup Detay Sayfasi | Tamamlandi | Banner, avatar, katil/ayril butonlari, sekme navigasyonu |
+| Kulup Olusturma | Tamamlandi | Olusturma formu ve validasyon |
+| Gercek Zamanli Sohbet | Tamamlandi | Socket.IO entegrasyonu, anlik mesajlasma |
+| Etkinlik Yonetimi | Tamamlandi | Olusturma, duzenleme, silme, RSVP sistemi |
+| Uye Listesi | Tamamlandi | Kulup uyelerinin listelenmesi |
+| Kulup Ayarlari | Tamamlandi | Kulup bilgilerinin duzenlenmesi |
+| Profil Sayfasi | Tamamlandi | Kullanici profili goruntuleme ve duzenleme |
+| E-posta Dogrulama | Tamamlandi | 6 haneli dogrulama kodu gonderimi (Nodemailer) |
+| Etkinlik Hatirlatici | Tamamlandi | 24 saat kala otomatik e-posta gonderimi (Cron Job) |
+| Dark Mode | Tamamlandi | Karanlik mod desteği (Tailwind dark:) |
+| Arama ve Filtreleme | Tamamlandi | Debounce edilmis arama, URL senkronizasyonu |
 
 ---
+
+## Yapilacaklar ve Gelecek Yol Haritasi
+
+Projenin gelisimi surerken asagidaki ozellikler gelecek evrelerde planlanmaktadir:
+
+| Ozellik | Oncelik | Aciklama |
+|----------|---------|----------|
+| Admin Paneli | Dusuk | ADMIN rolundeki yoneticilere ozel moderasyon ekranlari |
+| Medya Yukleme | Orta | Avatar ve kulup banner dosya yukleme (Cloudinary/S3) |
+| Sayfalama | Orta | Kulup, etkinlik ve mesaj listelerinde pagination |
+| Medya Paylasimi | Dusuk | Sohbet ortaminda görsel ve dokuman paylasimi |
+| Test Altyapisi | Dusuk | Birim ve entegrasyon testleri |
+
+---
+
+## Projeyi Yerel Ortamda Calistirmak
+
+Projeyi yerel bilgisayarinizda calistirmak için asagidaki adimlari takip ediniz:
+
+### On Kosullar
+
+| Gereksinim | Aciklama |
+|------------|----------|
+| Node.js | Versiyon 20.x veya daha guncel |
+| npm | Paket yoneticisi (npm ile birlikte gelir) |
+| Docker | Backend, PostgreSQL ve Redis icin (docker-compose ile) |
+
+### Kurulum Adimlari
+
+**1. Projeyi Klonlayin:**
+
+```bash
+git clone https://github.com/HilmiKilavuz/Cluber_Web.git
+cd Cluber_Web
+```
+
+**2. Bagimliliklari Yükleyin:**
+
+```bash
+npm install
+```
+
+**3. Ortam Degiskenlerini Yapilandirin:**
+
+Proje ana dizininde `.env.local` dosyasi olusturun ve asagidaki degiskeni ekleyin:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
+**4. Backend'i Baslatin (Docker):**
+
+```bash
+cd ..  # Ana dizine gidin
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+**5. Frontend'i Baslatin:**
+
+```bash
+cd Cluber_Web
+npm run dev
+```
+
+Uygulama **http://localhost:3001** adresinde hizmet verecektir.
+
+---
+
+## API Endpoint'leri
+
+Asagidaki tablo backend API'nin temel endpoint'lerini ozetlemektedir:
+
+| Grup | Endpoint | Metod | Aciklama |
+|------|----------|-------|----------|
+| **Auth** | /auth/login | POST | Giris yap |
+| | /auth/register | POST | Kayit ol |
+| | /auth/me | GET | Mevcut oturumu getir |
+| | /auth/logout | POST | Cikis yap |
+| **Clubs** | /clubs | GET | Tum kulupleri listele |
+| | /clubs | POST | Kulup olustur |
+| | /clubs/:id | GET | ID ile kulup getir |
+| | /clubs/slug/:slug | GET | Slug ile kulup getir |
+| | /clubs/:id | PATCH | Kulup guncelle |
+| | /clubs/:id | DELETE | Kulup sil |
+| | /clubs/:id/join | POST | Kulube katil |
+| | /clubs/:id/leave | POST | Kulupten ayril |
+| | /clubs/my/joined | GET | Uye olunan kulupleri getir |
+| **Events** | /events | GET, POST, PATCH, DELETE | Etkinlik CRUD islemleri |
+| **Users** | /users/me | PATCH | Profili guncelle |
+
+---
+
+## Katkida Bulunma
+
+Bu projeye katkida bulunmak isterseniz, lutfen once Fork yapin, bir dal (branch) olusturun ve degisikliklerinizi commit edin. Pull request gondermeden once kodunuzun lint kurallarina uygun oldugundan emin olunuz.
+
+---
+
 <div align="center">
-  <sub>Cluber Web - Ekip Çalışması, Topluluk İletişimi ve Moderasyon İçin Geliştirildi. </sub>
+  <sub>Cluber Web - Ekip Calismasi, Topluluk Iletişimi ve Moderasyon Icin Gelistirildi.</sub>
+  <br/>
+  <sub>Copyright 2024-2026 Cluber Team. Tüm haklari saklidir.</sub>
 </div>
