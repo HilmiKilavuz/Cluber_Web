@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 import { useAuth } from "@/hooks/auth/useAuth";
 import {
@@ -13,7 +14,9 @@ import {
 
 export function RegisterForm() {
   const router = useRouter();
-  const { registerMutation } = useAuth();
+  const { registerMutation, verifyEmailMutation } = useAuth();
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
 
   const {
     register,
@@ -36,11 +39,60 @@ export function RegisterForm() {
         displayName: values.username,
         password: values.password,
       });
-      router.push("/");
+      setRegisteredEmail(values.email);
+      setIsVerifying(true);
     } catch (error) {
       // Hata yönetimi mutation tarafından ele alınıyor
     }
   };
+
+  if (isVerifying) {
+    return (
+      <form
+        className="space-y-4"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          const code = formData.get("code") as string;
+          if (!code || code.length !== 6) return;
+          try {
+            await verifyEmailMutation.mutateAsync({ email: registeredEmail, code });
+            router.push("/");
+          } catch (error) {
+            // Hata yönetimi mutation tarafından ele alınıyor
+          }
+        }}
+      >
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+            Doğrulama Kodu
+          </label>
+          <input
+            name="code"
+            type="text"
+            maxLength={6}
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
+            placeholder="6 haneli kodu giriniz"
+            required
+          />
+        </div>
+
+        {verifyEmailMutation.isError && verifyEmailMutation.error ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-400">
+            {verifyEmailMutation.error.message}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={verifyEmailMutation.isPending}
+          className="inline-flex w-full items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        >
+          {verifyEmailMutation.isPending ? "Doğrulanıyor..." : "Doğrula ve Giriş Yap"}
+        </button>
+      </form>
+    );
+  }
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>

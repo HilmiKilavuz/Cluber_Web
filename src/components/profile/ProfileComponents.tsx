@@ -10,7 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 const profileSchema = z.object({
-    username: z.string().min(2, "Kullanıcı adı en az 2 karakter olmalıdır."),
+    displayName: z.string().min(2, "Görünen ad en az 2 karakter olmalıdır."),
+    username: z.string().min(2, "Kullanıcı adı en az 2 karakter olmalıdır.").optional().or(z.literal("")),
     bio: z.string().max(200, "Bio en fazla 200 karakter olabilir.").optional().or(z.literal("")),
     avatarUrl: z
         .string()
@@ -35,7 +36,8 @@ export function ProfileHeader() {
     } = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            username: user?.username || "",
+            displayName: user?.displayName || "",
+            username: (user as any)?.username || "",
             bio: (user as any)?.bio || "",
             avatarUrl: user?.avatarUrl || "",
         },
@@ -45,7 +47,8 @@ export function ProfileHeader() {
 
     const handleEdit = () => {
         reset({
-            username: user.username || "",
+            displayName: user.displayName || "",
+            username: (user as any)?.username || "",
             bio: (user as any)?.bio || "",
             avatarUrl: user.avatarUrl || "",
         });
@@ -54,7 +57,8 @@ export function ProfileHeader() {
 
     const onSubmit = async (values: ProfileFormValues) => {
         await updateProfileMutation.mutateAsync({
-            username: values.username,
+            displayName: values.displayName,
+            username: values.username || undefined,
             bio: values.bio || undefined,
             avatarUrl: values.avatarUrl || undefined,
         });
@@ -70,19 +74,19 @@ export function ProfileHeader() {
                         {user.avatarUrl ? (
                             <img
                                 src={user.avatarUrl}
-                                alt={user.username}
+                                alt={user.displayName}
                                 className="h-full w-full object-cover"
                             />
                         ) : (
                             <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-zinc-400">
-                                {user.username?.charAt(0).toUpperCase() || "U"}
+                                {user.displayName?.charAt(0).toUpperCase() || "U"}
                             </div>
                         )}
                     </div>
                     <div className="flex-1 text-center md:text-left">
                         <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
                             <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-                                {user.username}
+                                {user.displayName}
                             </h1>
                             <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
                                 {user.role}
@@ -123,15 +127,30 @@ export function ProfileHeader() {
                         </button>
                     </div>
 
+                    {/* Display Name */}
+                    <div className="space-y-1.5">
+                        <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                            Görünen Ad
+                        </label>
+                        <input
+                            {...register("displayName")}
+                            className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400"
+                            placeholder="Adınız Soyadınız"
+                        />
+                        {errors.displayName && (
+                            <p className="text-xs text-red-500">{errors.displayName.message}</p>
+                        )}
+                    </div>
+
                     {/* Username */}
                     <div className="space-y-1.5">
                         <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            Kullanıcı Adı
+                            Kullanıcı Adı <span className="text-zinc-400">(Opsiyonel)</span>
                         </label>
                         <input
                             {...register("username")}
                             className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400"
-                            placeholder="Kullanıcı adınız"
+                            placeholder="kullanici_adi"
                         />
                         {errors.username && (
                             <p className="text-xs text-red-500">{errors.username.message}</p>

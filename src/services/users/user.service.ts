@@ -3,6 +3,7 @@ import type { AuthUser } from "@/types/auth";
 
 export interface UpdateProfileDto {
     username?: string;
+    displayName?: string;
     bio?: string;
     avatarUrl?: string;
 }

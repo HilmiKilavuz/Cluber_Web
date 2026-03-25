@@ -1,4 +1,17 @@
-# Cluber Web 
+<div align="center">
+  <img src="https://via.placeholder.com/150x150/4F46E5/FFFFFF?text=Cluber" alt="Cluber Logo" width="120" height="120">
+  <br/>
+  <h1> Cluber Web</h1>
+  <p><strong>Üniversite ve Topluluk Kulüplerini Dijitalleştiren Modern Yönetim Platformu</strong></p>
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white" alt="Next.js" />
+    <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Socket.io-v4-010101?style=flat&logo=socket.io&logoColor=white" alt="Socket.io" />
+  </p>
+</div>
+
+---
 
 **Cluber**, kullanıcıların topluluk kulüplerini dijital ortamda yönetebilmelerini, yeni kulüpler keşfedip katılabilmelerini ve kulüp üyeleriyle gerçek zamanlı etkileşimde bulunabilmelerini sağlayan modern bir web uygulamasıdır. 
 
@@ -11,7 +24,7 @@ Kullanıcı deneyimini modern, kesintisiz ve hızlı bir arayüzle sunmayı hede
 - **Keşfet & Katıl:** Çeşitli ilgi alanlarına hitap eden kulüpleri bulma ve doğrudan katılma.
 - **Yönetim:** Kullanıcıların kendi kulüplerini oluşturup üye ve etkinlik süreçlerini yönetmesi.
 - **Anlık İletişim:** Kulüp bazlı entegre chat odalarında gecikmesiz sohbet.
-- **Etkinlik Takibi:** Geçmiş ve gelecek etkinliklerden anında haberdar olma (yakında).
+- **Etkinlik Takibi & Otomasyon:** Geçmiş/gelecek etkinliklerin takibi, RSVP sistemi ve otomatik e-posta hatırlatıcıları.
 
 ---
 
@@ -67,27 +80,31 @@ Cluber_Web/
 ##  Neler Yapıldı (Tamamlanan Özellikler)
 Projede aşağıdaki temel işlevlerin ve sayfaların tamamı geliştirilmiş ve çalışmaktadır:
 
-1. **Kimlik Doğrulama:** JWT Tabanlı login/register akışı (react-hook-form + zod tabanlı validasyon). `localStorage` ve `cookie` destekli Next.js Middleware route güvenliği.
+1. **Kimlik Doğrulama & Güvenlik:** 
+   - JWT Tabanlı login/register akışı. 
+   - `localStorage` ve `cookie` destekli Next.js Middleware route güvenliği.
+   -  **E-posta Doğrulama:** Kayıt olan kullanıcılara gönderilen 6 haneli doğrulama kodu (Nodemailer).
 2. **Genel Sayfalar:** Modern bir vitrin olan Ana Sayfa (Landing Page) ve kullanıcının kişisel alanını yansıtan Profil Sayfası.
 3. **Kulüp Modülleri:** 
-    - Gelişmiş filtreleme sunan Kulüp Listesi.
+    -  **Gelişmiş Filtreleme:** SSPA mimarisine uygun ve URL parametreleriyle senkronize debounce arama fonksiyonları.
     - Tüm detayları (banner, üye bilgileri) barındıran Kulüp Detay Sayfası.
-    - Ayarlar ve yeni yetki entegreli sayfalar (`/clubs/[id]/settings`, `/clubs/[id]/members`).
-    - Hızlı ve stabil form kontrolü ile desteklenen Kulüp Oluşturma adımı.
-4. **Etkinlikler:** Kulüp içi etkinliklerin ekleneceği temel modüller. (`/clubs/[id]/events` rotasının önizleme kurulumu dahi tamamlanmıştır.)
-5. **Canlı Sohbet:** Socket.IO WebSocket alt yapısıyla desteklenen, anlık olarak mesaj ve geçmiş okunabilen kulüp sohbet odaları.
+    - Yönetim için özel sayfalar (`/clubs/[id]/settings`, `/clubs/[id]/members`).
+    - Kulüp Oluşturma akışı.
+4. **Etkinlikler & Otomasyon:** 
+    - Kulüp içi etkinliklerin planlandığı, kullanıcıların RSVP olarak dahil olabildiği özel arayüz.
+    - *Akıllı Hatırlatıcılar (Cron Job):** Başlangıcına 24 saat kalmış etkinlikler için katılımcılara otomatik, görseli yüksek HTML bülten (E-posta) gönderimleri devreye alındı.
+5. **Canlı Sohbet:** Socket.IO WebSocket alt yapısıyla desteklenen, anlık mesajlaşılan ve geçmiş mesaj okunan odalar.
 6. **Tema ve Kullanıcı Arayüzü (UI):** Proje Tailwind v4 kullanılarak tasarlanmış, global `Header` eşliğinde "Dark Mode" seçeneği aktifleştirilmiştir.
 
 ---
 
 ##  Neler Yapılacak (Eksikler ve Gelecek Özellikler)
-Proje şu yeteneklere doğru genişlemeye devam etmektedir:
-- **Etkinlik Yönetimi (Tam Entegrasyon):** Ana etkinlik oluşturma sayfasının (`/events/create`) tam UI yönlendirmesi.
-- **RSVP (Durum Bildirimi):** Bir olaya katılıp katılmama bilgisinin işlenmesi ve gösterilmesi.
-- **Kapsamlı Global State:** `Zustand` ile global veri bağlarının `src/store/` üzerinde kurulması.
-- **Profil Yönetimi ve Medya Entegrasyonu:** Gerçek kullanıcı fotoğraf (avatar), kulüp banner dosya yüklemelerinin yapılması ile detaylı kişisel/kulüp düzenleme alanlarının açılması.
-- **Admin Aracı:** "Admin" rolündeki kullanıcılar için yetkili özel kontrol, listeleme ve yönetim UI paneli.
-- **Listeleme Özellikleri:** Kulüp veya üyeler dolduğunda gerekecek "Pagination (Sayfalama)" işlemlerinin bağlanması.
+Projenin büyümesi adına sıradaki gelişim yol haritası (Roadmap):
+- **Admin Paneli:** "Admin" rolündeki yöneticilere özel detaylı moderasyon ekranları.
+- **Medya Entegrasyonu:** Gerçek kullanıcı fotoğraf (avatar) ve kulüp bannerlarının sisteme yüklenebilmesi (Cloudinary / S3).
+- **Zustand Stabilizasyonu:** Tüm global state öğelerinin tam kapsamlı olarak Zustand (store) yapısına entegrasyonu.
+- **Pagination (Sayfalama):** Veri hacmi arttığında kulüp, etkinlik ve mesaj listelerinde sonsuz kaydırma veya klasik alt sayfalama işlemleri.
+- **Etkin Dosya Yönetimi:** Sohbet ortamında görsellerin veya dokümanların paylaşılabileceği upload (medya) altyapısı.
 
 ---
 
@@ -98,6 +115,7 @@ Projeyi bilgisayarında hatasız olarak ayağa kaldırabilmek için aşağıdaki
 ### Ön Koşullar
 - **[Node.js](https://nodejs.org/)** sürüm 20.x veya daha güncel.
 - Projede paket yürütücüsü olarak **npm** gereklidir.
+- Backend, Veritabanı (PostgreSQL) ve Redis sistemleri ayrı bir Docker Compose aracılığıyla çalışmaktadır.
 
 ### Kurulum Adımları
 1. **Projeyi Klonlayarak Çekme:**
@@ -110,9 +128,9 @@ Projeyi bilgisayarında hatasız olarak ayağa kaldırabilmek için aşağıdaki
     npm install
     ```
 3. **Çevre Değişkenleri (.env) Tanımlaması:**
-    Ana dizindeki sistemde bir `.env.local` dosyası oluşturun. Next.js istemcisinin backend ile konuşabilmesi için temel API yolunu verin (Lokalde aşağıdaki şekilde):
+    Ana dizindeki sistemde bir `.env.local` dosyası oluşturun. Next.js istemcisinin backend ile konuşabilmesi için temel API yolunu verin:
     ```env
-    NEXT_PUBLIC_API_URL=http://localhost:3001
+    NEXT_PUBLIC_API_URL=http://localhost:3000
     ```
 4. **Projeyi Başlatma:**
     Ortam hazır. İzleyen komutla uygulamayı lokal ortamınızda hızlı bir şekilde başlatıp deneyimleyebilirsiniz.
@@ -122,4 +140,6 @@ Projeyi bilgisayarında hatasız olarak ayağa kaldırabilmek için aşağıdaki
     İlgili işlem ardından Frontend sunucusu **[http://localhost:3001](http://localhost:3001)** üzerinde hizmet verecektir.
 
 ---
-**Cluber Web** - Ekip Çalışması, Topluluk İletişimi ve Moderasyon İçin Geliştirildi.
+<div align="center">
+  <sub>Cluber Web - Ekip Çalışması, Topluluk İletişimi ve Moderasyon İçin Geliştirildi. </sub>
+</div>

@@ -5,7 +5,7 @@ import { useEvents } from "@/hooks/events/useEvents";
 import { useClub } from "@/hooks/clubs/useClubs";
 import { EventCard } from "@/components/events/EventCard";
 import { EventForm } from "@/components/events/EventForm";
-import { Plus, Calendar, ChevronLeft, Loader2 } from "lucide-react";
+import { Plus, Calendar, ChevronLeft, Loader2, Filter } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/auth/useAuth";
 
@@ -16,6 +16,7 @@ interface ClubEventsPageProps {
 export default function ClubEventsPage({ params }: ClubEventsPageProps) {
     const { id: clubId } = use(params);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [filter, setFilter] = useState<"Tümü" | "Yaklaşan" | "Geçmiş">("Tümü");
 
     const { data: club, isLoading: isLoadingClub } = useClub(clubId);
     const { data: events, isLoading: isLoadingEvents } = useEvents({ clubId });
@@ -23,9 +24,12 @@ export default function ClubEventsPage({ params }: ClubEventsPageProps) {
     const user = sessionQuery.data;
 
     // Group and sort events
-    const sortedEvents = events ? [...events].sort((a, b) =>
-        new Date(a.date).getTime() - new Date(b.date).getTime()
-    ) : [];
+    const filteredEvents = events ? events.filter(event => {
+        const isPast = new Date(event.date).getTime() < new Date().getTime();
+        if (filter === "Yaklaşan") return !isPast;
+        if (filter === "Geçmiş") return isPast;
+        return true;
+    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : [];
 
     const isOwner = user?.id === club?.creatorId;
 
@@ -86,20 +90,43 @@ export default function ClubEventsPage({ params }: ClubEventsPageProps) {
                 </div>
             )}
 
+            {/* Filter Tabs */}
+            {events && events.length > 0 && (
+                <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+                    <Filter className="mr-1 h-4 w-4 text-zinc-400" />
+                    <span className="mr-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">Filtrele:</span>
+                    {(["Tümü", "Yaklaşan", "Geçmiş"] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setFilter(tab)}
+                            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                                filter === tab
+                                    ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                            }`}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+            )}
+
             {/* Events Grid */}
-            {(!sortedEvents || sortedEvents.length === 0) ? (
+            {(!filteredEvents || filteredEvents.length === 0) ? (
                 <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 py-20 dark:border-zinc-800">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-900">
                         <Calendar className="h-8 w-8 text-zinc-300 dark:text-zinc-700" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Henüz etkinlik yok</h3>
+                    <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                        {filter === "Tümü" ? "Henüz etkinlik yok" : "Bu kritere uygun etkinlik bulunamadı."}
+                    </h3>
                     <p className="mt-1 text-zinc-500 dark:text-zinc-400">
-                        {isOwner ? "İlk etkinliği sen oluşturabilirsin!" : "Bu kulüp henüz bir etkinlik planlamadı."}
+                        {filter === "Tümü" && isOwner ? "İlk etkinliği sen oluşturabilirsin!" : "Farklı bir filtre seçmeyi deneyin."}
                     </p>
                 </div>
             ) : (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {sortedEvents.map((event) => (
+                    {filteredEvents.map((event) => (
                         <EventCard key={event.id} event={event} />
                     ))}
                 </div>

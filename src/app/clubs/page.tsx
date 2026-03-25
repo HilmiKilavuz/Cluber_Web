@@ -2,19 +2,49 @@
 
 import { useClubs } from "@/hooks/clubs/useClubs";
 import { ClubCard } from "@/components/clubs/ClubCard";
-import { Search, Loader2, Compass, Plus } from "lucide-react";
-import { useState } from "react";
+import { Search, Loader2, Compass, Plus, Inbox } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useRouter, useSearchParams } from "next/navigation";
 
+function ClubsContent() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-export default function ClubsPage() {
-    const [search, setSearch] = useState("");
-    const [activeCategory, setActiveCategory] = useState("Tümü");
+    const initialSearch = searchParams.get("search") || "";
+    const initialCategory = searchParams.get("category") || "Tümü";
 
-    const { data: clubs, isLoading, error } = useClubs({
-        search: search || undefined,
-        category: activeCategory === "Tümü" ? undefined : activeCategory,
+    const [search, setSearch] = useState(initialSearch);
+    const [activeCategory, setActiveCategory] = useState(initialCategory);
+
+    const debouncedSearch = useDebounce(search, 500);
+
+    // URL Sync
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (debouncedSearch) {
+            params.set("search", debouncedSearch);
+        }
+        if (activeCategory !== "Tümü") {
+            params.set("category", activeCategory);
+        }
+        
+        const newUrl = params.toString() ? `/clubs?${params.toString()}` : "/clubs";
+        router.push(newUrl, { scroll: false });
+    }, [debouncedSearch, activeCategory, router]);
+
+    const { data: allClubs, isLoading, error } = useClubs();
+    
+    // Perform local filtering (since backend might not support filters yet)
+    const clubs = allClubs?.filter((club) => {
+        const matchesCategory = activeCategory === "Tümü" || club.category === activeCategory;
+        const matchesSearch = !debouncedSearch || 
+            club.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            club.description.toLowerCase().includes(debouncedSearch.toLowerCase());
+        
+        return matchesCategory && matchesSearch;
     });
     
     const { sessionQuery } = useAuth();
@@ -86,7 +116,7 @@ export default function ClubsPage() {
                 </div>
             ) : error ? (
                 <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
-                    <p className="text-red-500">Bir hata oluştu. Lütfen tekrar deneyin.</p>
+                    <p className="text-red-500 bg-red-50 dark:bg-red-900/10 px-6 py-4 rounded-2xl">Bir hata oluştu. Lütfen tekrar deneyin.</p>
                 </div>
             ) : (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -94,12 +124,28 @@ export default function ClubsPage() {
                         <ClubCard key={club.id} club={club} />
                     ))}
                     {(!clubs || (Array.isArray(clubs) && clubs.length === 0)) && (
-                        <div className="col-span-full flex min-h-[300px] flex-col items-center justify-center text-center">
-                            <p className="text-lg font-medium text-zinc-500">Hiç kulüp bulunamadı.</p>
+                        <div className="col-span-full flex min-h-[300px] flex-col items-center justify-center text-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 p-8">
+                            <div className="rounded-full bg-zinc-100 dark:bg-zinc-800 p-4 mb-4">
+                                <Inbox size={32} className="text-zinc-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Sonuç Bulunamadı</h3>
+                            <p className="mt-2 text-zinc-500 max-w-sm">Arama kriterlerinize uygun kulüp bulunamadı. Lütfen farklı kelimelerle veya farklı bir kategoride tekrar arayın.</p>
                         </div>
                     )}
                 </div>
             )}
         </main>
+    );
+}
+
+export default function ClubsPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center">
+                <Loader2 className="animate-spin text-zinc-400" size={40} />
+            </div>
+        }>
+            <ClubsContent />
+        </Suspense>
     );
 }

@@ -1,0 +1,207 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" version="28.2.5">
+  <diagram name="Cluber Web - Tüm Sayfalar" id="full-flow">
+    <mxGraphModel dx="906" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="CLUBER WEB - TÜM SAYFA WIREFRAME&#39;LERİ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="600" y="10" width="600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="page1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565C0;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="20" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-title" value="1. ANA SAYFA&#xa;/ (Landing)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="50" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-content" value="┌──────────────────┐&#xa;│ Hero Section    │&#xa;│ [Başlık]        │&#xa;│ [Alt Başlık]    │&#xa;│ [CTA Butonları] │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ Özellik Kartları│&#xa;│ [🔍 Keşfet]    │&#xa;│ [💬 Sohbet]     │&#xa;│ [📅 Etkinlik]  │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ Footer          │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="35" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#E65100;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="240" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-title" value="2. GİRİŞ&#xa;/login" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="270" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-content" value="┌──────────────────┐&#xa;│ Logo            │&#xa;│                 │&#xa;│ ClubHub&#39;a giriş │&#xa;│ yap             │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ [E-posta]       │&#xa;│                 │&#xa;│ [Şifre]         │&#xa;│                 │&#xa;│ [Giriş Yap]     │&#xa;│                 │&#xa;│ [Kayıt Ol]      │&#xa;│ linki           │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="255" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2E7D32;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="460" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-title" value="3. KAYIT&#xa;/register" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="490" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-content" value="┌──────────────────┐&#xa;│ Logo            │&#xa;│                 │&#xa;│ Hesap oluştur   │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ [Ad Soyad]      │&#xa;│ [E-posta]       │&#xa;│ [Şifre]         │&#xa;│ [Şifre Tekrar]  │&#xa;│                 │&#xa;│ [Kayıt Ol]      │&#xa;│                 │&#xa;│ [Giriş Yap]     │&#xa;│ linki           │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="475" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#C2185B;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="680" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p4-title" value="4. KULÜP LİSTESİ&#xa;/clubs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="710" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p4-content" value="┌──────────────────┐&#xa;│ [🔍 Arama]      │&#xa;│                 │&#xa;│ [Tümü][Tekno].. │&#xa;│                 │&#xa;│ ┌────┐ ┌────┐  │&#xa;│ │Krt1│ │Krt2│  │&#xa;│ └────┘ └────┘  │&#xa;│ ┌────┐ ┌────┐  │&#xa;│ │Krt3│ │Krt4│  │&#xa;│ └────┘ └────┘  │&#xa;│                 │&#xa;│ [+ Kulüp Oluştur]│&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="695" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7B1FA2;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="900" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p5-title" value="5. KULÜP OLUŞTUR&#xa;/clubs/create" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="920" y="80" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p5-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│                 │&#xa;│ Topluluğunu Kur │&#xa;│                 │&#xa;│ [Kulüp Adı]     │&#xa;│                 │&#xa;│ [İlgi Alanı ▼]  │&#xa;│                 │&#xa;│ [Açıklama]      │&#xa;│                 │&#xa;│ [Avatar URL]    │&#xa;│ [Banner URL]    │&#xa;│                 │&#xa;│ [Oluştur]       │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="915" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page6" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f7fa;strokeColor=#00838F;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="1120" y="70" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p6-title" value="6. KULÜP DETAY&#xa;/clubs/[id]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1150" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p6-content" value="┌──────────────────┐&#xa;│ [Banner Görsel] │&#xa;│ ┌──┐ Kulüp Adı  │&#xa;│ │Avatar│ [Kategori]│&#xa;│ └──┘              │&#xa;│                 │&#xa;│ [Katıl] / [Ayrıl]│&#xa;│ ─────────────── │&#xa;│ [Genel][Etkinl.]│&#xa;│ [Üyeler][Sohbet]│&#xa;│                 │&#xa;│ İçerik Alanı    │&#xa;│                 │&#xa;│                 │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="1135" y="115" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page7" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#FF8F00;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="20" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p7-title" value="7. ETKİNLİKLER&#xa;/clubs/[id]/events" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="40" y="380" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p7-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│ Kulüp Adı       │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ [Tümü][Yaklaşan]│&#xa;│ [Geçmiş]        │&#xa;│                 │&#xa;│ ┌──────────────┐│&#xa;│ │ Etkinlik Kartı││&#xa;│ │ [Görsel]      ││&#xa;│ │ Etkinlik Adı ││&#xa;│ │ 📅 | 📍      ││&#xa;│ │ 👥 45/100    ││&#xa;│ │ [Katıl]       ││&#xa;│ └──────────────┘│&#xa;│ [+ Etkinlik Ekle]│&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="35" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page8" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#efebe9;strokeColor=#4E342E;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="240" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p8-title" value="8. ÜYELER&#xa;/clubs/[id]/members" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="260" y="380" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p8-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│ Kulüp Adı       │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ Üye Sayısı: 45  │&#xa;│                 │&#xa;│ ┌──────────────┐│&#xa;│ │ 👤 Kurucu    ││&#xa;│ │ [👑]          ││&#xa;│ ├──────────────┤│&#xa;│ │ 👤 Yönetici ││&#xa;│ │ [🛡️]         ││&#xa;│ ├──────────────┤│&#xa;│ │ 👤 Moderatör ││&#xa;│ │ [🛡️]         ││&#xa;│ ├──────────────┤│&#xa;│ │ 👤 Üye x42   ││&#xa;│ │ [👤]         ││&#xa;│ └──────────────┘│&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="255" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page9" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#6A1B9A;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="460" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p9-title" value="9. SOHBET&#xa;/clubs/[id]/chat" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="480" y="380" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p9-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│ Kulüp Adı       │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│                 │&#xa;│ ┌──────────────┐│&#xa;│ │ Kullanıcı 1  ││&#xa;│ │ Merhaba! 👋  ││&#xa;│ ├──────────────┤│&#xa;│ │ Kullanıcı 2  ││&#xa;│ │ Hoş geldin!  ││&#xa;│ ├──────────────┤│&#xa;│ │ Kullanıcı 1  ││&#xa;│ │ Etkinlik ne? ││&#xa;│ ├──────────────┤│&#xa;│ │ ...          ││&#xa;│ ├──────────────┤│&#xa;│ │ [Mesaj yaz] ││&#xa;│ │ [Gönder]     ││&#xa;│ └──────────────┘│&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="475" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page10" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#C62828;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="680" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p10-title" value="10. AYARLAR&#xa;/clubs/[id]/settings" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="700" y="380" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p10-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│ Kulüp Adı       │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ Ayarlar         │&#xa;│                 │&#xa;│ [Kulüp Adı]     │&#xa;│                 │&#xa;│ [İlgi Alanı ▼]  │&#xa;│                 │&#xa;│ [Açıklama]      │&#xa;│                 │&#xa;│ [Avatar URL]    │&#xa;│ [Banner URL]    │&#xa;│                 │&#xa;│ [Kaydet]        │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ [🗑️ Kulübü Sil] │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="695" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page11" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#283593;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="900" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p11-title" value="11. ETKİNLİK OLUŞTUR&#xa;/events/create" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="920" y="380" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p11-content" value="┌──────────────────┐&#xa;│ [← Geri]        │&#xa;│                 │&#xa;│ Etkinlik Oluştur│&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ [Kulüp Seç ▼]  │&#xa;│                 │&#xa;│ [Etkinlik Adı]  │&#xa;│                 │&#xa;│ [Tarih/Saat]    │&#xa;│                 │&#xa;│ [Konum]         │&#xa;│                 │&#xa;│ [Açıklama]      │&#xa;│                 │&#xa;│ [Kontenjan]     │&#xa;│ [Görsel URL]    │&#xa;│                 │&#xa;│ [Oluştur]       │&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="915" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="page12" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00695C;strokeWidth=2" parent="1" vertex="1">
+          <mxGeometry x="1120" y="370" width="200" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="p12-title" value="12. PROFİL&#xa;/profile" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="1150" y="380" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="p12-content" value="┌──────────────────┐&#xa;│                 │&#xa;│    ┌─────┐    │&#xa;│    │Avatar│    │&#xa;│    └─────┘    │&#xa;│    Kullanıcı Adı│&#xa;│    [email]     │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ İstatistikler   │&#xa;│ Kulüp: 5        │&#xa;│ Etkinlik: 12    │&#xa;│                 │&#xa;│ ─────────────── │&#xa;│ Katıldığım Kulüp│&#xa;│ ┌────┐ ┌────┐  │&#xa;│ │Krt1│ │Krt2│  │&#xa;│ └────┘ └────┘  │&#xa;│                 │&#xa;│ [Profili Düzenle]│&#xa;└──────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=8;spacing=2" parent="1" vertex="1">
+          <mxGeometry x="1135" y="415" width="170" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2196F3;strokeWidth=2" parent="1" source="page1" target="page4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl1" value="Keşfet" style="text;html=1;strokeColor=#2196F3;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#2196F3" parent="1" vertex="1">
+          <mxGeometry x="295" y="200" width="60" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF9800;strokeWidth=2" parent="1" source="page1" target="page2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl2" value="Giriş" style="text;html=1;strokeColor=#FF9800;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#FF9800" parent="1" vertex="1">
+          <mxGeometry x="170" y="140" width="40" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4CAF50;strokeWidth=2" parent="1" source="page2" target="page3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl3" value="Kayıt ol" style="text;html=1;strokeColor=#4CAF50;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#4CAF50" parent="1" vertex="1">
+          <mxGeometry x="375" y="200" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9C27B0;strokeWidth=2" parent="1" source="page4" target="page5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl4" value="Oluştur" style="text;html=1;strokeColor=#9C27B0;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#9C27B0" parent="1" vertex="1">
+          <mxGeometry x="820" y="200" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#00BCD4;strokeWidth=2" parent="1" source="page4" target="page6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl5" value="Detay" style="text;html=1;strokeColor=#00BCD4;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#00BCD4" parent="1" vertex="1">
+          <mxGeometry x="1010" y="200" width="40" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4CAF50;strokeWidth=2" parent="1" source="page5" target="page6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl6" value="Oluştur" style="text;html=1;strokeColor=#4CAF50;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#4CAF50" parent="1" vertex="1">
+          <mxGeometry x="1185" y="280" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF9800;strokeWidth=2" parent="1" source="page6" target="page7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl7" value="Etkinlikler" style="text;html=1;strokeColor=#FF9800;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#FF9800" parent="1" vertex="1">
+          <mxGeometry x="200" y="340" width="70" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#795548;strokeWidth=2" parent="1" source="page6" target="page8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl8" value="Üyeler" style="text;html=1;strokeColor=#795548;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#795548" parent="1" vertex="1">
+          <mxGeometry x="330" y="340" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9C27B0;strokeWidth=2" parent="1" source="page6" target="page9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl9" value="Sohbet" style="text;html=1;strokeColor=#9C27B0;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#9C27B0" parent="1" vertex="1">
+          <mxGeometry x="440" y="340" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F44336;strokeWidth=2" parent="1" source="page6" target="page10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl10" value="Ayarlar" style="text;html=1;strokeColor=#F44336;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#F44336" parent="1" vertex="1">
+          <mxGeometry x="560" y="340" width="50" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3F51B5;strokeWidth=2" parent="1" source="page7" target="page11" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl11" value="Ekle" style="text;html=1;strokeColor=#3F51B5;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#3F51B5" parent="1" vertex="1">
+          <mxGeometry x="770" y="450" width="40" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#009688;strokeWidth=2" parent="1" source="page6" target="page12" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1350" y="210" />
+              <mxPoint x="1350" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl12" value="Profil" style="text;html=1;strokeColor=#009688;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#009688" parent="1" vertex="1">
+          <mxGeometry x="1330" y="450" width="40" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="SAYFA LİSTESİ (12 Sayfa):&#xa;─────────────────────&#xa;1. Ana Sayfa (/)&#xa;2. Giriş (/login)&#xa;3. Kayıt (/register)&#xa;4. Kulüp Listesi (/clubs)&#xa;5. Kulüp Oluştur (/clubs/create)&#xa;6. Kulüp Detay (/clubs/[id])&#xa;7. Etkinlikler (/clubs/[id]/events)&#xa;8. Üyeler (/clubs/[id]/members)&#xa;9. Sohbet (/clubs/[id]/chat)&#xa;10. Ayarlar (/clubs/[id]/settings)&#xa;11. Etkinlik Oluştur (/events/create)&#xa;12. Profil (/profile)" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" parent="1" vertex="1">
+          <mxGeometry x="1350" y="70" width="180" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="X6gSjDP9vsbs115pWFRA-1" value="&lt;b&gt;Öğrenci No: 230541085&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="170" y="18" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="X6gSjDP9vsbs115pWFRA-2" value="&lt;b&gt;Öğrenci Adı: Muhammed Hilmi Kılavuz&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="370" y="15" width="240" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

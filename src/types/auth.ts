@@ -26,3 +26,8 @@ export interface AuthSuccessResponse {
 
 export type SessionResponse = AuthUser;
 
+export interface VerifyEmailDto {
+  email: string;
+  code: string;
+}
+

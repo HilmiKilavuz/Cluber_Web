@@ -14,6 +14,7 @@ import type {
   AuthUser,
   LoginDto,
   RegisterDto,
+  VerifyEmailDto,
 } from "@/types/auth";
 
 const AUTH_SESSION_QUERY_KEY = ["auth", "session"] as const;
@@ -43,8 +44,9 @@ const resolveUser = (response: AuthSuccessResponse): AuthUser => response.user;
 interface UseAuthResult {
   sessionQuery: UseQueryResult<AuthUser | null, Error>;
   loginMutation: UseMutationResult<AuthUser, Error, LoginDto>;
-  registerMutation: UseMutationResult<AuthUser, Error, RegisterDto>;
+  registerMutation: UseMutationResult<{ user: AuthUser; message: string }, Error, RegisterDto>;
   logoutMutation: UseMutationResult<void, Error, void>;
+  verifyEmailMutation: UseMutationResult<AuthSuccessResponse & { message: string }, Error, VerifyEmailDto>;
 }
 
 export const useAuth = (): UseAuthResult => {
@@ -74,14 +76,10 @@ export const useAuth = (): UseAuthResult => {
     },
   });
 
-  const registerMutation = useMutation<AuthUser, Error, RegisterDto>({
+  const registerMutation = useMutation<{ user: AuthUser; message: string }, Error, RegisterDto>({
     mutationFn: async (payload) => {
       const response = await authService.register(payload);
-      persistAccessToken(response.accessToken, true); // default to remember for registration
-      return resolveUser(response);
-    },
-    onSuccess: (user) => {
-      queryClient.setQueryData(AUTH_SESSION_QUERY_KEY, user);
+      return response;
     },
   });
 
@@ -96,11 +94,23 @@ export const useAuth = (): UseAuthResult => {
     },
   });
 
+  const verifyEmailMutation = useMutation<AuthSuccessResponse & { message: string }, Error, VerifyEmailDto>({
+    mutationFn: async (payload) => {
+      const response = await authService.verifyEmail(payload);
+      persistAccessToken(response.accessToken, true); // log the user in
+      return response;
+    },
+    onSuccess: (response) => {
+      queryClient.setQueryData(AUTH_SESSION_QUERY_KEY, response.user);
+    },
+  });
+
   return {
     sessionQuery,
     loginMutation,
     registerMutation,
     logoutMutation,
+    verifyEmailMutation,
   };
 };
 

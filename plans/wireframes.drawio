@@ -1,0 +1,192 @@
+<mxfile host="app.diagrams.net" modified="2026-03-20T22:15:00" agent="CluberWeb" version="22.1.0" type="device">
+  <diagram name="Cluber Web Wireframes" id="screen-flow">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Cluber Web - Wireframe Ekran Akışı" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EKRAN 1: KULÜP LİSTESİ ==================== -->
+        <mxCell id="screen1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="280" height="380" as="geometry" />
+        </mxCell>
+
+        <!-- Screen 1 Header -->
+        <mxCell id="s1-header" value="KULÜP LİSTESİ&#xa;/clubs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Search Box -->
+        <mxCell id="s1-search" value="[ 🔍 Kulüp ara... ]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="240" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Category Filters -->
+        <mxCell id="s1-cats" value="[Tümü] [Teknoloji] [Spor] [Müzik]..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999" vertex="1" parent="1">
+          <mxGeometry x="60" y="190" width="240" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Club Cards -->
+        <mxCell id="s1-card1" value="┌─────────────┐&#xa;│ [Banner]   │&#xa;│ ┌───┐      │&#xa;│ │Avatar     │&#xa;│ └───┘      │&#xa;│ Kulüp Adı  │&#xa;│ [Kategori] │&#xa;│ 👥 125     │&#xa;└─────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="60" y="225" width="100" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1-card2" value="┌─────────────┐&#xa;│ [Banner]   │&#xa;│ ┌───┐      │&#xa;│ │Avatar     │&#xa;│ └───┘      │&#xa;│ Kulüp Adı  │&#xa;│ [Kategori] │&#xa;│ 👥 89      │&#xa;└─────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="170" y="225" width="100" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1-card3" value="┌─────────────┐&#xa;│ [Banner]   │&#xa;│ ┌───┐      │&#xa;│ │Avatar     │&#xa;│ └───┘      │&#xa;│ Kulüp Adı  │&#xa;│ [Kategori] │&#xa;│ 👥 234     │&#xa;└─────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="60" y="345" width="100" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Create Button -->
+        <mxCell id="s1-create" value="[ + Kulüp Oluştur ]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#2E7D32;fontColor=#ffffff" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="180" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EKRAN 2: KULÜP OLUŞTUR ==================== -->
+        <mxCell id="screen2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="380" y="100" width="280" height="380" as="geometry" />
+        </mxCell>
+
+        <!-- Screen 2 Header -->
+        <mxCell id="s2-header" value="KULÜP OLUŞTUR&#xa;/clubs/create" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="110" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Form Fields -->
+        <mxCell id="s2-field1" value="Kulüp Adı *&#xa;┌─────────────────────┐&#xa;│ Kulüp adını giriniz │&#xa;└─────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="400" y="150" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2-field2" value="İlgi Alanı *&#xa;┌─────────────────────┐&#xa;│ Teknoloji       ▼   │&#xa;└─────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="400" y="210" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2-field3" value="Açıklama *&#xa;┌─────────────────────┐&#xa;│ Bu kulüp hakkında │&#xa;│ bilgi veriniz...  │&#xa;│                   │&#xa;└─────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="400" y="270" width="240" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2-field4" value="Avatar URL (Opsiyonel)&#xa;┌─────────────────────┐&#xa;│ https://...        │&#xa;└─────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="400" y="350" width="240" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2-submit" value="[ Kulübü Oluştur ]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#1565C0;fontColor=#ffffff" vertex="1" parent="1">
+          <mxGeometry x="420" y="430" width="180" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EKRAN 3: KULÜP DETAY ==================== -->
+        <mxCell id="screen3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="720" y="100" width="280" height="380" as="geometry" />
+        </mxCell>
+
+        <!-- Screen 3 Header -->
+        <mxCell id="s3-header" value="KULÜP DETAY&#xa;/clubs/[id]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="760" y="110" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Banner -->
+        <mxCell id="s3-banner" value="┌───────────────────────────┐&#xa;│                           │&#xa;│     [BANNER GÖRSELİ]    │&#xa;│         ┌─────┐         │&#xa;│         │Avatar│         │&#xa;│         └─────┘         │&#xa;│                           │&#xa;│    Kulüp Adı             │&#xa;│    [Kategori]            │&#xa;│                           │&#xa;│    [ Katıl ] veya [ Ayrıl ]│&#xa;│                           │&#xa;└───────────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9;spacing=2" vertex="1" parent="1">
+          <mxGeometry x="735" y="145" width="250" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Tabs -->
+        <mxCell id="s3-tabs" value="[Genel] [Etkinlikler] [Üyeler] [Sohbet]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999" vertex="1" parent="1">
+          <mxGeometry x="735" y="335" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Events List -->
+        <mxCell id="s3-events" value="┌───────────────────────────┐&#xa;│ Etkinlik Kartı           │&#xa;│ [Etkinlik Görseli]        │&#xa;│ Etkinlik Adı             │&#xa;│ 📅 Tarih | 📍 Konum     │&#xa;│ 👥 45/100                 │&#xa;│ [Katıl] veya [Katıldın ✓]│&#xa;└───────────────────────────┘" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9;spacing=2" vertex="1" parent="1">
+          <mxGeometry x="735" y="365" width="250" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== OKLAR (GEÇİŞLER) ==================== -->
+
+        <!-- Arrow 1: List -> Create -->
+        <mxCell id="arrow1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#FF5722;strokeWidth=2;fillColor=#FF5722" edge="1" parent="1" source="s1-create" target="screen2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="350" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="340" y="475" />
+              <mxPoint x="340" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label1" value="1. Kulüp Oluştur" style="text;html=1;strokeColor=#FF5722;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#FF5722" vertex="1" parent="1">
+          <mxGeometry x="310" y="440" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 2: Card Click -> Detail -->
+        <mxCell id="arrow2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2196F3;strokeWidth=2;fillColor=#2196F3" edge="1" parent="1" source="s1-card1" target="screen3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="350" y="280" />
+              <mxPoint x="680" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label2" value="2. Kart Tıkla" style="text;html=1;strokeColor=#2196F3;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#2196F3" vertex="1" parent="1">
+          <mxGeometry x="400" y="265" width="90" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 3: Create -> Detail -->
+        <mxCell id="arrow3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4CAF50;strokeWidth=2;fillColor=#4CAF50" edge="1" parent="1" source="s2-submit" target="screen3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="447" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label3" value="3. Oluştur" style="text;html=1;strokeColor=#4CAF50;fillColor=#ffffff;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#4CAF50" vertex="1" parent="1">
+          <mxGeometry x="660" y="435" width="70" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="SENARYO AKIŞLARI:&#xa;─────────────────────&#xa;1️⃣ Arama yap → Kulüp Oluştur&#xa;2️⃣ Kart tıkla → Kulüp Detay&#xa;3️⃣ Etkinliklere katıl" style="text;html=1;strokeColor=#666666;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;spacing=4" vertex="1" parent="1">
+          <mxGeometry x="1040" y="100" width="180" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Navigation Flow -->
+        <mxCell id="nav-title" value="EKGEİŞ AKIŞI:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1040" y="220" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nav1" value="Ana Sayfa (/)" style="text;html=1;strokeColor=#666666;fillColor=#e3f2fd;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1040" y="250" width="120" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav-arrow1" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="1160" y="250" width="20" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav2" value="Kulüp Listesi (/clubs)" style="text;html=1;strokeColor=#666666;fillColor=#e3f2fd;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1180" y="250" width="180" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nav3" value="Kulüp Oluştur (/clubs/create)" style="text;html=1;strokeColor=#666666;fillColor=#e8f5e9;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1040" y="285" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav-arrow2" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="1240" y="285" width="20" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav4" value="Kulüp Detay (/clubs/[id])" style="text;html=1;strokeColor=#666666;fillColor=#fff3e0;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1260" y="285" width="180" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nav5" value="Etkinlikler" style="text;html=1;strokeColor=#666666;fillColor=#fce4ec;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1040" y="320" width="100" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav-arrow3" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="1140" y="320" width="20" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="nav6" value="Üyeler, Sohbet, Ayarlar" style="text;html=1;strokeColor=#666666;fillColor=#f3e5f5;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="1160" y="320" width="160" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

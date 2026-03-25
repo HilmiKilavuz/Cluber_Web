@@ -4,6 +4,7 @@ import type {
   LoginDto,
   RegisterDto,
   SessionResponse,
+  VerifyEmailDto,
 } from "@/types/auth";
 
 const AUTH_BASE_PATH = "/auth";
@@ -19,8 +20,8 @@ export const authService = {
     return response.data;
   },
 
-  register: async (payload: RegisterDto): Promise<AuthSuccessResponse> => {
-    const response = await axiosInstance.post<AuthSuccessResponse>(
+  register: async (payload: RegisterDto): Promise<{ user: AuthUser; message: string }> => {
+    const response = await axiosInstance.post<{ user: AuthUser; message: string }>(
       `${AUTH_BASE_PATH}/register`,
       payload,
     );
@@ -43,6 +44,14 @@ export const authService = {
 
   logout: async (): Promise<void> => {
     await axiosInstance.post(`${AUTH_BASE_PATH}/logout`);
+  },
+
+  verifyEmail: async (payload: VerifyEmailDto): Promise<AuthSuccessResponse & { message: string }> => {
+    const response = await axiosInstance.post<AuthSuccessResponse & { message: string }>(
+      `${AUTH_BASE_PATH}/verify-email`,
+      payload,
+    );
+    return response.data;
   },
 };
 
