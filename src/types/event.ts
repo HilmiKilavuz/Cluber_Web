@@ -48,4 +48,7 @@ export type UpdateEventDto = Partial<CreateEventDto>;
 export interface EventFilters {
     clubId?: string;
     date?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
 }

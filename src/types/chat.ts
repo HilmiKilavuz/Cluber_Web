@@ -3,9 +3,9 @@ import { AuthUser } from "./auth";
 export interface Message {
     id: string;
     content: string;
-    senderId: string;
+    userId: string;
     clubId: string;
-    sender?: AuthUser;
+    user?: Partial<AuthUser>;
     createdAt: string;
 }
 
@@ -16,13 +16,11 @@ export interface ChatRoom {
 }
 
 export interface ServerToClientEvents {
-    message: (message: Message) => void;
+    "chat:new-message": (message: Message) => void;
     exception: (error: { message: string; statusCode: number }) => void;
-    joined: (data: { clubId: string; history: Message[] }) => void;
 }
 
 export interface ClientToServerEvents {
-    join: (clubId: string) => void;
-    leave: (clubId: string) => void;
-    sendMessage: (data: { clubId: string; content: string }) => void;
+    "chat:join-room": (data: { clubId: string }, callback?: (res: { joined: boolean; clubId: string }) => void) => void;
+    "chat:send-message": (data: { clubId: string; content: string }, callback?: (res: Message) => void) => void;
 }

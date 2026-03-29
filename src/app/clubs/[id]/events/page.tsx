@@ -19,7 +19,16 @@ export default function ClubEventsPage({ params }: ClubEventsPageProps) {
     const [filter, setFilter] = useState<"Tümü" | "Yaklaşan" | "Geçmiş">("Tümü");
 
     const { data: club, isLoading: isLoadingClub } = useClub(clubId);
-    const { data: events, isLoading: isLoadingEvents } = useEvents({ clubId });
+    const { 
+        data: eventsData, 
+        isLoading: isLoadingEvents,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage
+    } = useEvents({ clubId });
+    
+    const events = eventsData?.pages.flatMap((page: any) => Array.isArray(page.data) ? page.data : (Array.isArray(page) ? page : [])) || [];
+    
     const { sessionQuery } = useAuth();
     const user = sessionQuery.data;
 
@@ -126,9 +135,28 @@ export default function ClubEventsPage({ params }: ClubEventsPageProps) {
                 </div>
             ) : (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {filteredEvents.map((event) => (
+                    {filteredEvents.map((event: any) => (
                         <EventCard key={event.id} event={event} />
                     ))}
+                </div>
+            )}
+            
+            {hasNextPage && (
+                <div className="mt-8 flex justify-center">
+                    <button
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                        className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-zinc-900 shadow-sm border border-zinc-200 transition-all hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-700"
+                    >
+                        {isFetchingNextPage ? (
+                            <>
+                                <Loader2 className="animate-spin" size={18} />
+                                Yükleniyor...
+                            </>
+                        ) : (
+                            "Daha Fazla Yükle"
+                        )}
+                    </button>
                 </div>
             )}
         </div>

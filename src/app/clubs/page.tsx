@@ -1,6 +1,7 @@
 "use client";
 
 import { useClubs } from "@/hooks/clubs/useClubs";
+import type { Club } from "@/types/club";
 import { ClubCard } from "@/components/clubs/ClubCard";
 import { Search, Loader2, Compass, Plus, Inbox } from "lucide-react";
 import { useState, useEffect, Suspense } from "react";
@@ -18,6 +19,11 @@ function ClubsContent() {
 
     const [search, setSearch] = useState(initialSearch);
     const [activeCategory, setActiveCategory] = useState(initialCategory);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const debouncedSearch = useDebounce(search, 500);
 
@@ -35,15 +41,28 @@ function ClubsContent() {
         router.push(newUrl, { scroll: false });
     }, [debouncedSearch, activeCategory, router]);
 
-    const { data: allClubs, isLoading, error } = useClubs();
+    // Fetch paginated data with filters
+    const { 
+        data, 
+        isLoading, 
+        error, 
+        hasNextPage, 
+        fetchNextPage, 
+        isFetchingNextPage 
+    } = useClubs({
+        search: debouncedSearch,
+        category: activeCategory !== "Tümü" ? activeCategory : undefined
+    });
     
-    // Perform local filtering (since backend might not support filters yet)
-    const clubs = allClubs?.filter((club) => {
-        const matchesCategory = activeCategory === "Tümü" || club.category === activeCategory;
-        const matchesSearch = !debouncedSearch || 
-            club.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-            club.description.toLowerCase().includes(debouncedSearch.toLowerCase());
-        
+    // Flatten all loaded pages into a single array
+    const allClubs = data?.pages.flatMap((page: any) => Array.isArray(page.data) ? page.data : (Array.isArray(page) ? page : [])) || [];
+    
+    // Client-side filtering as a reliable fallback (works whether or not backend supports filters)
+    const clubs = allClubs.filter((club: Club) => {
+        const matchesCategory = !activeCategory || activeCategory === "Tümü" || club.category === activeCategory;
+        const matchesSearch = !debouncedSearch ||
+            club.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+            club.description?.toLowerCase().includes(debouncedSearch.toLowerCase());
         return matchesCategory && matchesSearch;
     });
     
@@ -67,7 +86,7 @@ function ClubsContent() {
                     İlgi alanlarına göre kulüplere katıl, yeni insanlar tanı ve birlikte etkinlikler düzenle.
                 </p>
 
-                {user && (
+                {isMounted && user && (
                     <div className="mt-8">
                         <Link
                             href="/clubs/create"
@@ -119,17 +138,38 @@ function ClubsContent() {
                     <p className="text-red-500 bg-red-50 dark:bg-red-900/10 px-6 py-4 rounded-2xl">Bir hata oluştu. Lütfen tekrar deneyin.</p>
                 </div>
             ) : (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {Array.isArray(clubs) && clubs.map((club) => (
-                        <ClubCard key={club.id} club={club} />
-                    ))}
-                    {(!clubs || (Array.isArray(clubs) && clubs.length === 0)) && (
-                        <div className="col-span-full flex min-h-[300px] flex-col items-center justify-center text-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 p-8">
-                            <div className="rounded-full bg-zinc-100 dark:bg-zinc-800 p-4 mb-4">
-                                <Inbox size={32} className="text-zinc-400" />
+                <div className="flex flex-col gap-8">
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {clubs.map((club: Club) => (
+                            <ClubCard key={club.id} club={club} />
+                        ))}
+                        {clubs.length === 0 && (
+                            <div className="col-span-full flex min-h-[300px] flex-col items-center justify-center text-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 p-8">
+                                <div className="rounded-full bg-zinc-100 dark:bg-zinc-800 p-4 mb-4">
+                                    <Inbox size={32} className="text-zinc-400" />
+                                </div>
+                                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Sonuç Bulunamadı</h3>
+                                <p className="mt-2 text-zinc-500 max-w-sm">Arama kriterlerinize uygun kulüp bulunamadı. Lütfen farklı kelimelerle veya farklı bir kategoride tekrar arayın.</p>
                             </div>
-                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Sonuç Bulunamadı</h3>
-                            <p className="mt-2 text-zinc-500 max-w-sm">Arama kriterlerinize uygun kulüp bulunamadı. Lütfen farklı kelimelerle veya farklı bir kategoride tekrar arayın.</p>
+                        )}
+                    </div>
+                    
+                    {hasNextPage && (
+                        <div className="flex justify-center mt-4">
+                            <button
+                                onClick={() => fetchNextPage()}
+                                disabled={isFetchingNextPage}
+                                className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100 shadow-sm transition-all hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isFetchingNextPage ? (
+                                    <>
+                                        <Loader2 className="animate-spin" size={18} />
+                                        Yükleniyor...
+                                    </>
+                                ) : (
+                                    "Daha Fazla Yükle"
+                                )}
+                            </button>
                         </div>
                     )}
                 </div>

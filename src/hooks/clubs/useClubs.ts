@@ -2,8 +2,11 @@ import {
     useMutation,
     useQuery,
     useQueryClient,
+    useInfiniteQuery,
     type UseMutationResult,
     type UseQueryResult,
+    type UseInfiniteQueryResult,
+    type InfiniteData,
 } from "@tanstack/react-query";
 import { clubService } from "@/services/clubs/club.service";
 import type {
@@ -13,6 +16,7 @@ import type {
     CreateClubDto,
     UpdateClubDto,
 } from "@/types/club";
+import type { PaginatedResponse } from "@/types/api";
 
 const CLUB_QUERY_KEYS = {
     all: ["clubs"] as const,
@@ -21,10 +25,18 @@ const CLUB_QUERY_KEYS = {
     detailBySlug: (slug: string) => ["clubs", "detail", "slug", slug] as const,
 };
 
-export const useClubs = (filters?: ClubFilters): UseQueryResult<Club[], Error> => {
-    return useQuery({
+export const useClubs = (filters?: ClubFilters): UseInfiniteQueryResult<InfiniteData<PaginatedResponse<Club>>, Error> => {
+    return useInfiniteQuery({
         queryKey: CLUB_QUERY_KEYS.list(filters),
-        queryFn: () => clubService.getClubs(filters),
+        queryFn: ({ pageParam }) => clubService.getClubs({ ...filters, page: pageParam as number }),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage || !lastPage.meta) return undefined;
+            if (lastPage.meta.page < lastPage.meta.totalPages) {
+                return lastPage.meta.page + 1;
+            }
+            return undefined;
+        },
     });
 };
 

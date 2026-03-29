@@ -1,12 +1,21 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { eventService } from "@/services/events/event.service";
 import type { EventFilters, CreateEventDto, UpdateEventDto, RSVPStatus } from "@/types/event";
 import { toast } from "sonner";
+import type { PaginatedResponse } from "@/types/api";
 
 export const useEvents = (filters?: EventFilters) => {
-    return useQuery({
+    return useInfiniteQuery({
         queryKey: ["events", filters],
-        queryFn: () => eventService.getEvents(filters),
+        queryFn: ({ pageParam }) => eventService.getEvents({ ...filters, page: pageParam as number }),
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            if (!lastPage || !lastPage.meta) return undefined;
+            if (lastPage.meta.page < lastPage.meta.totalPages) {
+                return lastPage.meta.page + 1;
+            }
+            return undefined;
+        },
     });
 };
 

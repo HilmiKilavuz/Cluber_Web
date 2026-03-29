@@ -40,4 +40,6 @@ export type UpdateClubDto = Partial<CreateClubDto>;
 export interface ClubFilters {
     category?: string;
     search?: string;
+    page?: number;
+    limit?: number;
 }

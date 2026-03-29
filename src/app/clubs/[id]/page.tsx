@@ -34,7 +34,8 @@ export default function ClubDetailPage() {
     const isOwner = user?.id === club?.creatorId;
     const isLoading = clubLoading || joinedLoading;
 
-    const { data: events } = useEvents({ clubId: id });
+    const { data: eventsData } = useEvents({ clubId: id });
+    const events = eventsData?.pages.flatMap((page: any) => Array.isArray(page.data) ? page.data : (Array.isArray(page) ? page : [])) || [];
 
     const handleJoin = async () => {
         try {

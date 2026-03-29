@@ -11,8 +11,8 @@ interface MessageItemProps {
 }
 
 export const MessageItem = ({ message, currentUser }: MessageItemProps) => {
-    const isMe = message.senderId === currentUser?.id;
-    const senderName = message.sender?.username || "Bilinmeyen";
+    const isMe = message.userId === currentUser?.id;
+    const senderName = message.user?.displayName || "Bilinmeyen";
     const avatarChar = senderName?.charAt(0) || "?";
 
     return (
@@ -20,8 +20,8 @@ export const MessageItem = ({ message, currentUser }: MessageItemProps) => {
             <div className={`flex max-w-[80%] items-end gap-2 ${isMe ? "flex-row-reverse" : "flex-row"}`}>
                 {/* Avatar */}
                 <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-                    {message.sender?.avatarUrl ? (
-                        <img src={message.sender.avatarUrl} alt={senderName} className="h-full w-full object-cover" />
+                    {message.user?.avatarUrl ? (
+                        <img src={message.user.avatarUrl} alt={senderName} className="h-full w-full object-cover" />
                     ) : (
                         <div className="flex h-full w-full items-center justify-center text-xs font-bold text-zinc-400">
                             {avatarChar}

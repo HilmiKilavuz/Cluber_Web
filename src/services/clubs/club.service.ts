@@ -6,16 +6,16 @@ import type {
     CreateClubDto,
     UpdateClubDto,
 } from "@/types/club";
+import type { PaginatedResponse } from "@/types/api";
 
 const CLUBS_BASE_PATH = "/clubs";
 
 export const clubService = {
-    getClubs: async (filters?: ClubFilters): Promise<Club[]> => {
-        const response = await axiosInstance.get<Club[]>(CLUBS_BASE_PATH, {
+    getClubs: async (filters?: ClubFilters): Promise<PaginatedResponse<Club>> => {
+        const response = await axiosInstance.get<PaginatedResponse<Club>>(CLUBS_BASE_PATH, {
             params: filters,
         });
-        return Array.isArray(response.data) ? response.data : [];
-
+        return response.data;
     },
 
     getClubById: async (id: string): Promise<Club> => {

@@ -6,15 +6,16 @@ import type {
     UpdateEventDto,
     RSVPStatus,
 } from "@/types/event";
+import type { PaginatedResponse } from "@/types/api";
 
 const EVENTS_BASE_PATH = "/events";
 
 export const eventService = {
-    getEvents: async (filters?: EventFilters): Promise<Event[]> => {
-        const response = await axiosInstance.get<Event[]>(EVENTS_BASE_PATH, {
+    getEvents: async (filters?: EventFilters): Promise<PaginatedResponse<Event>> => {
+        const response = await axiosInstance.get<PaginatedResponse<Event>>(EVENTS_BASE_PATH, {
             params: filters,
         });
-        return Array.isArray(response.data) ? response.data : [];
+        return response.data;
     },
 
     getEventById: async (id: string): Promise<Event> => {

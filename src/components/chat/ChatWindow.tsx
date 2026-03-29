@@ -11,7 +11,7 @@ interface ChatWindowProps {
 }
 
 export const ChatWindow = ({ clubId }: ChatWindowProps) => {
-    const { messages, isConnected, sendMessage } = useSocket(clubId);
+    const { messages, isConnected, isConnecting, sendMessage } = useSocket(clubId);
     const { sessionQuery } = useAuth();
     const [content, setContent] = useState("");
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -43,6 +43,11 @@ export const ChatWindow = ({ clubId }: ChatWindowProps) => {
                     <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 italic">KULÜP SOHBETİ</h2>
                     {isConnected ? (
                         <Wifi className="text-emerald-500" size={14} />
+                    ) : isConnecting ? (
+                        <div className="flex items-center gap-1">
+                            <Loader2 className="animate-spin text-blue-500" size={14} />
+                            <span className="text-[10px] text-blue-500 font-bold">BAĞLANIYOR...</span>
+                        </div>
                     ) : (
                         <div className="flex items-center gap-1">
                             <WifiOff className="text-red-500" size={14} />
@@ -52,7 +57,8 @@ export const ChatWindow = ({ clubId }: ChatWindowProps) => {
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-zinc-500">
                     {isConnected && <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>}
-                    <span>{isConnected ? "Aktif" : "Çevrimdışı"}</span>
+                    {isConnecting && !isConnected && <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>}
+                    <span>{isConnected ? "Aktif" : isConnecting ? "Bağlanıyor..." : "Çevrimdışı"}</span>
                 </div>
             </div>
 
@@ -66,7 +72,7 @@ export const ChatWindow = ({ clubId }: ChatWindowProps) => {
                         <MessageItem message={{
                             id: 'welc',
                             content: 'Sohbetin ilk mesajını sen gönder!',
-                            senderId: 'sys',
+                            userId: 'sys',
                             clubId: clubId,
                             createdAt: new Date().toISOString()
                         }} currentUser={null} />
