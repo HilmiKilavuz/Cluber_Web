@@ -15,7 +15,8 @@ import {
     UserPlus,
     LogOut,
     Clock,
-    LayoutDashboard
+    LayoutDashboard,
+    ShieldAlert,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -178,6 +179,15 @@ export default function ClubDetailPage() {
                         <LayoutDashboard size={18} />
                         Üyeler
                     </Link>
+                    {isOwner && (
+                        <Link
+                            href={`/clubs/${club.id}/admin`}
+                            className="group flex items-center gap-2 pb-4 text-sm font-medium text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400"
+                        >
+                            <ShieldAlert size={18} />
+                            Yönetim Paneli
+                        </Link>
+                    )}
                 </div>
 
                 <div className="grid gap-10 py-10 lg:grid-cols-3">

@@ -5,19 +5,16 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useUpdateProfile } from "@/hooks/users/useUser";
 import { Users, Calendar, Award, Pencil, X, Loader2, Check } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 const profileSchema = z.object({
     displayName: z.string().min(2, "Görünen ad en az 2 karakter olmalıdır."),
     username: z.string().min(2, "Kullanıcı adı en az 2 karakter olmalıdır.").optional().or(z.literal("")),
     bio: z.string().max(200, "Bio en fazla 200 karakter olabilir.").optional().or(z.literal("")),
-    avatarUrl: z
-        .string()
-        .url("Geçerli bir resim URL'si girin.")
-        .optional()
-        .or(z.literal("")),
+    avatarUrl: z.string().optional().or(z.literal("")),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -32,6 +29,7 @@ export function ProfileHeader() {
         register,
         handleSubmit,
         reset,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
@@ -42,6 +40,8 @@ export function ProfileHeader() {
             avatarUrl: user?.avatarUrl || "",
         },
     });
+
+    const { field: avatarField } = useController({ name: "avatarUrl", control });
 
     if (!user) return null;
 
@@ -173,19 +173,14 @@ export function ProfileHeader() {
                         )}
                     </div>
 
-                    {/* Avatar URL */}
-                    <div className="space-y-1.5">
-                        <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            Avatar URL <span className="text-zinc-400">(Opsiyonel)</span>
-                        </label>
-                        <input
-                            {...register("avatarUrl")}
-                            className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400"
-                            placeholder="https://example.com/avatar.jpg"
+                    {/* Avatar Upload */}
+                    <div className="space-y-2">
+                        <ImageUpload
+                            label="Profil Fotoğrafı"
+                            shape="circle"
+                            value={avatarField.value}
+                            onChange={avatarField.onChange}
                         />
-                        {errors.avatarUrl && (
-                            <p className="text-xs text-red-500">{errors.avatarUrl.message}</p>
-                        )}
                     </div>
 
                     <div className="flex gap-3 pt-2">

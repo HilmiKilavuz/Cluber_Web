@@ -132,3 +132,16 @@ export const useClubMembers = (clubId: string): UseQueryResult<ClubMember[], Err
         enabled: !!clubId,
     });
 };
+
+export const useRemoveMember = (clubId: string): UseMutationResult<void, Error, string> => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (userId: string) => clubService.removeMember(clubId, userId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["clubs", "members", clubId] });
+            queryClient.invalidateQueries({ queryKey: CLUB_QUERY_KEYS.detail(clubId) });
+            queryClient.invalidateQueries({ queryKey: ["joinedClubs"] });
+        },
+    });
+};

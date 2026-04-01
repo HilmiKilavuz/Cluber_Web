@@ -62,5 +62,9 @@ export const clubService = {
         const response = await axiosInstance.get<ClubMember[]>(`${CLUBS_BASE_PATH}/${clubId}/members`);
         return Array.isArray(response.data) ? response.data : [];
     },
+
+    removeMember: async (clubId: string, userId: string): Promise<void> => {
+        await axiosInstance.delete(`${CLUBS_BASE_PATH}/${clubId}/members/${userId}`);
+    },
 };
 

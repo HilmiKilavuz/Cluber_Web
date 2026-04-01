@@ -4,7 +4,7 @@ import { use, useEffect } from "react";
 import { useClub, useUpdateClub, useDeleteClub } from "@/hooks/clubs/useClubs";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -13,11 +13,11 @@ import {
     Loader2,
     Save,
     Trash2,
-    Image as ImageIcon,
     AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 interface ClubSettingsPageProps {
     params: Promise<{ id: string }>;
@@ -27,16 +27,8 @@ const settingsSchema = z.object({
     name: z.string().min(3, "Kulüp adı en az 3 karakter olmalıdır."),
     description: z.string().min(10, "Açıklama en az 10 karakter olmalıdır."),
     category: z.string().min(1, "Kategori seçilmelidir."),
-    avatarUrl: z
-        .string()
-        .url("Geçerli bir URL girin.")
-        .optional()
-        .or(z.literal("")),
-    bannerUrl: z
-        .string()
-        .url("Geçerli bir URL girin.")
-        .optional()
-        .or(z.literal("")),
+    avatarUrl: z.string().optional().or(z.literal("")),
+    bannerUrl: z.string().optional().or(z.literal("")),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -70,6 +62,7 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
         register,
         handleSubmit,
         reset,
+        control,
         formState: { errors, isSubmitting, isDirty },
     } = useForm<SettingsFormValues>({
         resolver: zodResolver(settingsSchema),
@@ -81,6 +74,10 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
             bannerUrl: "",
         },
     });
+
+    // Controlled fields for ImageUpload
+    const { field: avatarField } = useController({ name: "avatarUrl", control });
+    const { field: bannerField } = useController({ name: "bannerUrl", control });
 
     // Kulüp verisi gelince formu doldur
     useEffect(() => {
@@ -219,40 +216,26 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
                     )}
                 </div>
 
-                {/* Avatar URL */}
-                <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Avatar URL (Opsiyonel)
-                    </label>
-                    <div className="relative">
-                        <ImageIcon className="absolute left-3.5 top-3 h-4 w-4 text-zinc-400" />
-                        <input
-                            {...register("avatarUrl")}
-                            className="w-full rounded-xl border border-zinc-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400 dark:focus:ring-zinc-400"
-                            placeholder="https://example.com/avatar.jpg"
-                        />
-                    </div>
-                    {errors.avatarUrl && (
-                        <p className="text-xs text-red-500">{errors.avatarUrl.message}</p>
-                    )}
+                {/* Avatar Upload */}
+                <div className="space-y-2">
+                    <ImageUpload
+                        label="Kulüp Avatarı (Opsiyonel)"
+                        shape="circle"
+                        value={avatarField.value}
+                        onChange={avatarField.onChange}
+                        placeholder="Avatar yükle"
+                    />
                 </div>
 
-                {/* Banner URL */}
-                <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Banner URL (Opsiyonel)
-                    </label>
-                    <div className="relative">
-                        <ImageIcon className="absolute left-3.5 top-3 h-4 w-4 text-zinc-400" />
-                        <input
-                            {...register("bannerUrl")}
-                            className="w-full rounded-xl border border-zinc-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400 dark:focus:ring-zinc-400"
-                            placeholder="https://example.com/banner.jpg"
-                        />
-                    </div>
-                    {errors.bannerUrl && (
-                        <p className="text-xs text-red-500">{errors.bannerUrl.message}</p>
-                    )}
+                {/* Banner Upload */}
+                <div className="space-y-2">
+                    <ImageUpload
+                        label="Kulüp Banneri (Opsiyonel)"
+                        shape="rectangle"
+                        value={bannerField.value}
+                        onChange={bannerField.onChange}
+                        placeholder="Banner görseli yükle"
+                    />
                 </div>
 
                 {/* Save Button */}
