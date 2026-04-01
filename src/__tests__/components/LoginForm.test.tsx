@@ -20,6 +20,14 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "@/components/auth/LoginForm";
 
+// Next.js Link bileşenini	mock'la
+// Next.js 16'da Link internal olarak IntersectionObserver kullanıyor
+jest.mock("next/link", () => {
+    return ({ children, ...props }: any) => {
+        return <a {...props}>{children}</a>;
+    };
+});
+
 // Next.js useRouter mock'u
 const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({

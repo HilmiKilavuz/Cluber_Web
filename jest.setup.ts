@@ -46,11 +46,12 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 
 // --- IntersectionObserver Mock ---
 // Scroll ve lazy loading bileşenleri için gerekli.
+// Next.js 16 use-intersection hook'u için jest.fn() kullanılmalı
 const mockIntersectionObserver = jest.fn();
 mockIntersectionObserver.mockImplementation(() => ({
-    observe: () => null,
-    unobserve: () => null,
-    disconnect: () => null,
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
 }));
 global.IntersectionObserver = mockIntersectionObserver;
 
