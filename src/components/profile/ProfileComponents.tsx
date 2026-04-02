@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useUpdateProfile } from "@/hooks/users/useUser";
-import { Users, Calendar, Award, Pencil, X, Loader2, Check, Key } from "lucide-react";
+import { Users, Pencil, X, Loader2, Check, Key } from "lucide-react";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -235,24 +235,10 @@ export function ProfileStats() {
             color: "text-blue-600",
             bg: "bg-blue-50 dark:bg-blue-900/20",
         },
-        {
-            label: "Etkinlikler",
-            value: 0,
-            icon: Calendar,
-            color: "text-emerald-600",
-            bg: "bg-emerald-50 dark:bg-emerald-900/20",
-        },
-        {
-            label: "Rozetler",
-            value: 1,
-            icon: Award,
-            color: "text-amber-600",
-            bg: "bg-amber-50 dark:bg-amber-900/20",
-        },
     ];
 
     return (
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-1">
             {stats.map((stat, idx) => (
                 <div
                     key={idx}
