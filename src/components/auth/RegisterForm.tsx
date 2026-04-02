@@ -11,6 +11,7 @@ import {
   type RegisterFormValues,
   registerSchema,
 } from "@/lib/auth/authSchemas";
+import { PasswordStrengthIndicator } from "@/components/ui/PasswordStrengthIndicator";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -21,6 +22,8 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -31,6 +34,8 @@ export function RegisterForm() {
       confirmPassword: "",
     },
   });
+
+  const password = watch("password", "");
 
   const onSubmit = async (values: RegisterFormValues): Promise<void> => {
     try {
@@ -152,6 +157,9 @@ export function RegisterForm() {
         {errors.password ? (
           <p className="text-xs text-red-500">{errors.password.message}</p>
         ) : null}
+
+        {/* Password Strength Indicator */}
+        <PasswordStrengthIndicator password={password} />
       </div>
 
       <div className="space-y-1.5">
@@ -171,6 +179,18 @@ export function RegisterForm() {
         {errors.confirmPassword ? (
           <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
         ) : null}
+      </div>
+
+      {/* Password Requirements Info */}
+      <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-700 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-400">
+        <p className="font-semibold mb-1">Güçlü şifre gereksinimleri:</p>
+        <ul className="list-disc pl-4 space-y-0.5">
+          <li>En az 8 karakter</li>
+          <li>En az bir büyük harf (A-Z)</li>
+          <li>En az bir küçük harf (a-z)</li>
+          <li>En az bir rakam (0-9)</li>
+          <li>En az bir özel karakter (!@#$%...)</li>
+        </ul>
       </div>
 
       {registerMutation.isError && registerMutation.error ? (
@@ -201,4 +221,3 @@ export function RegisterForm() {
     </form>
   );
 }
-

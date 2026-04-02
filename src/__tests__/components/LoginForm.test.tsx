@@ -117,7 +117,7 @@ describe("LoginForm", () => {
             });
         });
 
-        it("şifre 6 karakterden az olduğunda hata göstermeli", async () => {
+        it("şifre 8 karakterden az olduğunda hata göstermeli", async () => {
             // Arrange
             render(<LoginForm />);
             const user = userEvent.setup();
@@ -129,7 +129,7 @@ describe("LoginForm", () => {
 
             // Assert
             await waitFor(() => {
-                expect(screen.getByText(/en az 6 karakter/i)).toBeInTheDocument();
+                expect(screen.getByText(/en az 8 karakter/i)).toBeInTheDocument();
             });
         });
 
