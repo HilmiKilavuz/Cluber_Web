@@ -41,3 +41,31 @@ export const registerSchema = z
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type RegisterFormValues = z.infer<typeof registerSchema>;
+
+/**
+ * Şifre değiştirme formu validation schema.
+ * Mevcut şifre + yeni şifre (güçlü şifre politikası) + şifre tekrarı
+ */
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(1, "Mevcut şifre gereklidir."),
+    newPassword: z
+      .string()
+      .min(8, "Yeni şifre en az 8 karakter olmalıdır.")
+      .max(72, "Yeni şifre en fazla 72 karakter olabilir.")
+      .regex(
+        strongPasswordRegex,
+        "Şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir."
+      ),
+    confirmNewPassword: z
+      .string()
+      .min(1, "Yeni şifre tekrarı gereklidir."),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    path: ["confirmNewPassword"],
+    message: "Şifreler eşleşmiyor.",
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;

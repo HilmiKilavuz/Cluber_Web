@@ -1,11 +1,17 @@
 import { axiosInstance } from "@/services/axiosInstance";
 import type {
   AuthSuccessResponse,
+  AuthUser,
   LoginDto,
   RegisterDto,
   SessionResponse,
   VerifyEmailDto,
 } from "@/types/auth";
+
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
 
 const AUTH_BASE_PATH = "/auth";
 
@@ -49,6 +55,14 @@ export const authService = {
   verifyEmail: async (payload: VerifyEmailDto): Promise<AuthSuccessResponse & { message: string }> => {
     const response = await axiosInstance.post<AuthSuccessResponse & { message: string }>(
       `${AUTH_BASE_PATH}/verify-email`,
+      payload,
+    );
+    return response.data;
+  },
+
+  changePassword: async (payload: ChangePasswordDto): Promise<{ message: string }> => {
+    const response = await axiosInstance.post<{ message: string }>(
+      `${AUTH_BASE_PATH}/change-password`,
       payload,
     );
     return response.data;

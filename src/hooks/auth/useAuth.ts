@@ -8,7 +8,7 @@ import {
   type UseQueryResult,
 } from "@tanstack/react-query";
 
-import { authService } from "@/services/auth/auth.service";
+import { authService, type ChangePasswordDto } from "@/services/auth/auth.service";
 import type {
   AuthSuccessResponse,
   AuthUser,
@@ -47,6 +47,7 @@ interface UseAuthResult {
   registerMutation: UseMutationResult<{ user: AuthUser; message: string }, Error, RegisterDto>;
   logoutMutation: UseMutationResult<void, Error, void>;
   verifyEmailMutation: UseMutationResult<AuthSuccessResponse & { message: string }, Error, VerifyEmailDto>;
+  changePasswordMutation: UseMutationResult<{ message: string }, Error, ChangePasswordDto>;
 }
 
 export const useAuth = (): UseAuthResult => {
@@ -105,12 +106,19 @@ export const useAuth = (): UseAuthResult => {
     },
   });
 
+  const changePasswordMutation = useMutation<{ message: string }, Error, ChangePasswordDto>({
+    mutationFn: async (payload) => {
+      return authService.changePassword(payload);
+    },
+  });
+
   return {
     sessionQuery,
     loginMutation,
     registerMutation,
     logoutMutation,
     verifyEmailMutation,
+    changePasswordMutation,
   };
 };
 

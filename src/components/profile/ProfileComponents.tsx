@@ -4,11 +4,12 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useUpdateProfile } from "@/hooks/users/useUser";
-import { Users, Calendar, Award, Pencil, X, Loader2, Check } from "lucide-react";
+import { Users, Calendar, Award, Pencil, X, Loader2, Check, Key } from "lucide-react";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ImageUpload } from "@/components/ui/ImageUpload";
+import { ChangePasswordModal } from "@/components/profile/ChangePasswordModal";
 
 const profileSchema = z.object({
     displayName: z.string().min(2, "Görünen ad en az 2 karakter olmalıdır."),
@@ -23,6 +24,7 @@ export function ProfileHeader() {
     const { sessionQuery } = useAuth();
     const user = sessionQuery.data;
     const [isEditing, setIsEditing] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
     const updateProfileMutation = useUpdateProfile();
 
     const {
@@ -107,6 +109,13 @@ export function ProfileHeader() {
                             >
                                 <Pencil className="h-4 w-4" />
                                 Profili Düzenle
+                            </button>
+                            <button
+                                onClick={() => setShowChangePassword(true)}
+                                className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-6 py-2.5 text-sm font-bold text-zinc-700 transition-opacity hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                            >
+                                <Key className="h-4 w-4" />
+                                Şifre Değiştir
                             </button>
                         </div>
                     </div>
@@ -206,6 +215,11 @@ export function ProfileHeader() {
                     </div>
                 </form>
             )}
+            {/* Change Password Modal */}
+            <ChangePasswordModal
+                isOpen={showChangePassword}
+                onClose={() => setShowChangePassword(false)}
+            />
         </div>
     );
 }
