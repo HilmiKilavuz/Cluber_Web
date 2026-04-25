@@ -3,7 +3,7 @@
 import { ChatWindow } from "@/components/chat/ChatWindow";
 import { useClub, useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, MessageSquare, Loader2, Lock } from "lucide-react";
+import { ChevronLeft, MessageSquare, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -26,62 +26,152 @@ export default function ClubChatPage() {
 
     if (isLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <Loader2 className="animate-spin text-blue-600" size={48} />
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "100vh",
+                    backgroundColor: "var(--color-bg)",
+                }}
+            >
+                <Loader2
+                    size={28}
+                    strokeWidth={1.5}
+                    style={{ color: "var(--color-ink-tertiary)", animation: "spin 1s linear infinite" }}
+                />
             </div>
         );
     }
 
     if (!club) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Kulüp bulunamadı</h2>
-                <Link href="/clubs" className="mt-6 font-semibold text-blue-600 hover:underline">
-                    Tüm kulüplere dön
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "100vh",
+                    backgroundColor: "var(--color-bg)",
+                    gap: "16px",
+                    textAlign: "center",
+                    padding: "40px",
+                }}
+            >
+                <h2 className="heading-lg" style={{ color: "var(--color-ink)" }}>Kulüp bulunamadı</h2>
+                <Link
+                    href="/clubs"
+                    className="link-underline body-sm"
+                    style={{ color: "var(--color-ink-secondary)" }}
+                >
+                    Tüm kulüplere dön →
                 </Link>
             </div>
         );
     }
 
     return (
-        <main className="container mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-            {/* Header / Breadcrumb */}
-            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => router.back()}
-                        className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white border border-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                    >
-                        <ChevronLeft size={20} />
-                    </button>
-                    <div>
-                        <h1 className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 italic flex items-center gap-2">
-                            <MessageSquare size={24} className="text-blue-600" />
-                            {club.name.toUpperCase()}
-                        </h1>
-                        <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mt-0.5">Kulüp Sohbeti</p>
+        <main
+            style={{
+                minHeight: "100vh",
+                backgroundColor: "var(--color-bg)",
+            }}
+        >
+            <div
+                style={{
+                    maxWidth: "1024px",
+                    margin: "0 auto",
+                    padding: "clamp(32px, 5vw, 56px) var(--container-padding) var(--section-padding-y)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "24px",
+                }}
+            >
+                {/* ── Header ── */}
+                <div
+                    style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "12px",
+                    }}
+                >
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                        <button
+                            onClick={() => router.back()}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "36px",
+                                height: "36px",
+                                borderRadius: "var(--radius-md)",
+                                border: "1px solid var(--color-border)",
+                                backgroundColor: "var(--color-surface)",
+                                color: "var(--color-ink-secondary)",
+                                cursor: "pointer",
+                                flexShrink: 0,
+                                transition: "all var(--transition-fast)",
+                            }}
+                            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-ink)"; }}
+                            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-surface)"; (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)"; }}
+                            aria-label="Geri"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+                        <div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                <MessageSquare
+                                    size={16}
+                                    strokeWidth={1.5}
+                                    style={{ color: "var(--color-ink-secondary)" }}
+                                />
+                                <h1
+                                    className="heading-sm"
+                                    style={{ color: "var(--color-ink)" }}
+                                >
+                                    {club.name}
+                                </h1>
+                            </div>
+                            <p className="caption" style={{ color: "var(--color-ink-tertiary)", marginTop: "2px" }}>
+                                Kulüp Sohbeti
+                            </p>
+                        </div>
                     </div>
+
+                    <Link
+                        href={`/clubs/${club.id}`}
+                        className="btn btn-ghost btn-sm"
+                        style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}
+                    >
+                        Kulübe Dön
+                    </Link>
                 </div>
 
-                <Link
-                    href={`/clubs/${club.id}`}
-                    className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-bold text-zinc-900 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800 sm:w-auto"
+                {/* ── Divider ── */}
+                <div style={{ height: "1px", backgroundColor: "var(--color-border)" }} />
+
+                {/* ── Chat Window ── */}
+                <div style={{ width: "100%" }}>
+                    <ChatWindow clubId={id} />
+                </div>
+
+                {/* ── Tip ── */}
+                <div
+                    style={{
+                        padding: "16px 20px",
+                        borderRadius: "var(--radius-md)",
+                        backgroundColor: "var(--color-bg-secondary)",
+                        border: "1px solid var(--color-border)",
+                    }}
                 >
-                    Kulübe Dön
-                </Link>
-            </div>
-
-            {/* Chat Interface */}
-            <div className="mx-auto w-full max-w-4xl">
-                <ChatWindow clubId={id} />
-            </div>
-
-            {/* Info / Tips */}
-            <div className="mt-8 rounded-3xl bg-blue-50/50 p-6 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20">
-                <h3 className="text-sm font-bold text-blue-700 dark:text-blue-400 uppercase tracking-tighter">İpucu</h3>
-                <p className="mt-1 text-sm text-blue-600/80 dark:text-blue-300/60 leading-relaxed">
-                    Sohbet üyeleriyle saygılı bir şekilde iletişim kurun. Kulüp kuralları tüm mesajlaşmalar için geçerlidir.
-                </p>
+                    <p className="caption" style={{ color: "var(--color-ink-tertiary)" }}>
+                        <strong style={{ color: "var(--color-ink-secondary)" }}>İpucu:</strong>{" "}
+                        Sohbet üyeleriyle saygılı bir şekilde iletişim kurun. Kulüp kuralları tüm mesajlaşmalar için geçerlidir.
+                    </p>
+                </div>
             </div>
         </main>
     );

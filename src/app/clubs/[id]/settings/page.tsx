@@ -8,7 +8,6 @@ import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-    Settings,
     ChevronLeft,
     Loader2,
     Save,
@@ -34,17 +33,40 @@ const settingsSchema = z.object({
 type SettingsFormValues = z.infer<typeof settingsSchema>;
 
 const CATEGORIES = [
-    "Teknoloji",
-    "Spor",
-    "Müzik",
-    "Sanat",
-    "Bilim",
-    "İş & Kariyer",
-    "Oyun",
-    "Edebiyat",
-    "Sinema",
-    "Diğer",
+    "Teknoloji", "Spor", "Müzik", "Sanat", "Bilim",
+    "İş & Kariyer", "Oyun", "Edebiyat", "Sinema", "Diğer",
 ];
+
+function FormField({
+    label,
+    error,
+    children,
+}: {
+    label: string;
+    error?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label
+                style={{
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    fontFamily: "var(--font-sans)",
+                    color: "var(--color-ink)",
+                }}
+            >
+                {label}
+            </label>
+            {children}
+            {error && (
+                <p style={{ fontSize: "12px", color: "var(--color-error)", fontFamily: "var(--font-sans)" }}>
+                    {error}
+                </p>
+            )}
+        </div>
+    );
+}
 
 export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
     const { id: clubId } = use(params);
@@ -66,20 +88,12 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
         formState: { errors, isSubmitting, isDirty },
     } = useForm<SettingsFormValues>({
         resolver: zodResolver(settingsSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-            category: "",
-            avatarUrl: "",
-            bannerUrl: "",
-        },
+        defaultValues: { name: "", description: "", category: "", avatarUrl: "", bannerUrl: "" },
     });
 
-    // Controlled fields for ImageUpload
     const { field: avatarField } = useController({ name: "avatarUrl", control });
     const { field: bannerField } = useController({ name: "bannerUrl", control });
 
-    // Kulüp verisi gelince formu doldur
     useEffect(() => {
         if (club) {
             reset({
@@ -92,7 +106,6 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
         }
     }, [club, reset]);
 
-    // Sahip değilse yönlendir
     useEffect(() => {
         if (!isLoading && club && user && !isOwner) {
             toast.error("Bu sayfaya erişim yetkiniz yok.");
@@ -118,15 +131,25 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
             await deleteClubMutation.mutateAsync(clubId);
             toast.success("Kulüp silindi.");
             router.push("/clubs");
-        } catch {
-            // Hata axios interceptor tarafından yönetilir
-        }
+        } catch { }
     };
 
     if (isLoading) {
         return (
-            <div className="flex min-h-[60vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "60vh",
+                    backgroundColor: "var(--color-bg)",
+                }}
+            >
+                <Loader2
+                    size={28}
+                    strokeWidth={1.5}
+                    style={{ color: "var(--color-ink-tertiary)", animation: "spin 1s linear infinite" }}
+                />
             </div>
         );
     }
@@ -134,147 +157,199 @@ export default function ClubSettingsPage({ params }: ClubSettingsPageProps) {
     if (!isOwner) return null;
 
     return (
-        <div className="mx-auto max-w-2xl px-4 py-8">
-            {/* Header */}
-            <div className="mb-8">
+        <main
+            style={{
+                minHeight: "100vh",
+                backgroundColor: "var(--color-bg)",
+                padding: "clamp(40px, 6vw, 80px) var(--container-padding) var(--section-padding-y)",
+            }}
+        >
+            <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+
+                {/* ── Back nav ── */}
                 <Link
                     href={`/clubs/${clubId}`}
-                    className="mb-3 flex items-center gap-1 text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                    className="body-sm"
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        color: "var(--color-ink-tertiary)",
+                        textDecoration: "none",
+                        marginBottom: "12px",
+                        transition: "color var(--transition-fast)",
+                    }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-ink)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--color-ink-tertiary)"; }}
                 >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft size={14} />
                     {club?.name}
                 </Link>
-                <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-800">
-                        <Settings className="h-5 w-5 text-zinc-600 dark:text-zinc-400" />
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
-                            Kulüp Ayarları
-                        </h1>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                            Kulüp bilgilerini düzenle
-                        </p>
-                    </div>
-                </div>
-            </div>
 
-            {/* Settings Form */}
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="space-y-6 rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50 md:p-8"
-            >
-                {/* Name */}
-                <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Kulüp Adı
-                    </label>
-                    <input
-                        {...register("name")}
-                        className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400 dark:focus:ring-zinc-400"
-                        placeholder="Kulüp adı"
-                    />
-                    {errors.name && (
-                        <p className="text-xs text-red-500">{errors.name.message}</p>
-                    )}
-                </div>
-
-                {/* Description */}
-                <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Açıklama
-                    </label>
-                    <textarea
-                        {...register("description")}
-                        rows={4}
-                        className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400 dark:focus:ring-zinc-400"
-                        placeholder="Kulüp hakkında detaylı bilgi..."
-                    />
-                    {errors.description && (
-                        <p className="text-xs text-red-500">{errors.description.message}</p>
-                    )}
-                </div>
-
-                {/* Category */}
-                <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        Kategori
-                    </label>
-                    <select
-                        {...register("category")}
-                        className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-zinc-400 dark:focus:ring-zinc-400"
-                    >
-                        <option value="">Kategori seçin...</option>
-                        {CATEGORIES.map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.category && (
-                        <p className="text-xs text-red-500">{errors.category.message}</p>
-                    )}
-                </div>
-
-                {/* Avatar Upload */}
-                <div className="space-y-2">
-                    <ImageUpload
-                        label="Kulüp Avatarı (Opsiyonel)"
-                        shape="circle"
-                        value={avatarField.value}
-                        onChange={avatarField.onChange}
-                        placeholder="Avatar yükle"
-                    />
-                </div>
-
-                {/* Banner Upload */}
-                <div className="space-y-2">
-                    <ImageUpload
-                        label="Kulüp Banneri (Opsiyonel)"
-                        shape="rectangle"
-                        value={bannerField.value}
-                        onChange={bannerField.onChange}
-                        placeholder="Banner görseli yükle"
-                    />
-                </div>
-
-                {/* Save Button */}
-                <button
-                    type="submit"
-                    disabled={isSubmitting || updateClubMutation.isPending || !isDirty}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200"
-                >
-                    {isSubmitting || updateClubMutation.isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                        <Save className="h-4 w-4" />
-                    )}
-                    {isSubmitting || updateClubMutation.isPending ? "Kaydediliyor..." : "Değişiklikleri Kaydet"}
-                </button>
-            </form>
-
-            {/* Danger Zone */}
-            <div className="mt-8 overflow-hidden rounded-2xl border border-red-200 bg-red-50 p-6 dark:border-red-900/50 dark:bg-red-950/20 md:p-8">
-                <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-                    <AlertTriangle className="h-5 w-5" />
-                    <h2 className="font-bold">Tehlikeli Bölge</h2>
-                </div>
-                <p className="mt-2 text-sm text-red-600/80 dark:text-red-400/80">
-                    Kulübü silmek geri alınamaz. Tüm üyeler, etkinlikler ve mesajlar kalıcı olarak silinir.
+                {/* ── Page title ── */}
+                <p className="label" style={{ color: "var(--color-ink-tertiary)", marginBottom: "8px" }}>
+                    (ayarlar)
                 </p>
-                <button
-                    onClick={handleDelete}
-                    disabled={deleteClubMutation.isPending}
-                    className="mt-4 flex items-center gap-2 rounded-xl border border-red-300 bg-white px-5 py-2.5 text-sm font-bold text-red-600 transition-all hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:bg-transparent dark:hover:bg-red-900/20"
+                <h1 className="display-sm" style={{ color: "var(--color-ink)", marginBottom: "40px" }}>
+                    Kulüp Ayarları
+                </h1>
+
+                {/* ── Settings Form ── */}
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    style={{ display: "flex", flexDirection: "column", gap: "20px" }}
                 >
-                    {deleteClubMutation.isPending ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                        <Trash2 className="h-4 w-4" />
-                    )}
-                    {deleteClubMutation.isPending ? "Siliniyor..." : "Bu Kulübü Kalıcı Olarak Sil"}
-                </button>
+                    <div className="card-base" style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "20px" }}>
+
+                        <FormField label="Kulüp Adı" error={errors.name?.message}>
+                            <input
+                                {...register("name")}
+                                className="input-base"
+                                placeholder="Kulüp adı"
+                            />
+                        </FormField>
+
+                        <FormField label="Açıklama" error={errors.description?.message}>
+                            <textarea
+                                {...register("description")}
+                                rows={4}
+                                className="input-base"
+                                placeholder="Kulüp hakkında detaylı bilgi..."
+                                style={{ resize: "vertical", minHeight: "100px" }}
+                            />
+                        </FormField>
+
+                        <FormField label="Kategori" error={errors.category?.message}>
+                            <select
+                                {...register("category")}
+                                className="input-base"
+                            >
+                                <option value="">Kategori seçin...</option>
+                                {CATEGORIES.map((cat) => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+                        </FormField>
+
+                        {/* Divider */}
+                        <div style={{ height: "1px", backgroundColor: "var(--color-border)" }} />
+
+                        <div>
+                            <p className="label" style={{ color: "var(--color-ink-tertiary)", marginBottom: "16px" }}>
+                                Medya
+                            </p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                                <ImageUpload
+                                    label="Kulüp Avatarı (Opsiyonel)"
+                                    shape="circle"
+                                    value={avatarField.value}
+                                    onChange={avatarField.onChange}
+                                    placeholder="Avatar yükle"
+                                />
+                                <ImageUpload
+                                    label="Kulüp Banneri (Opsiyonel)"
+                                    shape="rectangle"
+                                    value={bannerField.value}
+                                    onChange={bannerField.onChange}
+                                    placeholder="Banner görseli yükle"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Save button */}
+                    <button
+                        type="submit"
+                        disabled={isSubmitting || updateClubMutation.isPending || !isDirty}
+                        className="btn btn-primary btn-lg"
+                        style={{
+                            width: "100%",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                            opacity: isSubmitting || updateClubMutation.isPending || !isDirty ? 0.6 : 1,
+                            cursor: isSubmitting || updateClubMutation.isPending || !isDirty ? "not-allowed" : "pointer",
+                        }}
+                    >
+                        {isSubmitting || updateClubMutation.isPending ? (
+                            <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+                        ) : (
+                            <Save size={16} />
+                        )}
+                        {isSubmitting || updateClubMutation.isPending ? "Kaydediliyor..." : "Değişiklikleri Kaydet"}
+                    </button>
+                </form>
+
+                {/* ── Danger Zone ── */}
+                <div
+                    style={{
+                        marginTop: "40px",
+                        borderRadius: "var(--radius-lg)",
+                        border: "1px solid color-mix(in srgb, var(--color-error) 25%, transparent)",
+                        backgroundColor: "var(--color-error-bg)",
+                        padding: "28px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            marginBottom: "8px",
+                            color: "var(--color-error)",
+                        }}
+                    >
+                        <AlertTriangle size={16} strokeWidth={1.5} />
+                        <h2 className="heading-sm" style={{ color: "var(--color-error)" }}>
+                            Tehlikeli Bölge
+                        </h2>
+                    </div>
+                    <p
+                        className="body-sm"
+                        style={{
+                            color: "var(--color-error)",
+                            opacity: 0.75,
+                            marginBottom: "20px",
+                        }}
+                    >
+                        Kulübü silmek geri alınamaz. Tüm üyeler, etkinlikler ve mesajlar kalıcı olarak silinir.
+                    </p>
+                    <button
+                        onClick={handleDelete}
+                        disabled={deleteClubMutation.isPending}
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "10px 20px",
+                            borderRadius: "var(--radius-md)",
+                            fontSize: "13px",
+                            fontWeight: 500,
+                            fontFamily: "var(--font-sans)",
+                            color: "var(--color-error)",
+                            border: "1px solid color-mix(in srgb, var(--color-error) 35%, transparent)",
+                            backgroundColor: "transparent",
+                            cursor: deleteClubMutation.isPending ? "not-allowed" : "pointer",
+                            opacity: deleteClubMutation.isPending ? 0.6 : 1,
+                            transition: "all var(--transition-fast)",
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "color-mix(in srgb, var(--color-error) 12%, transparent)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                        }}
+                    >
+                        {deleteClubMutation.isPending ? (
+                            <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} />
+                        ) : (
+                            <Trash2 size={15} strokeWidth={1.5} />
+                        )}
+                        {deleteClubMutation.isPending ? "Siliniyor..." : "Bu Kulübü Kalıcı Olarak Sil"}
+                    </button>
+                </div>
             </div>
-        </div>
+        </main>
     );
 }

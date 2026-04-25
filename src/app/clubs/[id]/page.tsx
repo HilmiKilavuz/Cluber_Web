@@ -17,6 +17,7 @@ import {
     Clock,
     LayoutDashboard,
     ShieldAlert,
+    ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -36,180 +37,442 @@ export default function ClubDetailPage() {
     const isLoading = clubLoading || joinedLoading;
 
     const { data: eventsData } = useEvents({ clubId: id });
-    const events = eventsData?.pages.flatMap((page: any) => Array.isArray(page.data) ? page.data : (Array.isArray(page) ? page : [])) || [];
+    const events =
+        eventsData?.pages.flatMap((page: any) =>
+            Array.isArray(page.data) ? page.data : Array.isArray(page) ? page : []
+        ) || [];
 
     const handleJoin = async () => {
         try {
             await joinMutation.mutateAsync(id);
             toast.success("Kulübe başarıyla katıldınız!");
-        } catch (err) {
-            // Error is handled by axios interceptor
-        }
+        } catch { }
     };
 
     const handleLeave = async () => {
         try {
             await leaveMutation.mutateAsync(id);
             toast.success("Kulüpten ayrıldınız.");
-        } catch (err) {
-            // Error is handled by axios interceptor
-        }
+        } catch { }
     };
 
+    /* ── Loading ── */
     if (isLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <Loader2 className="animate-spin text-blue-600" size={48} />
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "100vh",
+                    backgroundColor: "var(--color-bg)",
+                }}
+            >
+                <Loader2
+                    size={28}
+                    strokeWidth={1.5}
+                    style={{ color: "var(--color-ink-tertiary)", animation: "spin 1s linear infinite" }}
+                />
             </div>
         );
     }
 
+    /* ── Error ── */
     if (error || !club) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Kulüp bulunamadı</h2>
-                <p className="mt-2 text-zinc-600 dark:text-zinc-400">İstediğiniz kulüp silinmiş veya taşınmış olabilir.</p>
-                <Link href="/clubs" className="mt-6 font-semibold text-blue-600 hover:underline">
-                    Tüm kulüplere dön
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "100vh",
+                    gap: "16px",
+                    backgroundColor: "var(--color-bg)",
+                    padding: "40px",
+                    textAlign: "center",
+                }}
+            >
+                <h2 className="heading-lg" style={{ color: "var(--color-ink)" }}>
+                    Kulüp bulunamadı
+                </h2>
+                <p className="body-md" style={{ color: "var(--color-ink-secondary)" }}>
+                    İstediğiniz kulüp silinmiş veya taşınmış olabilir.
+                </p>
+                <Link
+                    href="/clubs"
+                    className="btn btn-primary btn-md"
+                    style={{ marginTop: "8px", display: "inline-flex", alignItems: "center", gap: "6px", textDecoration: "none" }}
+                >
+                    Tüm Kulüplere Dön
+                    <ArrowRight size={15} />
                 </Link>
             </div>
         );
     }
 
+    const TAB_LINKS = [
+        { label: "Genel Bakış", href: `/clubs/${club.id}`, icon: null },
+        { label: "Sohbet", href: `/clubs/${club.id}/chat`, icon: MessageSquare },
+        { label: "Etkinlikler", href: `/clubs/${club.id}/events`, icon: Calendar },
+        { label: "Üyeler", href: `/clubs/${club.id}/members`, icon: LayoutDashboard },
+    ];
+
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-            {/* Cover Banner */}
-            <div className="relative h-64 w-full bg-zinc-200 dark:bg-zinc-900 lg:h-80">
-                {club.bannerUrl && (
+        <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg)" }}>
+
+            {/* ════════════════════════════════
+                BANNER
+                ════════════════════════════════ */}
+            <div
+                style={{
+                    position: "relative",
+                    height: "clamp(200px, 28vw, 320px)",
+                    backgroundColor: "var(--color-bg-secondary)",
+                    overflow: "hidden",
+                }}
+            >
+                {club.bannerUrl ? (
                     <img
                         src={club.bannerUrl}
                         alt={club.name}
-                        className="h-full w-full object-cover"
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                ) : (
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            background: "linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-border) 100%)",
+                        }}
                     />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
-                {/* Back Button */}
+                {/* Gradient overlay */}
+                <div
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)",
+                    }}
+                />
+
+                {/* Back button */}
                 <button
                     onClick={() => router.back()}
-                    className="absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20"
+                    style={{
+                        position: "absolute",
+                        top: "20px",
+                        left: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "36px",
+                        height: "36px",
+                        borderRadius: "var(--radius-md)",
+                        backgroundColor: "rgba(255,255,255,0.15)",
+                        backdropFilter: "blur(12px)",
+                        WebkitBackdropFilter: "blur(12px)",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                        color: "#FFFFFF",
+                        cursor: "pointer",
+                        transition: "background-color var(--transition-fast)",
+                    }}
+                    aria-label="Geri"
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.25)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.15)"; }}
                 >
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={18} />
                 </button>
             </div>
 
-            <div className="container mx-auto max-w-6xl px-4 lg:px-8">
-                <div className="relative -mt-20 flex flex-col items-start gap-6 lg:-mt-24 lg:flex-row lg:items-end">
+            {/* ════════════════════════════════
+                CONTENT
+                ════════════════════════════════ */}
+            <div
+                style={{
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                    padding: "0 var(--container-padding)",
+                }}
+            >
+                {/* Club identity row */}
+                <div
+                    style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "flex-end",
+                        gap: "20px",
+                        marginTop: "-40px",
+                        marginBottom: "40px",
+                    }}
+                >
                     {/* Avatar */}
-                    <div className="h-32 w-32 overflow-hidden rounded-3xl border-4 border-white bg-zinc-100 shadow-xl dark:border-zinc-950 dark:bg-zinc-800 lg:h-40 lg:w-40">
+                    <div
+                        style={{
+                            width: "80px",
+                            height: "80px",
+                            borderRadius: "var(--radius-lg)",
+                            border: "3px solid var(--color-bg)",
+                            backgroundColor: "var(--color-bg-secondary)",
+                            overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "var(--shadow-md)",
+                            flexShrink: 0,
+                        }}
+                    >
                         {club.avatarUrl ? (
-                            <img src={club.avatarUrl} alt={club.name} className="h-full w-full object-cover" />
+                            <img src={club.avatarUrl} alt={club.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                         ) : (
-                            <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-zinc-400">
+                            <span
+                                style={{
+                                    fontSize: "28px",
+                                    fontWeight: 600,
+                                    fontFamily: "var(--font-sans)",
+                                    color: "var(--color-ink-secondary)",
+                                }}
+                            >
                                 {club.name?.charAt(0) || "C"}
-                            </div>
+                            </span>
                         )}
                     </div>
 
-                    <div className="flex-1 pb-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                                {club.category}
-                            </span>
-                        </div>
-                        <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+                    {/* Name + meta */}
+                    <div style={{ flex: 1, minWidth: "200px", paddingBottom: "4px" }}>
+                        <span className="badge-base" style={{ marginBottom: "8px", display: "inline-flex" }}>
+                            {club.category}
+                        </span>
+                        <h1
+                            className="display-md"
+                            style={{ color: "var(--color-ink)", lineHeight: 1.1 }}
+                        >
                             {club.name}
                         </h1>
-                        <div className="mt-2 flex flex-wrap items-center gap-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                            <div className="flex items-center gap-1.5">
-                                <Users size={18} className="text-zinc-400" />
-                                <span>{club._count?.memberships || club.memberships?.length || 0} Üye</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <Clock size={18} className="text-zinc-400" />
-                                <span>Oluşturulma: {new Date(club.createdAt).toLocaleDateString('tr-TR')}</span>
-                            </div>
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "16px",
+                                marginTop: "8px",
+                            }}
+                        >
+                            <span
+                                className="body-sm"
+                                style={{
+                                    color: "var(--color-ink-tertiary)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                }}
+                            >
+                                <Users size={13} strokeWidth={1.5} />
+                                {club._count?.memberships || club.memberships?.length || 0} üye
+                            </span>
+                            <span
+                                className="body-sm"
+                                style={{
+                                    color: "var(--color-ink-tertiary)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "5px",
+                                }}
+                            >
+                                <Clock size={13} strokeWidth={1.5} />
+                                {new Date(club.createdAt).toLocaleDateString("tr-TR")}
+                            </span>
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex w-full flex-wrap gap-3 lg:w-auto lg:pb-4">
+                    {/* Action buttons */}
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "10px",
+                            paddingBottom: "4px",
+                        }}
+                    >
                         {isOwner ? (
                             <Link
                                 href={`/clubs/${club.id}/settings`}
-                                className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-6 py-2.5 text-sm font-bold text-zinc-900 transition-all hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+                                className="btn btn-ghost btn-md"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    textDecoration: "none",
+                                }}
                             >
-                                <Settings size={18} />
-                                Kulüp Ayarları
+                                <Settings size={15} />
+                                Ayarlar
                             </Link>
                         ) : isMember ? (
                             <button
                                 onClick={handleLeave}
-                                className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-6 py-2.5 text-sm font-bold text-red-600 transition-all hover:bg-red-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-red-900/10"
+                                className="btn btn-ghost btn-md"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    color: "var(--color-error)",
+                                    borderColor: "color-mix(in srgb, var(--color-error) 30%, transparent)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-error-bg)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                                }}
                             >
-                                <LogOut size={18} />
+                                <LogOut size={15} />
                                 Ayrıl
                             </button>
                         ) : (
                             <button
                                 onClick={handleJoin}
-                                className="flex items-center gap-2 rounded-xl bg-zinc-900 px-8 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
+                                className="btn btn-primary btn-md"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                }}
                             >
-                                <UserPlus size={18} />
+                                <UserPlus size={15} />
                                 Katıl
                             </button>
                         )}
                     </div>
                 </div>
 
-                {/* Tab-like Navigation for internal club features */}
-                <div className="mt-12 flex flex-wrap gap-6 border-b border-zinc-200 dark:border-zinc-800">
-                    <Link href={`/clubs/${club.id}`} className="group relative border-b-2 border-blue-600 pb-4 text-sm font-bold text-blue-600">
-                        Genel Bakış
-                    </Link>
-                    <Link href={`/clubs/${club.id}/chat`} className="group flex items-center gap-2 pb-4 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
-                        <MessageSquare size={18} />
-                        Sohbet
-                    </Link>
-                    <Link href={`/clubs/${club.id}/events`} className="group flex items-center gap-2 pb-4 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
-                        <Calendar size={18} />
-                        Etkinlikler
-                    </Link>
-                    <Link href={`/clubs/${club.id}/members`} className="group flex items-center gap-2 pb-4 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
-                        <LayoutDashboard size={18} />
-                        Üyeler
-                    </Link>
+                {/* ── Tab Navigation ── */}
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "0",
+                        borderBottom: "1px solid var(--color-border)",
+                        marginBottom: "48px",
+                    }}
+                >
+                    {TAB_LINKS.map((tab) => {
+                        const Icon = tab.icon;
+                        return (
+                            <Link
+                                key={tab.href}
+                                href={tab.href}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "6px",
+                                    padding: "12px 20px",
+                                    fontSize: "14px",
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    color: "var(--color-ink-secondary)",
+                                    textDecoration: "none",
+                                    borderBottom: "2px solid transparent",
+                                    marginBottom: "-1px",
+                                    transition: "all var(--transition-fast)",
+                                    whiteSpace: "nowrap",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLElement).style.color = "var(--color-ink)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)";
+                                }}
+                            >
+                                {Icon && <Icon size={15} strokeWidth={1.5} />}
+                                {tab.label}
+                            </Link>
+                        );
+                    })}
                     {isOwner && (
                         <Link
                             href={`/clubs/${club.id}/admin`}
-                            className="group flex items-center gap-2 pb-4 text-sm font-medium text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400"
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                padding: "12px 20px",
+                                fontSize: "14px",
+                                fontWeight: 500,
+                                fontFamily: "var(--font-sans)",
+                                color: "var(--color-warning)",
+                                textDecoration: "none",
+                                borderBottom: "2px solid transparent",
+                                marginBottom: "-1px",
+                                transition: "color var(--transition-fast)",
+                                whiteSpace: "nowrap",
+                            }}
                         >
-                            <ShieldAlert size={18} />
+                            <ShieldAlert size={15} strokeWidth={1.5} />
                             Yönetim Paneli
                         </Link>
                     )}
                 </div>
 
-                <div className="grid gap-10 py-10 lg:grid-cols-3">
-                    {/* Main Content */}
-                    <div className="lg:col-span-2">
-                        <section className="rounded-3xl border border-zinc-200 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900/50">
-                            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Hakkında</h2>
-                            <p className="mt-4 whitespace-pre-wrap leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {/* ── Content Grid ── */}
+                <div
+                    className="grid lg:grid-cols-3"
+                    style={{ gap: "32px", paddingBottom: "var(--section-padding-y)" }}
+                >
+                    {/* Main */}
+                    <div style={{ gridColumn: "1 / 3" }}>
+                        {/* About */}
+                        <section
+                            className="card-base"
+                            style={{ padding: "32px" }}
+                        >
+                            <h2
+                                className="heading-sm"
+                                style={{ color: "var(--color-ink)", marginBottom: "16px" }}
+                            >
+                                Hakkında
+                            </h2>
+                            <p
+                                className="body-md"
+                                style={{
+                                    color: "var(--color-ink-secondary)",
+                                    whiteSpace: "pre-wrap",
+                                    lineHeight: 1.7,
+                                }}
+                            >
                                 {club.description}
                             </p>
                         </section>
 
-                        {/* Upcoming Events */}
-                        <section className="mt-10">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Yaklaşan Etkinlikler</h2>
-                                <Link href={`/clubs/${club.id}/events`} className="text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
+                        {/* Events */}
+                        <section style={{ marginTop: "24px" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    marginBottom: "20px",
+                                }}
+                            >
+                                <h2 className="heading-sm" style={{ color: "var(--color-ink)" }}>
+                                    Yaklaşan Etkinlikler
+                                </h2>
+                                <Link
+                                    href={`/clubs/${club.id}/events`}
+                                    className="link-underline body-sm"
+                                    style={{ color: "var(--color-ink-secondary)" }}
+                                >
                                     Tümünü Gör →
                                 </Link>
                             </div>
+
                             {events && events.length > 0 ? (
-                                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                                        gap: "16px",
+                                    }}
+                                >
                                     {[...events]
                                         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
                                         .slice(0, 3)
@@ -218,10 +481,28 @@ export default function ClubDetailPage() {
                                         ))}
                                 </div>
                             ) : (
-                                <div className="rounded-3xl border-2 border-dashed border-zinc-200 p-12 text-center dark:border-zinc-800">
-                                    <Calendar className="mx-auto mb-4 text-zinc-300 dark:text-zinc-700" size={48} />
-                                    <p className="font-medium text-zinc-500">Henüz planlanmış bir etkinlik bulunmuyor.</p>
-                                    <Link href={`/clubs/${club.id}/events`} className="mt-4 inline-block text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400">
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        padding: "48px 24px",
+                                        border: "1px dashed var(--color-border)",
+                                        borderRadius: "var(--radius-lg)",
+                                        textAlign: "center",
+                                        gap: "12px",
+                                    }}
+                                >
+                                    <Calendar size={32} strokeWidth={1} style={{ color: "var(--color-border-strong)" }} />
+                                    <p className="body-sm" style={{ color: "var(--color-ink-secondary)" }}>
+                                        Henüz planlanmış etkinlik yok.
+                                    </p>
+                                    <Link
+                                        href={`/clubs/${club.id}/events`}
+                                        className="link-underline body-sm"
+                                        style={{ color: "var(--color-ink-secondary)" }}
+                                    >
                                         Etkinlik oluştur →
                                     </Link>
                                 </div>
@@ -230,35 +511,88 @@ export default function ClubDetailPage() {
                     </div>
 
                     {/* Sidebar */}
-                    <div className="space-y-8">
-                        <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
-                            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Kulüp Sahibi</h3>
-                            <div className="mt-4 flex items-center gap-3">
-                                <div className="h-10 w-10 flex-shrink-0 rounded-full bg-zinc-200 dark:bg-zinc-800">
+                    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                        {/* Owner card */}
+                        <section
+                            className="card-base"
+                            style={{ padding: "24px" }}
+                        >
+                            <h3
+                                className="label"
+                                style={{ color: "var(--color-ink-tertiary)", marginBottom: "16px" }}
+                            >
+                                Kulüp Sahibi
+                            </h3>
+                            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                <div
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "var(--radius-full)",
+                                        backgroundColor: "var(--color-bg-secondary)",
+                                        overflow: "hidden",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0,
+                                    }}
+                                >
                                     {club.creator?.avatarUrl ? (
-                                        <img src={club.creator.avatarUrl} alt={club.creator.displayName} className="h-full w-full rounded-full object-cover" />
+                                        <img src={club.creator.avatarUrl} alt={club.creator.displayName} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "var(--radius-full)" }} />
                                     ) : (
-                                        <div className="flex h-full w-full items-center justify-center font-bold text-zinc-400">
+                                        <span style={{ fontSize: "14px", fontWeight: 600, fontFamily: "var(--font-sans)", color: "var(--color-ink-secondary)" }}>
                                             {club.creator?.displayName?.charAt(0) || club.creatorId?.charAt(0) || "U"}
-                                        </div>
+                                        </span>
                                     )}
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                                    <p className="body-sm" style={{ fontWeight: 600, color: "var(--color-ink)" }}>
                                         {club.creator?.displayName || "Admin"}
                                     </p>
-                                    <p className="text-xs text-zinc-500">Kurucu Üye</p>
+                                    <p className="caption" style={{ color: "var(--color-ink-tertiary)" }}>Kurucu Üye</p>
                                 </div>
                             </div>
                         </section>
 
-                        {/* Quick Stats/Info */}
-                        <div className="overflow-hidden rounded-3xl bg-zinc-900 p-8 text-white dark:bg-zinc-100 dark:text-zinc-900">
-                            <h3 className="text-lg font-bold">Resmi Kulüp</h3>
-                            <p className="mt-2 text-sm text-zinc-400 dark:text-zinc-500">
+                        {/* Dark info card */}
+                        <div
+                            style={{
+                                backgroundColor: "var(--color-ink)",
+                                borderRadius: "var(--radius-lg)",
+                                padding: "28px 24px",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "12px",
+                            }}
+                        >
+                            <h3
+                                className="heading-sm"
+                                style={{ color: "#FFFFFF" }}
+                            >
+                                Resmi Kulüp
+                            </h3>
+                            <p
+                                className="body-sm"
+                                style={{ color: "rgba(255,255,255,0.5)" }}
+                            >
                                 Bu kulüp topluluk kurallarına uygun olarak oluşturulmuştur.
                             </p>
-                            <button className="mt-6 w-full rounded-xl bg-white py-3 text-sm font-bold text-zinc-900 transition-opacity hover:opacity-90 dark:bg-zinc-900 dark:text-white">
+                            <button
+                                className="btn btn-md"
+                                style={{
+                                    width: "100%",
+                                    marginTop: "4px",
+                                    backgroundColor: "rgba(255,255,255,0.12)",
+                                    color: "#FFFFFF",
+                                    border: "1px solid rgba(255,255,255,0.2)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.2)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.12)";
+                                }}
+                            >
                                 Paylaş
                             </button>
                         </div>

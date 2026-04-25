@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Club } from "@/types/club";
-import { Users } from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 
 interface ClubCardProps {
     club: Club;
@@ -8,62 +8,197 @@ interface ClubCardProps {
 
 export const ClubCard = ({ club }: ClubCardProps) => {
     return (
-        <div className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900">
-            {/* Banner */}
-            <div className="relative h-24 w-full bg-zinc-100 dark:bg-zinc-800">
+        <div
+            className="card-base group animate-fade-in"
+            style={{
+                display: "flex",
+                flexDirection: "column",
+            }}
+        >
+            {/* ── Banner ── */}
+            <div
+                style={{
+                    position: "relative",
+                    height: "120px",
+                    backgroundColor: "var(--color-bg-secondary)",
+                    flexShrink: 0,
+                }}
+            >
                 {club.bannerUrl ? (
                     <img
                         src={club.bannerUrl}
                         alt={club.name}
-                        className="h-full w-full object-cover"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                        }}
                     />
                 ) : (
-                    <div className="h-full w-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10" />
+                    <div
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            background:
+                                "linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-border) 100%)",
+                        }}
+                    />
                 )}
 
                 {/* Avatar */}
-                <div className="absolute -bottom-6 left-4">
-                    <div className="h-14 w-14 overflow-hidden rounded-xl border-4 border-white bg-zinc-100 shadow-sm dark:border-zinc-900 dark:bg-zinc-800">
+                <div
+                    style={{
+                        position: "absolute",
+                        bottom: "-20px",
+                        left: "20px",
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "44px",
+                            height: "44px",
+                            borderRadius: "var(--radius-md)",
+                            border: "2px solid var(--color-bg)",
+                            backgroundColor: "var(--color-bg-secondary)",
+                            overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "var(--shadow-sm)",
+                        }}
+                    >
                         {club.avatarUrl ? (
-                            <img src={club.avatarUrl} alt={club.name} className="h-full w-full object-cover" />
+                            <img
+                                src={club.avatarUrl}
+                                alt={club.name}
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
                         ) : (
-                            <div className="flex h-full w-full items-center justify-center bg-zinc-200 text-lg font-bold text-zinc-500 dark:bg-zinc-700">
-                                {club.name?.charAt(0) || "C"}
-                            </div>
+                            <span
+                                style={{
+                                    fontSize: "16px",
+                                    fontWeight: 600,
+                                    fontFamily: "var(--font-sans)",
+                                    color: "var(--color-ink-secondary)",
+                                }}
+                            >
+                                {club.name?.charAt(0)?.toUpperCase() || "C"}
+                            </span>
                         )}
                     </div>
                 </div>
             </div>
 
-            <div className="p-4 pt-8">
-                <div className="flex items-start justify-between">
-                    <div>
-                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                            <Link href={`/clubs/${club.id}`}>
-                                {club.name}
-                            </Link>
-                        </h3>
-                        <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                            {club.category}
-                        </span>
-                    </div>
+            {/* ── Content ── */}
+            <div
+                style={{
+                    padding: "32px 20px 20px",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                {/* Category badge */}
+                <div style={{ marginBottom: "10px" }}>
+                    <span
+                        className="badge-base"
+                        style={{ display: "inline-flex" }}
+                    >
+                        {club.category}
+                    </span>
                 </div>
 
-                <p className="mt-2 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+                {/* Club name */}
+                <h3
+                    className="heading-sm"
+                    style={{
+                        color: "var(--color-ink)",
+                        marginBottom: "8px",
+                        transition: "color var(--transition-fast)",
+                    }}
+                >
+                    <Link
+                        href={`/clubs/${club.id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.color = "var(--color-ink)";
+                        }}
+                    >
+                        {club.name}
+                    </Link>
+                </h3>
+
+                {/* Description */}
+                <p
+                    className="body-sm"
+                    style={{
+                        color: "var(--color-ink-secondary)",
+                        marginBottom: "auto",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                    }}
+                >
                     {club.description}
                 </p>
 
-                <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        <Users size={14} />
-                        <span>{club._count?.memberships || club.memberships?.length || 0} üye</span>
+                {/* Footer */}
+                <div
+                    style={{
+                        marginTop: "20px",
+                        paddingTop: "16px",
+                        borderTop: "1px solid var(--color-border)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            color: "var(--color-ink-tertiary)",
+                        }}
+                    >
+                        <Users size={13} strokeWidth={1.5} />
+                        <span
+                            style={{
+                                fontSize: "12px",
+                                fontWeight: 500,
+                                fontFamily: "var(--font-sans)",
+                            }}
+                        >
+                            {club._count?.memberships || club.memberships?.length || 0} üye
+                        </span>
                     </div>
 
                     <Link
                         href={`/clubs/${club.id}`}
-                        className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
+                        className="btn btn-sm"
+                        style={{
+                            backgroundColor: "var(--color-accent)",
+                            color: "var(--color-accent-fg)",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            textDecoration: "none",
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent-hover)";
+                            (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent)";
+                            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                        }}
                     >
                         İncele
+                        <ArrowRight size={12} />
                     </Link>
                 </div>
             </div>

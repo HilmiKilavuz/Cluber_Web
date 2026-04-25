@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { ArrowRight, Loader2, MailCheck } from "lucide-react";
 
 import { useAuth } from "@/hooks/auth/useAuth";
 import {
@@ -12,6 +13,41 @@ import {
   registerSchema,
 } from "@/lib/auth/authSchemas";
 import { PasswordStrengthIndicator } from "@/components/ui/PasswordStrengthIndicator";
+
+/* Reusable field wrapper */
+function Field({
+  label,
+  htmlFor,
+  error,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      <label
+        htmlFor={htmlFor}
+        style={{
+          fontSize: "13px",
+          fontWeight: 500,
+          fontFamily: "var(--font-sans)",
+          color: "var(--color-ink)",
+        }}
+      >
+        {label}
+      </label>
+      {children}
+      {error && (
+        <p style={{ fontSize: "12px", color: "var(--color-error)", fontFamily: "var(--font-sans)" }}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export function RegisterForm() {
   const router = useRouter();
@@ -22,7 +58,6 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
-    control,
     watch,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
@@ -46,15 +81,16 @@ export function RegisterForm() {
       });
       setRegisteredEmail(values.email);
       setIsVerifying(true);
-    } catch (error) {
+    } catch {
       // Hata yönetimi mutation tarafından ele alınıyor
     }
   };
 
+  /* ── Verify step ── */
   if (isVerifying) {
     return (
       <form
-        className="space-y-4"
+        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
         onSubmit={async (e) => {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
@@ -63,158 +99,241 @@ export function RegisterForm() {
           try {
             await verifyEmailMutation.mutateAsync({ email: registeredEmail, code });
             router.push("/");
-          } catch (error) {
+          } catch {
             // Hata yönetimi mutation tarafından ele alınıyor
           }
         }}
       >
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
-            Doğrulama Kodu
-          </label>
+        {/* Success notice */}
+        <div
+          style={{
+            display: "flex",
+            gap: "12px",
+            padding: "16px",
+            borderRadius: "var(--radius-md)",
+            backgroundColor: "var(--color-success-bg)",
+            border: "1px solid color-mix(in srgb, var(--color-success) 25%, transparent)",
+          }}
+        >
+          <MailCheck
+            size={20}
+            style={{ color: "var(--color-success)", flexShrink: 0, marginTop: "1px" }}
+          />
+          <div>
+            <p
+              style={{
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "var(--color-success)",
+                fontFamily: "var(--font-sans)",
+                marginBottom: "4px",
+              }}
+            >
+              E-postanı kontrol et
+            </p>
+            <p style={{ fontSize: "12px", color: "var(--color-success)", fontFamily: "var(--font-sans)", opacity: 0.8 }}>
+              <strong>{registeredEmail}</strong> adresine 6 haneli bir kod gönderdik.
+            </p>
+          </div>
+        </div>
+
+        {/* Code input */}
+        <Field label="Doğrulama Kodu" htmlFor="code">
           <input
+            id="code"
             name="code"
             type="text"
             maxLength={6}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
-            placeholder="6 haneli kodu giriniz"
+            placeholder="123456"
+            className="input-base"
+            style={{ letterSpacing: "0.15em", fontSize: "18px", textAlign: "center" }}
             required
           />
-        </div>
+        </Field>
 
-        {verifyEmailMutation.isError && verifyEmailMutation.error ? (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-400">
+        {verifyEmailMutation.isError && verifyEmailMutation.error && (
+          <div
+            role="alert"
+            style={{
+              padding: "12px 16px",
+              borderRadius: "var(--radius-md)",
+              backgroundColor: "var(--color-error-bg)",
+              border: "1px solid color-mix(in srgb, var(--color-error) 30%, transparent)",
+              fontSize: "13px",
+              fontFamily: "var(--font-sans)",
+              color: "var(--color-error)",
+            }}
+          >
             {verifyEmailMutation.error.message}
           </div>
-        ) : null}
+        )}
 
         <button
           type="submit"
           disabled={verifyEmailMutation.isPending}
-          className="inline-flex w-full items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="btn btn-primary btn-lg"
+          style={{
+            width: "100%",
+            opacity: verifyEmailMutation.isPending ? 0.7 : 1,
+            cursor: verifyEmailMutation.isPending ? "not-allowed" : "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+          }}
         >
-          {verifyEmailMutation.isPending ? "Doğrulanıyor..." : "Doğrula ve Giriş Yap"}
+          {verifyEmailMutation.isPending ? (
+            <>
+              <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+              Doğrulanıyor...
+            </>
+          ) : (
+            <>
+              Doğrula ve Giriş Yap
+              <ArrowRight size={16} />
+            </>
+          )}
         </button>
       </form>
     );
   }
 
+  /* ── Register step ── */
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="space-y-1.5">
-        <label
-          htmlFor="email"
-          className="text-sm font-medium text-zinc-800 dark:text-zinc-200"
-        >
-          E-posta
-        </label>
+    <form
+      style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
+      <Field label="E-posta" htmlFor="email" error={errors.email?.message}>
         <input
           id="email"
           type="email"
           autoComplete="email"
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
+          placeholder="ornek@email.com"
+          className="input-base"
+          style={{ border: errors.email ? "1px solid var(--color-error)" : undefined }}
           {...register("email")}
         />
-        {errors.email ? (
-          <p className="text-xs text-red-500">{errors.email.message}</p>
-        ) : null}
-      </div>
+      </Field>
 
-      <div className="space-y-1.5">
-        <label
-          htmlFor="username"
-          className="text-sm font-medium text-zinc-800 dark:text-zinc-200"
-        >
-          Kullanıcı Adı
-        </label>
+      <Field label="Kullanıcı Adı" htmlFor="username" error={errors.username?.message}>
         <input
           id="username"
           type="text"
           autoComplete="username"
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
+          placeholder="kullanici_adi"
+          className="input-base"
+          style={{ border: errors.username ? "1px solid var(--color-error)" : undefined }}
           {...register("username")}
         />
-        {errors.username ? (
-          <p className="text-xs text-red-500">{errors.username.message}</p>
-        ) : null}
-      </div>
+      </Field>
 
-
-      <div className="space-y-1.5">
-        <label
-          htmlFor="password"
-          className="text-sm font-medium text-zinc-800 dark:text-zinc-200"
-        >
-          Şifre
-        </label>
+      <Field label="Şifre" htmlFor="password" error={errors.password?.message}>
         <input
           id="password"
           type="password"
           autoComplete="new-password"
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
+          placeholder="••••••••"
+          className="input-base"
+          style={{ border: errors.password ? "1px solid var(--color-error)" : undefined }}
           {...register("password")}
         />
-        {errors.password ? (
-          <p className="text-xs text-red-500">{errors.password.message}</p>
-        ) : null}
-
-        {/* Password Strength Indicator */}
         <PasswordStrengthIndicator password={password} />
-      </div>
+      </Field>
 
-      <div className="space-y-1.5">
-        <label
-          htmlFor="confirmPassword"
-          className="text-sm font-medium text-zinc-800 dark:text-zinc-200"
-        >
-          Şifre (Tekrar)
-        </label>
+      <Field label="Şifre (Tekrar)" htmlFor="confirmPassword" error={errors.confirmPassword?.message}>
         <input
           id="confirmPassword"
           type="password"
           autoComplete="new-password"
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none ring-zinc-200 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950 dark:ring-zinc-700"
+          placeholder="••••••••"
+          className="input-base"
+          style={{ border: errors.confirmPassword ? "1px solid var(--color-error)" : undefined }}
           {...register("confirmPassword")}
         />
-        {errors.confirmPassword ? (
-          <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
-        ) : null}
-      </div>
+      </Field>
 
-      {/* Password Requirements Info */}
-      <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-xs text-blue-700 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-400">
-        <p className="font-semibold mb-1">Güçlü şifre gereksinimleri:</p>
-        <ul className="list-disc pl-4 space-y-0.5">
-          <li>En az 8 karakter</li>
-          <li>En az bir büyük harf (A-Z)</li>
-          <li>En az bir küçük harf (a-z)</li>
-          <li>En az bir rakam (0-9)</li>
-          <li>En az bir özel karakter (!@#$%...)</li>
+      {/* Password hint */}
+      <div
+        style={{
+          padding: "12px 16px",
+          borderRadius: "var(--radius-md)",
+          backgroundColor: "var(--color-bg-secondary)",
+          border: "1px solid var(--color-border)",
+        }}
+      >
+        <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-ink-secondary)", fontFamily: "var(--font-sans)", marginBottom: "6px" }}>
+          Şifre gereksinimleri:
+        </p>
+        <ul style={{ margin: 0, paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "2px" }}>
+          {["En az 8 karakter", "En az bir büyük harf (A-Z)", "En az bir küçük harf (a-z)", "En az bir rakam (0-9)", "En az bir özel karakter (!@#$%...)"].map((req) => (
+            <li key={req} style={{ fontSize: "11px", color: "var(--color-ink-tertiary)", fontFamily: "var(--font-sans)" }}>
+              {req}
+            </li>
+          ))}
         </ul>
       </div>
 
-      {registerMutation.isError && registerMutation.error ? (
+      {registerMutation.isError && registerMutation.error && (
         <div
           role="alert"
-          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-400"
+          style={{
+            padding: "12px 16px",
+            borderRadius: "var(--radius-md)",
+            backgroundColor: "var(--color-error-bg)",
+            border: "1px solid color-mix(in srgb, var(--color-error) 30%, transparent)",
+            fontSize: "13px",
+            fontFamily: "var(--font-sans)",
+            color: "var(--color-error)",
+          }}
         >
           {registerMutation.error.message}
         </div>
-      ) : null}
+      )}
 
       <button
         type="submit"
         disabled={isSubmitting || registerMutation.isPending}
-        className="inline-flex w-full items-center justify-center rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="btn btn-primary btn-lg"
+        style={{
+          width: "100%",
+          marginTop: "4px",
+          opacity: isSubmitting || registerMutation.isPending ? 0.7 : 1,
+          cursor: isSubmitting || registerMutation.isPending ? "not-allowed" : "pointer",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+        }}
       >
-        {isSubmitting || registerMutation.isPending
-          ? "Kayıt oluşturuluyor..."
-          : "Kayıt Ol"}
+        {isSubmitting || registerMutation.isPending ? (
+          <>
+            <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+            Hesap oluşturuluyor...
+          </>
+        ) : (
+          <>
+            Kayıt Ol
+            <ArrowRight size={16} />
+          </>
+        )}
       </button>
 
-      <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
+      <p
+        style={{
+          textAlign: "center",
+          fontSize: "13px",
+          fontFamily: "var(--font-sans)",
+          color: "var(--color-ink-secondary)",
+        }}
+      >
         Zaten hesabın var mı?{" "}
-        <Link href="/login" className="font-medium underline underline-offset-2">
+        <Link
+          href="/login"
+          className="link-underline"
+          style={{ fontWeight: 500, color: "var(--color-ink)" }}
+        >
           Giriş yap
         </Link>
       </p>

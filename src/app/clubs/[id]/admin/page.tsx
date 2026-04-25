@@ -22,15 +22,9 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import { useEvents } from "@/hooks/events/useEvents";
 import type { ClubMember } from "@/types/club";
 
-/* ─── Onay Modalı ──────────────────────────────────────── */
+/* ─── Confirm Modal ────────────────────────────────────── */
 function ConfirmModal({
-    isOpen,
-    title,
-    description,
-    confirmLabel,
-    danger,
-    onConfirm,
-    onClose,
+    isOpen, title, description, confirmLabel, danger, onConfirm, onClose,
 }: {
     isOpen: boolean;
     title: string;
@@ -42,28 +36,71 @@ function ConfirmModal({
 }) {
     if (!isOpen) return null;
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white p-8 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
-                <div className="flex items-start justify-between gap-4">
-                    <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${danger ? "bg-red-100 dark:bg-red-900/30" : "bg-amber-100 dark:bg-amber-900/30"}`}>
-                        <AlertTriangle size={24} className={danger ? "text-red-600 dark:text-red-400" : "text-amber-600 dark:text-amber-400"} />
+        <div
+            style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 50,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(0,0,0,0.55)",
+                backdropFilter: "blur(8px)",
+                padding: "24px",
+            }}
+        >
+            <div
+                className="card-base animate-fade-in-up"
+                style={{ width: "100%", maxWidth: "440px", padding: "32px" }}
+            >
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
+                    <div
+                        style={{
+                            width: "44px",
+                            height: "44px",
+                            flexShrink: 0,
+                            borderRadius: "var(--radius-md)",
+                            backgroundColor: danger ? "var(--color-error-bg)" : "var(--color-warning-bg, #FEF9C3)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: danger ? "var(--color-error)" : "var(--color-warning)",
+                        }}
+                    >
+                        <AlertTriangle size={20} strokeWidth={1.5} />
                     </div>
-                    <button onClick={onClose} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
-                        <X size={20} />
-                    </button>
-                </div>
-                <h3 className="mt-4 text-xl font-bold text-zinc-900 dark:text-zinc-100">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{description}</p>
-                <div className="mt-6 flex gap-3">
                     <button
                         onClick={onClose}
-                        className="flex-1 rounded-xl border border-zinc-200 bg-white py-2.5 text-sm font-bold text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                        style={{
+                            color: "var(--color-ink-tertiary)",
+                            backgroundColor: "transparent",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: "4px",
+                        }}
                     >
+                        <X size={18} />
+                    </button>
+                </div>
+                <h3 className="heading-sm" style={{ color: "var(--color-ink)", marginTop: "16px", marginBottom: "8px" }}>
+                    {title}
+                </h3>
+                <p className="body-sm" style={{ color: "var(--color-ink-secondary)", lineHeight: 1.6 }}>
+                    {description}
+                </p>
+                <div style={{ display: "flex", gap: "10px", marginTop: "24px" }}>
+                    <button onClick={onClose} className="btn btn-ghost btn-md" style={{ flex: 1 }}>
                         İptal
                     </button>
                     <button
                         onClick={onConfirm}
-                        className={`flex-1 rounded-xl py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90 ${danger ? "bg-red-600" : "bg-amber-500"}`}
+                        className="btn btn-md"
+                        style={{
+                            flex: 1,
+                            backgroundColor: danger ? "var(--color-error)" : "var(--color-warning)",
+                            color: "#FFFFFF",
+                            fontWeight: 500,
+                        }}
                     >
                         {confirmLabel}
                     </button>
@@ -73,65 +110,93 @@ function ConfirmModal({
     );
 }
 
-/* ─── Üye Satırı ────────────────────────────────────────── */
-function MemberRow({
-    member,
-    isCreator,
-    onKick,
-    isPending,
-}: {
+/* ─── Member Row ─────────────────────────────────────── */
+function MemberRow({ member, isCreator, onKick, isPending }: {
     member: ClubMember;
     isCreator: boolean;
     onKick: (member: ClubMember) => void;
     isPending: boolean;
 }) {
-    const roleBadge: Record<string, string> = {
-        OWNER: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-        ADMIN: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-        MODERATOR: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
-        MEMBER: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-    };
-
     const roleLabel: Record<string, string> = {
-        OWNER: "Sahip",
-        ADMIN: "Admin",
-        MODERATOR: "Moderatör",
-        MEMBER: "Üye",
+        OWNER: "Sahip", ADMIN: "Admin", MODERATOR: "Moderatör", MEMBER: "Üye",
     };
 
     return (
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-4 transition-colors hover:bg-zinc-100/60 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/50">
-            <div className="flex items-center gap-3">
+        <div
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "16px",
+                padding: "12px 16px",
+                borderRadius: "var(--radius-md)",
+                border: "1px solid var(--color-border)",
+                backgroundColor: "var(--color-surface)",
+                transition: "background-color var(--transition-fast)",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-surface)"; }}
+        >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 {/* Avatar */}
-                <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                <div
+                    style={{
+                        position: "relative",
+                        width: "36px",
+                        height: "36px",
+                        borderRadius: "var(--radius-full)",
+                        backgroundColor: "var(--color-bg-secondary)",
+                        overflow: "hidden",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                    }}
+                >
                     {member.user?.avatarUrl ? (
-                        <img src={member.user.avatarUrl} alt={member.user.displayName} className="h-full w-full object-cover" />
+                        <img src={member.user.avatarUrl} alt={member.user.displayName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : (
-                        <div className="flex h-full w-full items-center justify-center text-sm font-bold text-zinc-500 dark:text-zinc-400">
+                        <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-ink-secondary)", fontFamily: "var(--font-sans)" }}>
                             {member.user?.displayName?.charAt(0)?.toUpperCase() || "?"}
-                        </div>
+                        </span>
                     )}
                     {isCreator && (
-                        <div className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400">
-                            <Crown size={9} className="text-white" />
+                        <div
+                            style={{
+                                position: "absolute",
+                                bottom: 0,
+                                right: 0,
+                                width: "14px",
+                                height: "14px",
+                                borderRadius: "var(--radius-full)",
+                                backgroundColor: "#F59E0B",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Crown size={8} style={{ color: "#FFFFFF" }} />
                         </div>
                     )}
                 </div>
 
-                {/* İsim & Rol */}
                 <div>
-                    <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                    <p className="body-sm" style={{ fontWeight: 600, color: "var(--color-ink)" }}>
                         {member.user?.displayName || "Bilinmeyen Kullanıcı"}
-                        {isCreator && <span className="ml-2 text-xs font-medium text-amber-500">(Siz)</span>}
+                        {isCreator && (
+                            <span style={{ marginLeft: "8px", fontSize: "11px", fontWeight: 500, color: "#F59E0B" }}>
+                                (Siz)
+                            </span>
+                        )}
                     </p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                    <p className="caption" style={{ color: "var(--color-ink-tertiary)" }}>
                         {new Date(member.joinedAt).toLocaleDateString("tr-TR")} tarihinde katıldı
                     </p>
                 </div>
             </div>
 
-            <div className="flex items-center gap-3">
-                <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${roleBadge[member.role] || roleBadge.MEMBER}`}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <span className="badge-base" style={{ display: "inline-flex" }}>
                     {roleLabel[member.role] || member.role}
                 </span>
                 {!isCreator && (
@@ -139,9 +204,28 @@ function MemberRow({
                         onClick={() => onKick(member)}
                         disabled={isPending}
                         title="Üyeyi çıkar"
-                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-50 text-red-500 transition-colors hover:bg-red-100 hover:text-red-700 disabled:opacity-50 dark:bg-red-900/20 dark:hover:bg-red-900/40"
+                        style={{
+                            width: "32px",
+                            height: "32px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "var(--radius-md)",
+                            backgroundColor: "var(--color-error-bg)",
+                            color: "var(--color-error)",
+                            border: "none",
+                            cursor: isPending ? "not-allowed" : "pointer",
+                            opacity: isPending ? 0.5 : 1,
+                            transition: "all var(--transition-fast)",
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!isPending) (e.currentTarget as HTMLElement).style.backgroundColor = "color-mix(in srgb, var(--color-error) 20%, transparent)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-error-bg)";
+                        }}
                     >
-                        {isPending ? <Loader2 size={14} className="animate-spin" /> : <UserMinus size={14} />}
+                        {isPending ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : <UserMinus size={13} />}
                     </button>
                 )}
             </div>
@@ -149,7 +233,7 @@ function MemberRow({
     );
 }
 
-/* ─── Admin Sayfası ─────────────────────────────────────── */
+/* ─── Admin Page ──────────────────────────────────────── */
 export default function ClubAdminPage() {
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
@@ -173,7 +257,6 @@ export default function ClubAdminPage() {
             Array.isArray(page.data) ? page.data : Array.isArray(page) ? page : []
         ).length ?? 0;
 
-    // Yetkisiz kullanıcıları yönlendir
     useEffect(() => {
         if (!isLoading && club && user && !isOwner) {
             toast.error("Bu sayfaya erişim yetkiniz yok.");
@@ -181,15 +264,12 @@ export default function ClubAdminPage() {
         }
     }, [isLoading, club, user, isOwner, id, router]);
 
-    /* ── Handlers ── */
     const handleKickConfirm = async () => {
         if (!kickTarget) return;
         try {
             await removeMemberMutation.mutateAsync(kickTarget.userId);
             toast.success(`${kickTarget.user?.displayName || "Üye"} kulüpten çıkarıldı.`);
-        } catch {
-            // axios interceptor handles toast
-        } finally {
+        } catch { } finally {
             setKickTarget(null);
         }
     };
@@ -199,18 +279,15 @@ export default function ClubAdminPage() {
             await deleteMutation.mutateAsync(id);
             toast.success("Kulüp başarıyla silindi.");
             router.push("/clubs");
-        } catch {
-            // axios interceptor handles toast
-        } finally {
+        } catch { } finally {
             setDeleteConfirmOpen(false);
         }
     };
 
-    /* ── Loading ── */
     if (isLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <Loader2 className="animate-spin text-blue-600" size={48} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", backgroundColor: "var(--color-bg)" }}>
+                <Loader2 size={28} strokeWidth={1.5} style={{ color: "var(--color-ink-tertiary)", animation: "spin 1s linear infinite" }} />
             </div>
         );
     }
@@ -219,10 +296,8 @@ export default function ClubAdminPage() {
 
     const nonOwnerMembers = (members || []).filter((m) => m.userId !== club.creatorId);
 
-    /* ── UI ── */
     return (
         <>
-            {/* Kick Onay Modalı */}
             <ConfirmModal
                 isOpen={!!kickTarget}
                 title="Üyeyi Çıkar"
@@ -232,8 +307,6 @@ export default function ClubAdminPage() {
                 onConfirm={handleKickConfirm}
                 onClose={() => setKickTarget(null)}
             />
-
-            {/* Silme Onay Modalı */}
             <ConfirmModal
                 isOpen={deleteConfirmOpen}
                 title="Kulübü Sil"
@@ -244,85 +317,121 @@ export default function ClubAdminPage() {
                 onClose={() => setDeleteConfirmOpen(false)}
             />
 
-            <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-                <div className="container mx-auto max-w-4xl px-4 py-10 lg:px-8">
-
-                    {/* Üst Bar */}
-                    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
+            <main style={{ minHeight: "100vh", backgroundColor: "var(--color-bg)" }}>
+                <div
+                    style={{
+                        maxWidth: "960px",
+                        margin: "0 auto",
+                        padding: "clamp(40px, 6vw, 80px) var(--container-padding) var(--section-padding-y)",
+                    }}
+                >
+                    {/* ── Header ── */}
+                    <div
+                        style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            gap: "16px",
+                            marginBottom: "48px",
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                             <Link
                                 href={`/clubs/${id}`}
-                                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "36px",
+                                    height: "36px",
+                                    borderRadius: "var(--radius-md)",
+                                    border: "1px solid var(--color-border)",
+                                    backgroundColor: "var(--color-surface)",
+                                    color: "var(--color-ink-secondary)",
+                                    textDecoration: "none",
+                                    transition: "all var(--transition-fast)",
+                                    flexShrink: 0,
+                                }}
+                                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)"; (e.currentTarget as HTMLElement).style.color = "var(--color-ink)"; }}
+                                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-surface)"; (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)"; }}
                             >
-                                <ChevronLeft size={20} />
+                                <ChevronLeft size={18} />
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-                                    Yönetim Paneli
-                                </h1>
-                                <p className="text-sm text-zinc-500 dark:text-zinc-400">{club.name}</p>
+                                <p className="label" style={{ color: "var(--color-ink-tertiary)" }}>{club.name}</p>
+                                <h1 className="heading-lg" style={{ color: "var(--color-ink)" }}>Yönetim Paneli</h1>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 rounded-2xl bg-amber-50 px-4 py-2 dark:bg-amber-900/20">
-                            <ShieldCheck size={16} className="text-amber-600 dark:text-amber-400" />
-                            <span className="text-sm font-bold text-amber-700 dark:text-amber-400">Kulüp Sahibi</span>
+
+                        <div
+                            style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                padding: "6px 14px",
+                                borderRadius: "var(--radius-full)",
+                                backgroundColor: "var(--color-warning-bg, #FEF9C3)",
+                                color: "var(--color-warning, #B45309)",
+                            }}
+                        >
+                            <ShieldCheck size={14} />
+                            <span className="label" style={{ color: "inherit" }}>Kulüp Sahibi</span>
                         </div>
                     </div>
 
-                    {/* İstatistik Kartları */}
-                    <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
-                        <div className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
-                            <Users size={24} className="mb-3 text-blue-500" />
-                            <p className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-                                {members?.length ?? 0}
-                            </p>
-                            <p className="mt-1 text-sm font-medium text-zinc-500">Toplam Üye</p>
-                        </div>
-                        <div className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
-                            <Calendar size={24} className="mb-3 text-purple-500" />
-                            <p className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-                                {totalEvents}
-                            </p>
-                            <p className="mt-1 text-sm font-medium text-zinc-500">Etkinlik</p>
-                        </div>
-                        <div className="col-span-2 rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50 sm:col-span-1">
-                            <ShieldAlert size={24} className="mb-3 text-emerald-500" />
-                            <p className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-                                {nonOwnerMembers.length}
-                            </p>
-                            <p className="mt-1 text-sm font-medium text-zinc-500">Yönetilebilir Üye</p>
-                        </div>
-                    </div>
-
-                    {/* Üye Yönetimi */}
-                    <section className="mb-8 rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/50">
-                        <div className="mb-6 flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 dark:bg-blue-900/20">
-                                <Users size={20} className="text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div>
-                                <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Üye Yönetimi</h2>
-                                <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                    Üyeleri görüntüle ve kulüpten çıkar
+                    {/* ── Stats ── */}
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                            gap: "16px",
+                            marginBottom: "32px",
+                        }}
+                    >
+                        {[
+                            { label: "Toplam Üye", value: members?.length ?? 0, Icon: Users },
+                            { label: "Etkinlik", value: totalEvents, Icon: Calendar },
+                            { label: "Yönetilebilir Üye", value: nonOwnerMembers.length, Icon: ShieldAlert },
+                        ].map(({ label, value, Icon }, i) => (
+                            <div
+                                key={i}
+                                className="card-base"
+                                style={{ padding: "24px 20px" }}
+                            >
+                                <Icon size={18} strokeWidth={1.5} style={{ color: "var(--color-ink-tertiary)", marginBottom: "12px" }} />
+                                <p
+                                    style={{
+                                        fontSize: "32px",
+                                        fontWeight: 700,
+                                        fontFamily: "var(--font-sans)",
+                                        letterSpacing: "-0.02em",
+                                        color: "var(--color-ink)",
+                                        lineHeight: 1,
+                                        marginBottom: "4px",
+                                    }}
+                                >
+                                    {value}
                                 </p>
+                                <p className="caption" style={{ color: "var(--color-ink-tertiary)" }}>{label}</p>
                             </div>
-                        </div>
+                        ))}
+                    </div>
 
-                        <div className="space-y-2">
-                            {/* Kulüp sahibi (siz) */}
-                            {members
-                                ?.filter((m) => m.userId === club.creatorId)
-                                .map((m) => (
-                                    <MemberRow
-                                        key={m.id}
-                                        member={m}
-                                        isCreator={true}
-                                        onKick={() => {}}
-                                        isPending={false}
-                                    />
-                                ))}
+                    {/* ── Divider ── */}
+                    <div style={{ height: "1px", backgroundColor: "var(--color-border)", marginBottom: "32px" }} />
 
-                            {/* Diğer üyeler */}
+                    {/* ── Member Management ── */}
+                    <section style={{ marginBottom: "32px" }}>
+                        <h2 className="heading-sm" style={{ color: "var(--color-ink)", marginBottom: "6px" }}>Üye Yönetimi</h2>
+                        <p className="body-sm" style={{ color: "var(--color-ink-secondary)", marginBottom: "20px" }}>
+                            Üyeleri görüntüle ve kulüpten çıkar
+                        </p>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                            {members?.filter((m) => m.userId === club.creatorId).map((m) => (
+                                <MemberRow key={m.id} member={m} isCreator={true} onKick={() => { }} isPending={false} />
+                            ))}
                             {nonOwnerMembers.length > 0 ? (
                                 nonOwnerMembers.map((m) => (
                                     <MemberRow
@@ -330,60 +439,91 @@ export default function ClubAdminPage() {
                                         member={m}
                                         isCreator={false}
                                         onKick={(member) => setKickTarget(member)}
-                                        isPending={
-                                            removeMemberMutation.isPending &&
-                                            removeMemberMutation.variables === m.userId
-                                        }
+                                        isPending={removeMemberMutation.isPending && removeMemberMutation.variables === m.userId}
                                     />
                                 ))
                             ) : (
-                                <div className="rounded-2xl border-2 border-dashed border-zinc-200 p-8 text-center dark:border-zinc-800">
-                                    <Users className="mx-auto mb-3 text-zinc-300 dark:text-zinc-700" size={32} />
-                                    <p className="text-sm font-medium text-zinc-500">
-                                        Henüz başka üye yok.
-                                    </p>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        padding: "48px 24px",
+                                        border: "1px dashed var(--color-border)",
+                                        borderRadius: "var(--radius-lg)",
+                                        gap: "8px",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <Users size={24} strokeWidth={1.5} style={{ color: "var(--color-ink-tertiary)" }} />
+                                    <p className="body-sm" style={{ color: "var(--color-ink-secondary)" }}>Henüz başka üye yok.</p>
                                 </div>
                             )}
                         </div>
                     </section>
 
-                    {/* Tehlikeli Bölge */}
-                    <section className="rounded-3xl border-2 border-red-200 bg-red-50/50 p-6 dark:border-red-900/30 dark:bg-red-900/10">
-                        <div className="mb-6 flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-900/30">
-                                <ShieldAlert size={20} className="text-red-600 dark:text-red-400" />
-                            </div>
+                    {/* ── Danger Zone ── */}
+                    <section
+                        style={{
+                            borderRadius: "var(--radius-lg)",
+                            border: "1px solid color-mix(in srgb, var(--color-error) 25%, transparent)",
+                            backgroundColor: "var(--color-error-bg)",
+                            padding: "28px",
+                        }}
+                    >
+                        <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", marginBottom: "16px" }}>
+                            <ShieldAlert size={16} strokeWidth={1.5} style={{ color: "var(--color-error)", marginTop: "2px" }} />
                             <div>
-                                <h2 className="text-lg font-bold text-red-700 dark:text-red-400">Tehlikeli Bölge</h2>
-                                <p className="text-sm text-red-500 dark:text-red-500">
+                                <h2 className="heading-sm" style={{ color: "var(--color-error)", marginBottom: "4px" }}>Tehlikeli Bölge</h2>
+                                <p className="body-sm" style={{ color: "var(--color-error)", opacity: 0.75 }}>
                                     Bu işlemler geri alınamaz, dikkatli olun
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+                            style={{ gap: "16px" }}
+                        >
                             <div>
-                                <p className="font-bold text-zinc-900 dark:text-zinc-100">Kulübü Sil</p>
-                                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                                    Kulübü ve tüm içeriğini (üyeler, etkinlikler, sohbet) kalıcı olarak sil.
+                                <p className="body-sm" style={{ fontWeight: 600, color: "var(--color-ink)" }}>Kulübü Sil</p>
+                                <p className="body-sm" style={{ color: "var(--color-ink-secondary)", marginTop: "4px" }}>
+                                    Kulübü ve tüm içeriğini kalıcı olarak sil.
                                 </p>
                             </div>
                             <button
                                 onClick={() => setDeleteConfirmOpen(true)}
                                 disabled={deleteMutation.isPending}
-                                className="flex flex-shrink-0 items-center gap-2 rounded-2xl bg-red-600 px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "10px 20px",
+                                    borderRadius: "var(--radius-md)",
+                                    fontSize: "13px",
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    backgroundColor: "var(--color-error)",
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    cursor: deleteMutation.isPending ? "not-allowed" : "pointer",
+                                    opacity: deleteMutation.isPending ? 0.6 : 1,
+                                    flexShrink: 0,
+                                    whiteSpace: "nowrap",
+                                }}
                             >
                                 {deleteMutation.isPending ? (
-                                    <Loader2 size={16} className="animate-spin" />
+                                    <Loader2 size={15} style={{ animation: "spin 1s linear infinite" }} />
                                 ) : (
-                                    <Trash2 size={16} />
+                                    <Trash2 size={15} strokeWidth={1.5} />
                                 )}
                                 Kulübü Sil
                             </button>
                         </div>
                     </section>
                 </div>
-            </div>
+            </main>
         </>
     );
 }

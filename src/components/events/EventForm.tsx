@@ -50,7 +50,7 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
         try {
             // Convert local datetime string to proper ISO-8601 string for the backend
             const isoDateString = new Date(values.date).toISOString();
-            
+
             // Create a perfectly mapped payload based strictly on the backend DTO.
             // Any extra properties (like maxParticipants, imageUrl, category) will cause
             // a 400 Bad Request if the backend ValidationPipe uses forbidNonWhitelisted.
@@ -61,9 +61,9 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
                 location: values.location,
                 clubId: clubId,
             };
-            
+
             console.log("Submitting Event Payload:", JSON.stringify(payload, null, 2));
-            
+
             await createEventMutation.mutateAsync(payload);
             onSuccess?.();
         } catch (error: any) {
@@ -71,8 +71,8 @@ export function EventForm({ clubId, onSuccess }: EventFormProps) {
             console.error("Event creation failed payload:", error.response?.data || error.details || error);
             const backendError = error.details || error.response?.data;
             if (backendError?.message) {
-                const errorMsg = Array.isArray(backendError.message) 
-                    ? backendError.message.join(", ") 
+                const errorMsg = Array.isArray(backendError.message)
+                    ? backendError.message.join(", ")
                     : backendError.message;
                 toast.error(`Kayıt başarısız: ${errorMsg}`);
             } else {

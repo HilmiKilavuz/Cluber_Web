@@ -10,8 +10,8 @@ import {
     Home as HomeIcon,
     Menu,
     X,
-    Sparkles,
-    CalendarPlus
+    CalendarPlus,
+    ArrowRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -21,9 +21,16 @@ export default function Header() {
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 12);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const user = sessionQuery.data;
@@ -49,134 +56,283 @@ export default function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80">
-            <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                        <Sparkles size={20} />
-                    </div>
-                    <span className="text-xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100">
-                        CLUB<span className="text-blue-600">HUB</span>
+        <header
+            className="sticky top-0 z-50 w-full transition-all duration-300"
+            style={{
+                backgroundColor: isScrolled
+                    ? "color-mix(in srgb, var(--color-bg) 92%, transparent)"
+                    : "color-mix(in srgb, var(--color-bg) 80%, transparent)",
+                borderBottom: `1px solid ${isScrolled ? "var(--color-border)" : "transparent"}`,
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)",
+            }}
+        >
+            <div
+                className="mx-auto flex h-16 max-w-[1280px] items-center justify-between"
+                style={{ padding: "0 var(--container-padding)" }}
+            >
+                {/* ── Logo ── */}
+                <Link
+                    href="/"
+                    className="group flex items-center gap-2 transition-transform duration-200 hover:scale-[1.03]"
+                    aria-label="Cluber Ana Sayfa"
+                >
+                    <span
+                        style={{
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "20px",
+                            fontWeight: 700,
+                            letterSpacing: "-0.03em",
+                            color: "var(--color-ink)",
+                        }}
+                    >
+                        Cluber
                     </span>
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex md:items-center md:gap-1">
+                {/* ── Desktop Nav ── */}
+                <nav className="hidden items-center gap-1 md:flex" aria-label="Ana navigasyon">
                     {navLinks.map((link) => {
-                        const Icon = link.icon;
                         const isActive = pathname === link.href;
                         return (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${isActive
-                                    ? "bg-zinc-100 text-blue-600 dark:bg-zinc-900 dark:text-blue-400"
-                                    : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
-                                    }`}
+                                className="rounded-lg px-4 py-2 text-sm transition-all duration-150"
+                                style={{
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    color: isActive ? "var(--color-ink)" : "var(--color-ink-secondary)",
+                                    backgroundColor: isActive ? "var(--color-bg-secondary)" : "transparent",
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isActive) {
+                                        (e.target as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)";
+                                        (e.target as HTMLElement).style.color = "var(--color-ink)";
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isActive) {
+                                        (e.target as HTMLElement).style.backgroundColor = "transparent";
+                                        (e.target as HTMLElement).style.color = "var(--color-ink-secondary)";
+                                    }
+                                }}
                             >
-                                <Icon size={18} />
                                 {link.name}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* Desktop Auth Actions */}
-                <div className="hidden md:flex md:items-center md:gap-4">
+                {/* ── Desktop Auth ── */}
+                <div className="hidden items-center gap-3 md:flex">
                     {isAuthenticated ? (
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-3 rounded-full border border-zinc-200 bg-zinc-50 py-1 pl-1 pr-4 dark:border-zinc-800 dark:bg-zinc-900">
-                                <div className="h-8 w-8 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                        <div className="flex items-center gap-3">
+                            {/* User chip */}
+                            <Link
+                                href="/profile"
+                                className="flex items-center gap-2.5 rounded-full py-1 pl-1 pr-4 transition-all duration-150 hover:opacity-80"
+                                style={{
+                                    border: "1px solid var(--color-border)",
+                                    backgroundColor: "var(--color-surface)",
+                                }}
+                            >
+                                <div
+                                    className="flex h-7 w-7 overflow-hidden rounded-full items-center justify-center"
+                                    style={{ backgroundColor: "var(--color-bg-secondary)" }}
+                                >
                                     {user.avatarUrl ? (
-                                        <img src={user.avatarUrl} alt={user.username} className="h-full w-full object-cover" />
+                                        <img
+                                            src={user.avatarUrl}
+                                            alt={user.username}
+                                            className="h-full w-full object-cover"
+                                        />
                                     ) : (
-                                        <div className="flex h-full w-full items-center justify-center text-xs font-bold text-zinc-500">
+                                        <span
+                                            style={{
+                                                fontSize: "11px",
+                                                fontWeight: 600,
+                                                color: "var(--color-ink-secondary)",
+                                                fontFamily: "var(--font-sans)",
+                                            }}
+                                        >
                                             {user.username?.charAt(0).toUpperCase() || "U"}
-                                        </div>
+                                        </span>
                                     )}
                                 </div>
-                                <span className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
+                                <span
+                                    style={{
+                                        fontSize: "13px",
+                                        fontWeight: 500,
+                                        color: "var(--color-ink)",
+                                        fontFamily: "var(--font-sans)",
+                                    }}
+                                >
                                     {user.username}
                                 </span>
-                            </div>
+                            </Link>
+
+                            {/* Logout */}
                             <button
                                 onClick={handleLogout}
-                                className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 text-zinc-500 hover:bg-red-50 hover:text-red-600 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-red-900/10 transition-colors"
+                                className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-150"
+                                style={{
+                                    border: "1px solid var(--color-border)",
+                                    color: "var(--color-ink-tertiary)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLButtonElement).style.color = "var(--color-error)";
+                                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--color-error-bg)";
+                                    (e.currentTarget as HTMLButtonElement).style.borderColor = "transparent";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLButtonElement).style.color = "var(--color-ink-tertiary)";
+                                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
+                                    (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--color-border)";
+                                }}
                                 title="Çıkış Yap"
+                                aria-label="Çıkış Yap"
                             >
-                                <LogOut size={20} />
+                                <LogOut size={16} />
                             </button>
                         </div>
                     ) : (
                         <div className="flex items-center gap-2">
                             <Link
                                 href="/login"
-                                className="rounded-xl px-4 py-2 text-sm font-bold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                                className="rounded-lg px-4 py-2 text-sm transition-all duration-150"
+                                style={{
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    color: "var(--color-ink-secondary)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.target as HTMLElement).style.color = "var(--color-ink)";
+                                    (e.target as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.target as HTMLElement).style.color = "var(--color-ink-secondary)";
+                                    (e.target as HTMLElement).style.backgroundColor = "transparent";
+                                }}
                             >
                                 Giriş Yap
                             </Link>
                             <Link
                                 href="/register"
-                                className="rounded-xl bg-zinc-900 px-5 py-2 text-sm font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-all"
+                                className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm transition-all duration-150 active:scale-95"
+                                style={{
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    backgroundColor: "var(--color-accent)",
+                                    color: "var(--color-accent-fg)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent-hover)";
+                                    (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent)";
+                                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                                }}
                             >
-                                Kayıt Ol
+                                Üye Ol
+                                <ArrowRight size={14} />
                             </Link>
                         </div>
                     )}
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* ── Mobile Menu Toggle ── */}
                 <button
-                    className="flex h-10 w-10 items-center justify-center rounded-xl md:hidden"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg md:hidden transition-all duration-150"
+                    style={{
+                        border: "1px solid var(--color-border)",
+                        color: "var(--color-ink)",
+                    }}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label={isMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
                 >
-                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
             </div>
 
-            {/* Mobile Menu */}
+            {/* ── Mobile Menu ── */}
             {isMenuOpen && (
-                <div className="border-t border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 md:hidden">
-                    <nav className="flex flex-col gap-2">
+                <div
+                    className="animate-fade-in border-t md:hidden"
+                    style={{
+                        borderColor: "var(--color-border)",
+                        backgroundColor: "var(--color-bg)",
+                    }}
+                >
+                    <nav className="flex flex-col gap-1 p-4" aria-label="Mobil navigasyon">
                         {navLinks.map((link) => {
                             const Icon = link.icon;
+                            const isActive = pathname === link.href;
                             return (
                                 <Link
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center gap-3 rounded-xl p-3 text-base font-bold text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-900"
+                                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-150"
+                                    style={{
+                                        fontWeight: 500,
+                                        fontFamily: "var(--font-sans)",
+                                        color: isActive ? "var(--color-ink)" : "var(--color-ink-secondary)",
+                                        backgroundColor: isActive ? "var(--color-bg-secondary)" : "transparent",
+                                    }}
                                 >
-                                    <Icon size={20} />
+                                    <Icon size={16} />
                                     {link.name}
                                 </Link>
                             );
                         })}
-                        <hr className="my-2 border-zinc-100 dark:border-zinc-800" />
+
+                        <div
+                            className="my-2"
+                            style={{ height: "1px", backgroundColor: "var(--color-border)" }}
+                        />
+
                         {isAuthenticated ? (
                             <button
                                 onClick={handleLogout}
-                                className="flex items-center gap-3 rounded-xl p-3 text-base font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
+                                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all duration-150 text-left"
+                                style={{
+                                    fontWeight: 500,
+                                    fontFamily: "var(--font-sans)",
+                                    color: "var(--color-error)",
+                                }}
                             >
-                                <LogOut size={20} />
+                                <LogOut size={16} />
                                 Çıkış Yap
                             </button>
                         ) : (
-                            <div className="grid grid-cols-2 gap-3 p-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 <Link
                                     href="/login"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center justify-center rounded-xl border border-zinc-200 py-3 text-sm font-bold dark:border-zinc-800"
+                                    className="flex items-center justify-center rounded-lg py-3 text-sm transition-all duration-150"
+                                    style={{
+                                        fontWeight: 500,
+                                        fontFamily: "var(--font-sans)",
+                                        border: "1px solid var(--color-border)",
+                                        color: "var(--color-ink)",
+                                    }}
                                 >
                                     Giriş Yap
                                 </Link>
                                 <Link
                                     href="/register"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center justify-center rounded-xl bg-zinc-900 py-3 text-sm font-bold text-white dark:bg-zinc-100 dark:text-zinc-900"
+                                    className="flex items-center justify-center rounded-lg py-3 text-sm transition-all duration-150"
+                                    style={{
+                                        fontWeight: 500,
+                                        fontFamily: "var(--font-sans)",
+                                        backgroundColor: "var(--color-accent)",
+                                        color: "var(--color-accent-fg)",
+                                    }}
                                 >
-                                    Kayıt Ol
+                                    Üye Ol
                                 </Link>
                             </div>
                         )}

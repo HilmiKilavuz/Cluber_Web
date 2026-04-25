@@ -4,8 +4,8 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 export default function RegisterPage() {
   return (
     <AuthShell
-      title="ClubHub hesabı oluştur"
-      description="Yeni kulüpler keşfetmek, topluluklara katılmak ve etkinlikleri takip etmek için kayıt ol."
+      title="Cluber'a katıl"
+      description="Yeni kulüpler keşfet, topluluklara katıl ve etkinlikleri takip et."
     >
       <RegisterForm />
     </AuthShell>

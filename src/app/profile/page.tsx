@@ -3,50 +3,142 @@
 import { useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { ProfileHeader, ProfileStats } from "@/components/profile/ProfileComponents";
 import { ClubCard } from "@/components/clubs/ClubCard";
-import { Loader2, Compass } from "lucide-react";
+import { Loader2, Compass, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function ProfilePage() {
     const { data: joinedClubs, isLoading } = useJoinedClubs();
 
     return (
-        <div className="container mx-auto max-w-6xl px-4 py-12 lg:px-8">
-            <div className="space-y-10">
-                {/* Header Section */}
+        <main
+            style={{
+                minHeight: "100vh",
+                backgroundColor: "var(--color-bg)",
+            }}
+        >
+            <div
+                style={{
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                    padding: "clamp(40px, 6vw, 80px) var(--container-padding) var(--section-padding-y)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "32px",
+                }}
+            >
+                {/* Section label */}
+                <div>
+                    <p className="label" style={{ color: "var(--color-ink-tertiary)", marginBottom: "8px" }}>
+                        (profil)
+                    </p>
+                </div>
+
+                {/* Profile Header */}
                 <ProfileHeader />
 
-                {/* Stats Section */}
+                {/* Stats */}
                 <ProfileStats />
+
+                {/* Divider */}
+                <div style={{ height: "1px", backgroundColor: "var(--color-border)" }} />
 
                 {/* Clubs Section */}
                 <section>
-                    <div className="mb-6 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Katıldığım Kulüpler</h2>
-                        <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                            {joinedClubs?.length || 0} Kulüp
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginBottom: "24px",
+                        }}
+                    >
+                        <h2 className="heading-lg" style={{ color: "var(--color-ink)" }}>
+                            Katıldığım Kulüpler
+                        </h2>
+                        <span
+                            className="label"
+                            style={{ color: "var(--color-ink-tertiary)" }}
+                        >
+                            {joinedClubs?.length || 0} kulüp
                         </span>
                     </div>
 
                     {isLoading ? (
-                        <div className="flex h-64 items-center justify-center rounded-3xl border border-zinc-200 dark:border-zinc-800">
-                            <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                height: "200px",
+                                border: "1px solid var(--color-border)",
+                                borderRadius: "var(--radius-lg)",
+                            }}
+                        >
+                            <Loader2
+                                size={24}
+                                strokeWidth={1.5}
+                                style={{ color: "var(--color-ink-tertiary)", animation: "spin 1s linear infinite" }}
+                            />
                         </div>
                     ) : !joinedClubs || joinedClubs.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 py-20 dark:border-zinc-800">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-900">
-                                <Compass className="h-8 w-8 text-zinc-300 dark:text-zinc-700" />
+                        <div
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                padding: "80px 24px",
+                                border: "1px dashed var(--color-border)",
+                                borderRadius: "var(--radius-lg)",
+                                gap: "12px",
+                                textAlign: "center",
+                                backgroundColor: "var(--color-bg-secondary)",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: "56px",
+                                    height: "56px",
+                                    borderRadius: "var(--radius-md)",
+                                    backgroundColor: "var(--color-border)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Compass size={24} strokeWidth={1.5} style={{ color: "var(--color-ink-tertiary)" }} />
                             </div>
-                            <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100">Henüz bir kulübe katılmadınız</h3>
-                            <p className="mt-1 text-zinc-500 dark:text-zinc-400">Yeni maceralar için keşfetmeye başlayın!</p>
+                            <div>
+                                <h3 className="heading-sm" style={{ color: "var(--color-ink)", marginBottom: "6px" }}>
+                                    Henüz bir kulübe katılmadınız
+                                </h3>
+                                <p className="body-sm" style={{ color: "var(--color-ink-secondary)" }}>
+                                    Yeni maceralar için keşfetmeye başlayın!
+                                </p>
+                            </div>
                             <Link
                                 href="/clubs"
-                                className="mt-6 rounded-xl bg-zinc-900 px-6 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
+                                className="btn btn-primary btn-md"
+                                style={{
+                                    marginTop: "8px",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "6px",
+                                    textDecoration: "none",
+                                }}
                             >
                                 Kulüpleri Keşfet
+                                <ArrowRight size={15} />
                             </Link>
                         </div>
                     ) : (
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        <div
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                                gap: "16px",
+                            }}
+                        >
                             {joinedClubs.map((club) => (
                                 <ClubCard key={club.id} club={club} />
                             ))}
@@ -54,6 +146,6 @@ export default function ProfilePage() {
                     )}
                 </section>
             </div>
-        </div>
+        </main>
     );
 }

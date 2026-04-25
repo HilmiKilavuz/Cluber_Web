@@ -4,7 +4,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 export default function LoginPage() {
   return (
     <AuthShell
-      title="ClubHub'a giriş yap"
+      title="Cluber'a giriş yap"
       description="Kulüplerine, sohbetlerine ve etkinliklerine kaldığın yerden devam et."
     >
       <LoginForm />

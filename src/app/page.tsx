@@ -1,183 +1,649 @@
 "use client";
 
 import Link from "next/link";
-import { Compass, Users, MessageSquare, Calendar, ChevronRight, Sparkles, Zap, Shield, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useState, useEffect } from "react";
+import { ArrowRight, MessageSquare, Calendar, Users, Compass } from "lucide-react";
+
+/* ──────────────────────────────────────────────────
+   Marquee items
+   ────────────────────────────────────────────────── */
+const MARQUEE_ITEMS = [
+    "KULÜP YÖNETİMİ",
+    "GERÇEK ZAMANLI SOHBET",
+    "ETKİNLİK TAKİBİ",
+    "ÜYE YÖNETİMİ",
+    "KEŞFET & KATIL",
+    "KATEGORİ FİLTRELE",
+    "ANLINDA MESAJLAŞ",
+    "KOMÜNİTE KUR",
+];
+
+/* ──────────────────────────────────────────────────
+   Feature items
+   ────────────────────────────────────────────────── */
+const FEATURES = [
+    {
+        icon: MessageSquare,
+        title: "Gerçek Zamanlı Sohbet",
+        description:
+            "Kulüp üyeleriyle anlık mesajlaşın, fikirlerinizi anında paylaşın. Socket.IO ile kesintisiz iletişim.",
+    },
+    {
+        icon: Calendar,
+        title: "Etkinlik Yönetimi",
+        description:
+            "Dijital veya fiziksel etkinlikler oluşturun, katılımcıları takip edin ve RSVP alın.",
+    },
+    {
+        icon: Users,
+        title: "Üye Yönetimi",
+        description:
+            "Roller atayın, yöneticiler belirleyin ve topluluğunuzu kolayca yönetin.",
+    },
+    {
+        icon: Compass,
+        title: "Keşfet",
+        description:
+            "Kategorilere göre filtreleyin, arama yapın ve ilgi alanlarınıza uygun kulüpleri bulun.",
+    },
+];
+
+/* ──────────────────────────────────────────────────
+   Stats
+   ────────────────────────────────────────────────── */
+const STATS = [
+    { value: "Anlık", label: "Gerçek zamanlı mesajlaşma" },
+    { value: "JWT", label: "Güvenli kimlik doğrulama" },
+    { value: "∞", label: "Sınırsız kulüp & etkinlik" },
+];
 
 export default function Home() {
-  const { sessionQuery } = useAuth();
+    const { sessionQuery } = useAuth();
+    const [isMounted, setIsMounted] = useState(false);
 
-  const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    const user = sessionQuery.data;
+    const isAuthenticated = isMounted && !!user;
 
-  const user = sessionQuery.data;
-  const isAuthenticated = isMounted && !!user;
-
-  return (
-    <main className="relative min-h-screen overflow-hidden bg-white dark:bg-zinc-950">
-      {/* Background Decorative Elements */}
-      <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 blur-3xl" aria-hidden="true">
-        <div className="h-[40rem] w-[80rem] bg-gradient-to-b from-blue-500/10 to-transparent dark:from-blue-600/5" />
-      </div>
-
-      <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:pt-32">
-        <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8">
-          <div className="mt-24 sm:mt-32 lg:mt-16">
-            <a href="#" className="inline-flex space-x-6">
-              <span className="rounded-full bg-blue-600/10 px-3 py-1 text-sm font-semibold leading-6 text-blue-600 ring-1 ring-inset ring-blue-600/10 dark:text-blue-400">
-                Yayında
-              </span>
-              <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-zinc-600 dark:text-zinc-400">
-                <span>Versiyon 0.1.0</span>
-                <ChevronRight className="h-5 w-5 text-zinc-400" aria-hidden="true" />
-              </span>
-            </a>
-          </div>
-
-          <h1 className="mt-10 text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-6xl">
-            Topluluklar Burada <br />
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Canlanıyor.</span>
-          </h1>
-
-          <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Kulüpler oluştur, ortak ilgi alanlarına sahip insanlarla tanış ve etkinliklerini tek bir yerden yönet. ClubHub, dinamik topluluklar için modern bir platformdur.
-          </p>
-
-          <div className="relative z-10 mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href={isAuthenticated ? "/clubs" : "/register"}
-              className="pointer-events-auto rounded-xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-500 hover:scale-105 active:scale-95"
+    return (
+        <main
+            style={{
+                minHeight: "100vh",
+                backgroundColor: "var(--color-bg)",
+                overflowX: "hidden",
+            }}
+        >
+            {/* ════════════════════════════════════════
+                HERO SECTION
+                ════════════════════════════════════════ */}
+            <section
+                style={{
+                    paddingTop: "clamp(80px, 12vw, 160px)",
+                    paddingBottom: "clamp(80px, 10vw, 140px)",
+                    paddingLeft: "var(--container-padding)",
+                    paddingRight: "var(--container-padding)",
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                }}
             >
-              {isAuthenticated ? "Kulüpleri Keşfet" : "Hemen Katıl"}
-            </Link>
-            {!isAuthenticated && (
-              <Link href="/login" className="pointer-events-auto text-sm font-bold leading-6 text-zinc-900 transition-colors hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400">
-                Giriş Yap <span aria-hidden="true">→</span>
-              </Link>
-            )}
-            {isAuthenticated && (
-              <Link href="/profile" className="flex items-center gap-2 text-sm font-bold leading-6 text-zinc-900 transition-colors hover:text-blue-600 dark:text-zinc-100 dark:hover:text-blue-400">
-                Profiline Git <ArrowRight size={16} />
-              </Link>
-            )}
-          </div>
-        </div>
+                {/* Section marker */}
+                <p
+                    className="animate-fade-in label"
+                    style={{
+                        color: "var(--color-ink-tertiary)",
+                        marginBottom: "32px",
+                    }}
+                >
+                    (topluluk platformu)
+                </p>
 
-        {/* Feature Cards Grid (Desktop View) */}
-        <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
-          <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:w-[40rem]">
-              <div className="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600">
-                  <MessageSquare size={24} />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-zinc-900 dark:text-zinc-100">Gerçek Zamanlı Sohbet</h3>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Kulüp üyeleriyle anlık mesajlaşın, fikirlerinizi anında paylaşın.</p>
-              </div>
+                <div className="flex flex-col lg:flex-row lg:items-end lg:gap-16">
+                    {/* Heading */}
+                    <div className="flex-1">
+                        <h1
+                            className="animate-fade-in-up display-xl"
+                            style={{
+                                color: "var(--color-ink)",
+                                maxWidth: "720px",
+                            }}
+                        >
+                            Topluluklar,
+                            <br />
+                            <em
+                                style={{
+                                    fontStyle: "italic",
+                                    fontWeight: 400,
+                                }}
+                            >
+                                Burada
+                            </em>{" "}
+                            Yaşıyor.
+                        </h1>
+                    </div>
 
-              <div className="mt-0 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 sm:mt-8">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600">
-                  <Calendar size={24} />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-zinc-900 dark:text-zinc-100">Etkinlik Yönetimi</h3>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Dijital veya fiziksel etkinlikler oluşturun, katılımcıları takip edin.</p>
-              </div>
+                    {/* Right column: desc + CTAs */}
+                    <div
+                        className="animate-fade-in delay-200 mt-10 lg:mt-0"
+                        style={{ maxWidth: "400px", flexShrink: 0 }}
+                    >
+                        <p
+                            className="body-lg"
+                            style={{
+                                color: "var(--color-ink-secondary)",
+                                marginBottom: "40px",
+                            }}
+                        >
+                            Kulüpler oluştur, ortak ilgi alanlarına sahip insanlarla tanış ve etkinliklerini
+                            tek bir yerden yönet.
+                        </p>
 
-              <div className="rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600">
-                  <Users size={24} />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-zinc-900 dark:text-zinc-100">Üye Yönetimi</h3>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Roller atayın, moderasyonu sağlayın ve güvenli bir ortam kurun.</p>
-              </div>
+                        <div className="flex flex-wrap items-center gap-4">
+                            <Link
+                                href={isAuthenticated ? "/clubs" : "/register"}
+                                className="btn btn-primary btn-lg"
+                                style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
+                            >
+                                {isAuthenticated ? "Kulüpleri Keşfet" : "Ücretsiz Başla"}
+                                <ArrowRight size={16} />
+                            </Link>
 
-              <div className="mt-0 rounded-3xl border border-zinc-200 bg-white p-8 shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/50 sm:mt-8">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500/10 text-orange-600">
-                  <Sparkles size={24} />
+                            {!isAuthenticated && (
+                                <Link
+                                    href="/login"
+                                    className="btn btn-ghost btn-lg"
+                                >
+                                    Giriş Yap
+                                </Link>
+                            )}
+
+                            {isAuthenticated && (
+                                <Link
+                                    href="/profile"
+                                    className="link-underline body-sm"
+                                    style={{
+                                        color: "var(--color-ink-secondary)",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "4px",
+                                    }}
+                                >
+                                    Profiline Git →
+                                </Link>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-zinc-900 dark:text-zinc-100">Keşfet</h3>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Yüzlerce kategori arasından size en uygun topluluğu bulun.</p>
-              </div>
+            </section>
+
+            {/* ════════════════════════════════════════
+                MARQUEE BANNER
+                ════════════════════════════════════════ */}
+            <div
+                style={{
+                    borderTop: "1px solid var(--color-border)",
+                    borderBottom: "1px solid var(--color-border)",
+                    padding: "14px 0",
+                    overflow: "hidden",
+                }}
+            >
+                <div className="marquee-wrapper">
+                    <div className="marquee-track">
+                        {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+                            <span
+                                key={i}
+                                className="label"
+                                style={{
+                                    color: "var(--color-ink-secondary)",
+                                    padding: "0 28px",
+                                    flexShrink: 0,
+                                    letterSpacing: "0.1em",
+                                }}
+                            >
+                                {item}
+                                <span style={{ marginLeft: "28px", color: "var(--color-border-strong)" }}>
+                                    •
+                                </span>
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Stats Section */}
-      <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-4xl">Geleceğin Topluluğunu Birlikte İnşa Edelim</h2>
-          <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Modern mimarimiz ve hız odaklı yapımızla topluluk deneyiminizi bir üst seviyeye taşıyoruz.
-          </p>
-        </div>
-        <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-zinc-900 dark:text-zinc-100 sm:mt-20 sm:grid-cols-3 lg:mx-0 lg:max-w-none">
-          <div className="flex flex-col gap-y-3 border-l border-zinc-200 pl-6 dark:border-zinc-800">
-            <dt className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">Hız & Performans</dt>
-            <dd className="order-first text-3xl font-semibold tracking-tight italic">
-              <Zap className="mb-1 inline-block text-yellow-500" /> %100 Turbopack
-            </dd>
-          </div>
-          <div className="flex flex-col gap-y-3 border-l border-zinc-200 pl-6 dark:border-zinc-800">
-            <dt className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">Güvenlik</dt>
-            <dd className="order-first text-3xl font-semibold tracking-tight">
-              <Shield className="mb-1 inline-block text-blue-500" /> JWT Koruma
-            </dd>
-          </div>
-          <div className="flex flex-col gap-y-3 border-l border-zinc-200 pl-6 dark:border-zinc-800">
-            <dt className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">Kullanılabilirlik</dt>
-            <dd className="order-first text-3xl font-semibold tracking-tight">Modern UI</dd>
-          </div>
-        </dl>
-      </div>
-
-      {/* CTA Section */}
-      <div className="mx-auto my-32 max-w-7xl px-6 sm:my-48 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-zinc-900 px-6 py-24 text-center shadow-2xl rounded-3xl sm:px-16 dark:bg-white dark:text-zinc-900">
-          <h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white dark:text-zinc-900 sm:text-4xl">
-            {isAuthenticated ? "Topluluğunu Büyütmeye Devam Et" : "Bugün Başlamaya Hazır Mısın?"}
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-zinc-400 dark:text-zinc-500">
-            {isAuthenticated
-              ? "Kulüplerini yönetmek ve yeni etkinlikler oluşturmak için hemen başla."
-              : "Kendi topluluğunu kurmak sadece birkaç saniye sürer. Ücretsiz üye ol ve keşfetmeye başla."}
-          </p>
-          <div className="relative z-10 mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href={isAuthenticated ? "/profile" : "/register"}
-              className="pointer-events-auto rounded-xl bg-white px-8 py-4 text-base font-bold text-zinc-900 shadow-xl transition-all hover:bg-zinc-100 hover:scale-105 active:scale-95 dark:bg-zinc-950 dark:text-white dark:hover:bg-zinc-900"
+            {/* ════════════════════════════════════════
+                FEATURES SECTION
+                ════════════════════════════════════════ */}
+            <section
+                className="section-padding"
+                style={{
+                    paddingLeft: "var(--container-padding)",
+                    paddingRight: "var(--container-padding)",
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                }}
             >
-              {isAuthenticated ? "Profiline Git" : "Şimdi Kayıt Ol"}
-            </Link>
-            <Link href="/clubs" className="pointer-events-auto text-base font-bold leading-6 text-white">
-              Kulüplere Göz At <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <svg
-            viewBox="0 0 1024 1024"
-            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
-            aria-hidden="true"
-          >
-            <circle cx={512} cy={512} r={512} fill="url(#gradient)" fillOpacity="0.7" />
-            <defs>
-              <radialGradient id="gradient">
-                <stop stopColor="#3b82f6" />
-                <stop offset={1} stopColor="#6366f1" />
-              </radialGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
+                {/* Section header */}
+                <div
+                    className="flex flex-col md:flex-row md:items-end md:justify-between"
+                    style={{ marginBottom: "80px" }}
+                >
+                    <div>
+                        <p
+                            className="label animate-fade-in"
+                            style={{ color: "var(--color-ink-tertiary)", marginBottom: "16px" }}
+                        >
+                            (özellikler)
+                        </p>
+                        <h2
+                            className="display-md animate-fade-in-up"
+                            style={{ color: "var(--color-ink)", maxWidth: "520px" }}
+                        >
+                            Her şey bir arada,
+                            <br />
+                            <em style={{ fontStyle: "italic", fontWeight: 400 }}>sade</em> ve hızlı.
+                        </h2>
+                    </div>
 
-      <footer className="border-t border-zinc-200 bg-zinc-50 py-12 dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="container mx-auto px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
-          <p>&copy; {new Date().getFullYear()} ClubHub Web. Tüm hakları saklıdır.</p>
-        </div>
-      </footer>
-    </main>
-  );
+                    <Link
+                        href="/clubs"
+                        className="animate-fade-in delay-300 link-underline body-sm mt-6 md:mt-0"
+                        style={{
+                            color: "var(--color-ink-secondary)",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            flexShrink: 0,
+                        }}
+                    >
+                        Tüm kulüpleri gör →
+                    </Link>
+                </div>
+
+                {/* Feature grid */}
+                <div
+                    className="grid gap-px"
+                    style={{
+                        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: "var(--radius-lg)",
+                        overflow: "hidden",
+                        backgroundColor: "var(--color-border)",
+                    }}
+                >
+                    {FEATURES.map((feature, i) => {
+                        const Icon = feature.icon;
+                        return (
+                            <div
+                                key={i}
+                                className="animate-fade-in-up group"
+                                style={{
+                                    animationDelay: `${i * 80}ms`,
+                                    padding: "40px 36px",
+                                    backgroundColor: "var(--color-bg)",
+                                    transition: "background-color var(--transition-base)",
+                                }}
+                                onMouseEnter={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                                        "var(--color-surface)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor =
+                                        "var(--color-bg)";
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        width: "44px",
+                                        height: "44px",
+                                        borderRadius: "var(--radius-md)",
+                                        border: "1px solid var(--color-border)",
+                                        backgroundColor: "var(--color-surface)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        marginBottom: "24px",
+                                        color: "var(--color-ink-secondary)",
+                                        transition: "all var(--transition-base)",
+                                    }}
+                                    className="group-hover:border-current group-hover:text-[var(--color-ink)]"
+                                >
+                                    <Icon size={20} strokeWidth={1.5} />
+                                </div>
+
+                                <h3
+                                    className="heading-sm"
+                                    style={{
+                                        color: "var(--color-ink)",
+                                        marginBottom: "12px",
+                                    }}
+                                >
+                                    {feature.title}
+                                </h3>
+
+                                <p
+                                    className="body-sm"
+                                    style={{ color: "var(--color-ink-secondary)" }}
+                                >
+                                    {feature.description}
+                                </p>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* ════════════════════════════════════════
+                STATS SECTION  (Motto style: left border stripe)
+                ════════════════════════════════════════ */}
+            <section
+                style={{
+                    paddingTop: "0",
+                    paddingBottom: "var(--section-padding-y)",
+                    paddingLeft: "var(--container-padding)",
+                    paddingRight: "var(--container-padding)",
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                }}
+            >
+                {/* Divider */}
+                <div
+                    style={{
+                        borderTop: "1px solid var(--color-border)",
+                        marginBottom: "80px",
+                    }}
+                />
+
+                <p
+                    className="label"
+                    style={{ color: "var(--color-ink-tertiary)", marginBottom: "48px" }}
+                >
+                    (platform)
+                </p>
+
+                <div
+                    className="grid gap-8"
+                    style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+                >
+                    {STATS.map((stat, i) => (
+                        <div
+                            key={i}
+                            className="animate-fade-in-up"
+                            style={{
+                                animationDelay: `${i * 100}ms`,
+                                paddingLeft: "24px",
+                                borderLeft: "1px solid var(--color-border)",
+                            }}
+                        >
+                            <div
+                                className="display-md"
+                                style={{
+                                    color: "var(--color-ink)",
+                                    marginBottom: "8px",
+                                }}
+                            >
+                                {stat.value}
+                            </div>
+                            <p
+                                className="body-sm"
+                                style={{ color: "var(--color-ink-secondary)" }}
+                            >
+                                {stat.label}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ════════════════════════════════════════
+                CTA SECTION
+                ════════════════════════════════════════ */}
+            <section
+                style={{
+                    paddingLeft: "var(--container-padding)",
+                    paddingRight: "var(--container-padding)",
+                    paddingBottom: "var(--section-padding-y)",
+                    maxWidth: "1280px",
+                    margin: "0 auto",
+                }}
+            >
+                <div
+                    className="animate-fade-in-up"
+                    style={{
+                        backgroundColor: "var(--color-ink)",
+                        borderRadius: "var(--radius-xl)",
+                        padding: "clamp(48px, 8vw, 96px) clamp(32px, 6vw, 80px)",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: "40px",
+                        position: "relative",
+                        overflow: "hidden",
+                    }}
+                >
+                    {/* Subtle background texture */}
+                    <div
+                        aria-hidden
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage:
+                                "radial-gradient(circle at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 60%)",
+                            pointerEvents: "none",
+                        }}
+                    />
+
+                    <p
+                        className="label"
+                        style={{ color: "rgba(255,255,255,0.4)", position: "relative" }}
+                    >
+                        {isAuthenticated ? "(topluluğunu büyüt)" : "(başlamaya hazır mısın?)"}
+                    </p>
+
+                    <h2
+                        className="display-lg"
+                        style={{
+                            color: "#FFFFFF",
+                            maxWidth: "640px",
+                            position: "relative",
+                        }}
+                    >
+                        {isAuthenticated
+                            ? "Topluluğunu büyütmeye devam et."
+                            : "Topluluğun seni bekliyor."}
+                    </h2>
+
+                    <p
+                        className="body-lg"
+                        style={{
+                            color: "rgba(255,255,255,0.55)",
+                            maxWidth: "480px",
+                            position: "relative",
+                        }}
+                    >
+                        {isAuthenticated
+                            ? "Kulüplerini yönet, yeni etkinlikler oluştur ve topluluğunla bağlantıda kal."
+                            : "Kendi topluluğunu kurmak sadece birkaç saniye sürer. Ücretsiz üye ol ve keşfetmeye başla."}
+                    </p>
+
+                    <div
+                        className="flex flex-wrap gap-4"
+                        style={{ position: "relative" }}
+                    >
+                        <Link
+                            href={isAuthenticated ? "/profile" : "/register"}
+                            className="btn btn-xl"
+                            style={{
+                                backgroundColor: "#FFFFFF",
+                                color: "var(--color-ink)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                            }}
+                            onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = "#F0EFE9";
+                            }}
+                            onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = "#FFFFFF";
+                            }}
+                        >
+                            {isAuthenticated ? "Profiline Git" : "Hemen Başla"}
+                            <ArrowRight size={16} />
+                        </Link>
+
+                        <Link
+                            href="/clubs"
+                            className="btn btn-xl"
+                            style={{
+                                backgroundColor: "transparent",
+                                color: "rgba(255,255,255,0.7)",
+                                border: "1px solid rgba(255,255,255,0.2)",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "8px",
+                            }}
+                            onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.5)";
+                                (e.currentTarget as HTMLElement).style.color = "#FFFFFF";
+                            }}
+                            onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
+                                (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)";
+                            }}
+                        >
+                            Kulüplere Göz At
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* ════════════════════════════════════════
+                FOOTER
+                ════════════════════════════════════════ */}
+            <footer
+                style={{
+                    borderTop: "1px solid var(--color-border)",
+                    backgroundColor: "var(--color-bg-secondary)",
+                }}
+            >
+                <div
+                    style={{
+                        maxWidth: "1280px",
+                        margin: "0 auto",
+                        padding: "48px var(--container-padding)",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "40px",
+                    }}
+                >
+                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+                        {/* Brand col */}
+                        <div>
+                            <p
+                                style={{
+                                    fontFamily: "var(--font-sans)",
+                                    fontSize: "18px",
+                                    fontWeight: 700,
+                                    letterSpacing: "-0.03em",
+                                    color: "var(--color-ink)",
+                                    marginBottom: "12px",
+                                }}
+                            >
+                                Cluber
+                            </p>
+                            <p
+                                className="body-sm"
+                                style={{ color: "var(--color-ink-tertiary)", maxWidth: "280px" }}
+                            >
+                                Toplulukların dijital merkezi. Kulüp oluştur, katıl, bağlantı kur.
+                            </p>
+                        </div>
+
+                        {/* Links col */}
+                        <div className="flex flex-wrap gap-12">
+                            <div>
+                                <p
+                                    className="label"
+                                    style={{ color: "var(--color-ink-tertiary)", marginBottom: "16px" }}
+                                >
+                                    Platform
+                                </p>
+                                <div className="flex flex-col gap-3">
+                                    {[
+                                        { name: "Kulüpler", href: "/clubs" },
+                                        { name: "Etkinlik Oluştur", href: "/events/create" },
+                                    ].map((link) => (
+                                        <Link
+                                            key={link.href}
+                                            href={link.href}
+                                            className="body-sm link-underline"
+                                            style={{ color: "var(--color-ink-secondary)" }}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <p
+                                    className="label"
+                                    style={{ color: "var(--color-ink-tertiary)", marginBottom: "16px" }}
+                                >
+                                    Hesap
+                                </p>
+                                <div className="flex flex-col gap-3">
+                                    {[
+                                        { name: "Giriş Yap", href: "/login" },
+                                        { name: "Kayıt Ol", href: "/register" },
+                                        { name: "Profil", href: "/profile" },
+                                    ].map((link) => (
+                                        <Link
+                                            key={link.href}
+                                            href={link.href}
+                                            className="body-sm link-underline"
+                                            style={{ color: "var(--color-ink-secondary)" }}
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom bar */}
+                    <div
+                        style={{
+                            borderTop: "1px solid var(--color-border)",
+                            paddingTop: "24px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                        }}
+                    >
+                        <p
+                            className="caption"
+                            style={{ color: "var(--color-ink-tertiary)" }}
+                        >
+                            © {new Date().getFullYear()} Cluber. Tüm hakları saklıdır.
+                        </p>
+                        <p
+                            className="caption"
+                            style={{ color: "var(--color-ink-tertiary)" }}
+                        >
+                            Topluluklar, burada yaşıyor.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    );
 }
