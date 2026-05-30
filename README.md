@@ -60,6 +60,7 @@
 | 🏢 **Kulüp Keşfi** | Çeşitli ilgi alanlarına hitap eden kulüpleri bulma, filtreleme ve katılma | React Query + Pagination |
 | 📋 **Kulüp Yönetimi** | Kulüp oluşturma, düzenleme, üye yönetimi, admin paneli | CRUD API + React Query |
 | 💬 **Gerçek Zamanlı İletişim** | Kulüp bazlı entegre chat odalarında anlık mesajlaşma | Socket.IO Client v4 |
+| 🤖 **Yapay Zeka Destekli Profil Analizi** | Kullanıcının kulüplerine göre karakter yorumu ve akıllı kulüp önerileri | OpenRouter AI + React Query |
 | 📅 **Etkinlik Yönetimi** | Geçmiş ve gelecek etkinliklerin takibi, RSVP sistemi | Form + Date-fns |
 | 📧 **Otomatik Hatırlatma** | Etkinlik başlangıcına 24 saat kalan katılımcılara e-posta | Backend Cron Job |
 | ✉️ **E-posta Doğrulama** | Kayıt sonrası 6 haneli doğrulama kodu | Nodemailer |
@@ -699,7 +700,7 @@ npm run dev
 
 ## 📊 Proje Durumu
 
-### Tamamlanan Özellikler (23/23)
+### Tamamlanan Özellikler (24/24)
 
 ✅ Landing Page  
 ✅ Kayıt & Giriş  
@@ -724,6 +725,7 @@ npm run dev
 ✅ E-posta Doğrulama  
 ✅ Cron Job (Event Reminder)  
 ✅ Arama & Filtreleme  
+✅ Yapay Zeka Destekli Profil Analizi (OpenRouter)  
 ✅ Test Altyapısı (111 test)  
 
 ### Yapılacaklar (İsteğe Bağlı)
