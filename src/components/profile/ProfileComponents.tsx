@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { useJoinedClubs } from "@/hooks/clubs/useClubs";
 import { useUpdateProfile } from "@/hooks/users/useUser";
-import { Pencil, X, Loader2, Check, Key, ArrowRight } from "lucide-react";
+import { useJoinedClubs } from "@/hooks/clubs/useClubs";
+import { Pencil, X, Loader2, Check, Key, Sparkles } from "lucide-react";
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,7 +20,11 @@ const profileSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-export function ProfileHeader() {
+interface ProfileHeaderProps {
+    onOpenAI: () => void;
+}
+
+export function ProfileHeader({ onOpenAI }: ProfileHeaderProps) {
     const { sessionQuery } = useAuth();
     const user = sessionQuery.data;
     const [isEditing, setIsEditing] = useState(false);
@@ -141,6 +145,22 @@ export function ProfileHeader() {
                             >
                                 <Key size={14} />
                                 Şifre Değiştir
+                            </button>
+                            {/* AI Insight Button */}
+                            <button
+                                onClick={onOpenAI}
+                                className="btn btn-ghost btn-sm"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "6px",
+                                    background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1))",
+                                    border: "1px solid rgba(99,102,241,0.25)",
+                                    color: "#6366f1",
+                                }}
+                            >
+                                <Sparkles size={14} />
+                                AI Yorumu &amp; Öneriler
                             </button>
                         </div>
                     </div>

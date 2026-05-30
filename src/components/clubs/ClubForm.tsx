@@ -28,7 +28,19 @@ export const ClubForm = ({ initialData }: ClubFormProps) => {
     const createMutation = useCreateClub();
     const updateMutation = useUpdateClub(initialData?.id || "");
 
-    const categories = ["Teknoloji", "Spor", "Müzik", "Sanat", "Oyun", "Eğitim", "Diğer"];
+    const categories = [
+        "Teknoloji",
+        "Spor",
+        "Müzik",
+        "Sanat",
+        "Bilim",
+        "İş & Kariyer",
+        "Oyun",
+        "Eğitim",
+        "Edebiyat",
+        "Sinema",
+        "Diğer",
+    ];
 
     const {
         register,

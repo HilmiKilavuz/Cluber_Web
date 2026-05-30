@@ -28,6 +28,12 @@ export interface Event {
     _count?: {
         participants: number;
     };
+    club?: {
+        id: string;
+        name: string;
+        category: string;
+        imageUrl?: string | null;
+    };
     createdAt: string;
     updatedAt: string;
 }

@@ -27,8 +27,13 @@ export function EventCard({ event }: EventCardProps) {
     const participantCount = event._count?.participants || event.participants?.length || 0;
     const isFull = event.maxParticipants ? participantCount >= event.maxParticipants : false;
     const isLoading = rsvpMutation.isPending || cancelRSVPMutation.isPending;
+    const isPast = new Date(event.date) < new Date();
 
     const handleRSVP = async () => {
+        if (isPast) {
+            toast.error("Geçmiş bir etkinliğe katılamazsınız.");
+            return;
+        }
         if (!user) {
             toast.error("Katılmak için giriş yapmalısınız.");
             return;
@@ -81,10 +86,63 @@ export function EventCard({ event }: EventCardProps) {
                     gap: "12px",
                 }}
             >
-                {/* Category badge */}
-                <span className="badge-base" style={{ display: "inline-flex", alignSelf: "flex-start" }}>
-                    {event.category || "Genel"}
-                </span>
+                {/* Club and Category row */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                    {event.club && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <div
+                                style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "var(--radius-full)",
+                                    backgroundColor: "var(--color-bg-secondary)",
+                                    border: "1px solid var(--color-border)",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    overflow: "hidden",
+                                    flexShrink: 0,
+                                }}
+                            >
+                                {event.club.imageUrl ? (
+                                    <img
+                                        src={event.club.imageUrl}
+                                        alt={event.club.name}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
+                                ) : (
+                                    <span
+                                        style={{
+                                            fontSize: "9px",
+                                            fontWeight: 600,
+                                            color: "var(--color-ink-secondary)",
+                                            fontFamily: "var(--font-sans)",
+                                        }}
+                                    >
+                                        {event.club.name.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
+                            </div>
+                            <span
+                                className="caption"
+                                style={{
+                                    fontWeight: 600,
+                                    color: "var(--color-ink)",
+                                    fontFamily: "var(--font-sans)",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    maxWidth: "110px",
+                                }}
+                            >
+                                {event.club.name}
+                            </span>
+                        </div>
+                    )}
+                    <span className="badge-base" style={{ display: "inline-flex", alignSelf: "center", height: "20px", padding: "0 8px", fontSize: "10px" }}>
+                        {event.club?.category || event.category || "Genel"}
+                    </span>
+                </div>
 
                 {/* Title */}
                 <h3
@@ -95,6 +153,7 @@ export function EventCard({ event }: EventCardProps) {
                         display: "-webkit-box",
                         WebkitLineClamp: 1,
                         WebkitBoxOrient: "vertical",
+                        marginTop: "4px",
                     }}
                 >
                     {event.title}
@@ -157,7 +216,7 @@ export function EventCard({ event }: EventCardProps) {
                 {/* RSVP button */}
                 <button
                     onClick={handleRSVP}
-                    disabled={isLoading}
+                    disabled={isLoading || isPast}
                     style={{
                         marginTop: "auto",
                         width: "100%",
@@ -170,28 +229,35 @@ export function EventCard({ event }: EventCardProps) {
                         fontSize: "13px",
                         fontWeight: 500,
                         fontFamily: "var(--font-sans)",
-                        cursor: isLoading || isFull ? "not-allowed" : "pointer",
+                        cursor: isLoading || isFull || isPast ? "not-allowed" : "pointer",
                         transition: "all var(--transition-fast)",
                         opacity: isLoading ? 0.7 : 1,
-                        ...(isParticipant
+                        ...(isPast
+                            ? {
+                                backgroundColor: "var(--color-bg-secondary)",
+                                color: "var(--color-ink-tertiary)",
+                                border: "1px solid var(--color-border)",
+                            }
+                            : isParticipant
                             ? {
                                 backgroundColor: "var(--color-success-bg)",
                                 color: "var(--color-success)",
                                 border: "1px solid color-mix(in srgb, var(--color-success) 25%, transparent)",
                             }
                             : isFull
-                                ? {
-                                    backgroundColor: "var(--color-bg-secondary)",
-                                    color: "var(--color-ink-tertiary)",
-                                    border: "1px solid var(--color-border)",
-                                }
-                                : {
-                                    backgroundColor: "var(--color-accent)",
-                                    color: "var(--color-accent-fg)",
-                                    border: "1px solid transparent",
-                                }),
+                            ? {
+                                backgroundColor: "var(--color-bg-secondary)",
+                                color: "var(--color-ink-tertiary)",
+                                border: "1px solid var(--color-border)",
+                            }
+                            : {
+                                backgroundColor: "var(--color-accent)",
+                                color: "var(--color-accent-fg)",
+                                border: "1px solid transparent",
+                            }),
                     }}
                     onMouseEnter={(e) => {
+                        if (isPast) return;
                         if (!isLoading && !isFull && isParticipant) {
                             (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-error-bg)";
                             (e.currentTarget as HTMLElement).style.color = "var(--color-error)";
@@ -202,6 +268,7 @@ export function EventCard({ event }: EventCardProps) {
                         }
                     }}
                     onMouseLeave={(e) => {
+                        if (isPast) return;
                         if (isParticipant) {
                             (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-success-bg)";
                             (e.currentTarget as HTMLElement).style.color = "var(--color-success)";
@@ -214,6 +281,8 @@ export function EventCard({ event }: EventCardProps) {
                 >
                     {isLoading ? (
                         <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />
+                    ) : isPast ? (
+                        isParticipant ? "Katıldınız" : "Sona Erdi"
                     ) : isParticipant ? (
                         <>
                             <CheckCircle2 size={14} />

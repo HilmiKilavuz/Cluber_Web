@@ -11,6 +11,7 @@ import {
     Menu,
     X,
     CalendarPlus,
+    CalendarDays,
     ArrowRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -42,6 +43,7 @@ export default function Header() {
     ];
 
     if (isAuthenticated) {
+        navLinks.push({ name: "Etkinlikler", href: "/events", icon: CalendarDays });
         navLinks.push({ name: "Etkinlik Oluştur", href: "/events/create", icon: CalendarPlus });
         navLinks.push({ name: "Profilim", href: "/profile", icon: User });
     }
@@ -144,7 +146,7 @@ export default function Header() {
                                     {user.avatarUrl ? (
                                         <img
                                             src={user.avatarUrl}
-                                            alt={user.username}
+                                            alt={user.displayName}
                                             className="h-full w-full object-cover"
                                         />
                                     ) : (
@@ -156,7 +158,7 @@ export default function Header() {
                                                 fontFamily: "var(--font-sans)",
                                             }}
                                         >
-                                            {user.username?.charAt(0).toUpperCase() || "U"}
+                                            {user.displayName?.charAt(0).toUpperCase() || "U"}
                                         </span>
                                     )}
                                 </div>
@@ -168,7 +170,7 @@ export default function Header() {
                                         fontFamily: "var(--font-sans)",
                                     }}
                                 >
-                                    {user.username}
+                                    {user.displayName}
                                 </span>
                             </Link>
 

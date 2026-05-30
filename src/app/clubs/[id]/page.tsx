@@ -554,48 +554,7 @@ export default function ClubDetailPage() {
                             </div>
                         </section>
 
-                        {/* Dark info card */}
-                        <div
-                            style={{
-                                backgroundColor: "var(--color-ink)",
-                                borderRadius: "var(--radius-lg)",
-                                padding: "28px 24px",
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "12px",
-                            }}
-                        >
-                            <h3
-                                className="heading-sm"
-                                style={{ color: "#FFFFFF" }}
-                            >
-                                Resmi Kulüp
-                            </h3>
-                            <p
-                                className="body-sm"
-                                style={{ color: "rgba(255,255,255,0.5)" }}
-                            >
-                                Bu kulüp topluluk kurallarına uygun olarak oluşturulmuştur.
-                            </p>
-                            <button
-                                className="btn btn-md"
-                                style={{
-                                    width: "100%",
-                                    marginTop: "4px",
-                                    backgroundColor: "rgba(255,255,255,0.12)",
-                                    color: "#FFFFFF",
-                                    border: "1px solid rgba(255,255,255,0.2)",
-                                }}
-                                onMouseEnter={(e) => {
-                                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.2)";
-                                }}
-                                onMouseLeave={(e) => {
-                                    (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.12)";
-                                }}
-                            >
-                                Paylaş
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>

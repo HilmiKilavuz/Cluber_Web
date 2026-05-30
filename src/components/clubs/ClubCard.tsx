@@ -1,12 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import type { Club } from "@/types/club";
 import { Users, ArrowRight } from "lucide-react";
 
 interface ClubCardProps {
     club: Club;
+    isAuthenticated?: boolean;
+    onAuthRequired?: () => void;
 }
 
-export const ClubCard = ({ club }: ClubCardProps) => {
+export const ClubCard = ({ club, isAuthenticated = true, onAuthRequired }: ClubCardProps) => {
+    const handleProtectedClick = (e: React.MouseEvent) => {
+        if (!isAuthenticated) {
+            e.preventDefault();
+            onAuthRequired?.();
+        }
+    };
+
     return (
         <div
             className="card-base group animate-fade-in"
@@ -120,6 +131,7 @@ export const ClubCard = ({ club }: ClubCardProps) => {
                     <Link
                         href={`/clubs/${club.id}`}
                         style={{ textDecoration: "none", color: "inherit" }}
+                        onClick={handleProtectedClick}
                         onMouseEnter={(e) => {
                             (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)";
                         }}
@@ -188,6 +200,7 @@ export const ClubCard = ({ club }: ClubCardProps) => {
                             gap: "4px",
                             textDecoration: "none",
                         }}
+                        onClick={handleProtectedClick}
                         onMouseEnter={(e) => {
                             (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-accent-hover)";
                             (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";

@@ -3,8 +3,8 @@
 import { useClubs } from "@/hooks/clubs/useClubs";
 import type { Club } from "@/types/club";
 import { ClubCard } from "@/components/clubs/ClubCard";
-import { Search, Loader2, Plus, Inbox } from "lucide-react";
-import { useState, useEffect, Suspense } from "react";
+import { Search, Loader2, Plus, Inbox, Lock, ArrowRight, X } from "lucide-react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -19,11 +19,202 @@ const CATEGORIES = [
     "Bilim",
     "İş & Kariyer",
     "Oyun",
+    "Eğitim",
     "Edebiyat",
     "Sinema",
     "Diğer",
 ];
 
+/* ════════════════════════════════
+   AUTH REQUIRED MODAL
+   ════════════════════════════════ */
+function AuthRequiredModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+    // Close on ESC key
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        document.addEventListener("keydown", handleKey);
+        return () => document.removeEventListener("keydown", handleKey);
+    }, [isOpen, onClose]);
+
+    // Prevent body scroll when modal is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+
+    if (!isOpen) return null;
+
+    return (
+        <div
+            onClick={onClose}
+            style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 9999,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "24px",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backdropFilter: "blur(6px)",
+                animation: "fadeIn 0.18s ease-out",
+            }}
+        >
+            <div
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                    backgroundColor: "var(--color-surface)",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "var(--radius-xl, 20px)",
+                    boxShadow: "0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08)",
+                    maxWidth: "420px",
+                    width: "100%",
+                    overflow: "hidden",
+                    animation: "slideUpFade 0.22s ease-out",
+                }}
+            >
+                {/* Modal Header */}
+                <div
+                    style={{
+                        padding: "24px 24px 0",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    {/* Lock icon */}
+                    <div
+                        style={{
+                            width: "48px",
+                            height: "48px",
+                            borderRadius: "var(--radius-md)",
+                            backgroundColor: "var(--color-bg-secondary)",
+                            border: "1px solid var(--color-border)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                        }}
+                    >
+                        <Lock size={20} strokeWidth={1.5} style={{ color: "var(--color-ink)" }} />
+                    </div>
+
+                    {/* Close button */}
+                    <button
+                        onClick={onClose}
+                        style={{
+                            width: "32px",
+                            height: "32px",
+                            borderRadius: "var(--radius-md)",
+                            border: "1px solid var(--color-border)",
+                            backgroundColor: "var(--color-bg-secondary)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                            color: "var(--color-ink-secondary)",
+                            transition: "all var(--transition-fast)",
+                            flexShrink: 0,
+                        }}
+                        onMouseEnter={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-border)";
+                            (e.currentTarget as HTMLElement).style.color = "var(--color-ink)";
+                        }}
+                        onMouseLeave={(e) => {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = "var(--color-bg-secondary)";
+                            (e.currentTarget as HTMLElement).style.color = "var(--color-ink-secondary)";
+                        }}
+                        aria-label="Kapat"
+                    >
+                        <X size={14} strokeWidth={2} />
+                    </button>
+                </div>
+
+                {/* Modal Body */}
+                <div style={{ padding: "20px 24px 28px" }}>
+                    <h2
+                        className="heading-md"
+                        style={{
+                            color: "var(--color-ink)",
+                            marginBottom: "10px",
+                        }}
+                    >
+                        Giriş Yapmanız Gerekiyor
+                    </h2>
+                    <p
+                        className="body-sm"
+                        style={{
+                            color: "var(--color-ink-secondary)",
+                            marginBottom: "28px",
+                            lineHeight: 1.6,
+                        }}
+                    >
+                        Kulüp detaylarını görüntülemek, etkinliklere katılmak ve kulüplere üye olmak için
+                        hesabınıza giriş yapmanız gerekmektedir.
+                    </p>
+
+                    {/* Actions */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                        <Link
+                            href="/login?next=/clubs"
+                            className="btn btn-primary btn-md"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "8px",
+                                textDecoration: "none",
+                                width: "100%",
+                            }}
+                        >
+                            Giriş Yap
+                            <ArrowRight size={15} />
+                        </Link>
+
+                        <Link
+                            href="/register"
+                            className="btn btn-ghost btn-md"
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                textDecoration: "none",
+                                width: "100%",
+                                border: "1px solid var(--color-border)",
+                            }}
+                        >
+                            Hesap Oluştur
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideUpFade {
+                    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+            `}</style>
+        </div>
+    );
+}
+
+/* ════════════════════════════════
+   CLUBS CONTENT
+   ════════════════════════════════ */
 function ClubsContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -34,6 +225,7 @@ function ClubsContent() {
     const [search, setSearch] = useState(initialSearch);
     const [activeCategory, setActiveCategory] = useState(initialCategory);
     const [isMounted, setIsMounted] = useState(false);
+    const [showAuthModal, setShowAuthModal] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -79,6 +271,11 @@ function ClubsContent() {
 
     const { sessionQuery } = useAuth();
     const user = sessionQuery.data;
+    const isAuthenticated = isMounted && !!user;
+
+    const handleAuthRequired = useCallback(() => {
+        setShowAuthModal(true);
+    }, []);
 
     return (
         <main
@@ -87,6 +284,12 @@ function ClubsContent() {
                 backgroundColor: "var(--color-bg)",
             }}
         >
+            {/* Auth Required Modal */}
+            <AuthRequiredModal
+                isOpen={showAuthModal}
+                onClose={() => setShowAuthModal(false)}
+            />
+
             {/* ════════════════════════════════
                 PAGE HEADER
                 ════════════════════════════════ */}
@@ -130,7 +333,7 @@ function ClubsContent() {
                         </p>
                     </div>
 
-                    {/* CTA: Create Club */}
+                    {/* CTA: Create Club — only for logged-in users */}
                     {isMounted && user && (
                         <div className="animate-fade-in delay-200" style={{ flexShrink: 0 }}>
                             <Link
@@ -363,7 +566,11 @@ function ClubsContent() {
                                     key={club.id}
                                     style={{ animationDelay: `${Math.min(i * 40, 400)}ms` }}
                                 >
-                                    <ClubCard club={club} />
+                                    <ClubCard
+                                        club={club}
+                                        isAuthenticated={isAuthenticated}
+                                        onAuthRequired={handleAuthRequired}
+                                    />
                                 </div>
                             ))}
 

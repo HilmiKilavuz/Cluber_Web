@@ -11,6 +11,10 @@ const AUTH_COOKIE_CANDIDATES = [
 const AUTH_ROUTES = ["/login", "/register"] as const;
 const PROTECTED_ROUTE_PREFIXES = ["/clubs/create", "/events/create", "/chat"] as const;
 
+// Individual club pages require auth (but NOT /clubs listing)
+const isClubDetailRoute = (pathname: string): boolean =>
+  /^\/clubs\/[^/]+/.test(pathname) && !pathname.startsWith("/clubs/create");
+
 const hasAuthCookie = (request: NextRequest): boolean =>
   AUTH_COOKIE_CANDIDATES.some((cookieKey) =>
     Boolean(request.cookies.get(cookieKey)?.value),
@@ -31,7 +35,7 @@ export function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL("/", request.url));
   // }
 
-  if (isProtectedRoute(pathname) && !isAuthenticated) {
+  if ((isProtectedRoute(pathname) || isClubDetailRoute(pathname)) && !isAuthenticated) {
     const redirectTarget = `${pathname}${search}`;
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("next", redirectTarget);
@@ -43,6 +47,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/clubs/create/:path*", "/events/create/:path*", "/chat/:path*"],
+  matcher: ["/login", "/register", "/clubs/create/:path*", "/clubs/:id", "/clubs/:id/:path*", "/events/create/:path*", "/chat/:path*"],
 };
 

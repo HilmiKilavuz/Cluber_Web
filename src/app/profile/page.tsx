@@ -1,13 +1,32 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { useJoinedClubs } from "@/hooks/clubs/useClubs";
+import { useProfileInsight } from "@/hooks/ai/useProfileInsight";
 import { ProfileHeader, ProfileStats } from "@/components/profile/ProfileComponents";
 import { ClubCard } from "@/components/clubs/ClubCard";
+import { AIInsightCard } from "@/components/profile/AIInsightCard";
 import { Loader2, Compass, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function ProfilePage() {
     const { data: joinedClubs, isLoading } = useJoinedClubs();
+
+    // ── AI Insight state — lives here so mutations don't re-render the header ──
+    const [showAIInsight, setShowAIInsight] = useState(false);
+    const profileInsightMutation = useProfileInsight();
+
+    const handleOpenAI = useCallback(() => {
+        setShowAIInsight(true);
+        // Only fire if user has clubs AND we haven't fetched yet (avoids duplicate calls)
+        if (joinedClubs && joinedClubs.length > 0 && !profileInsightMutation.data && !profileInsightMutation.isPending) {
+            profileInsightMutation.mutate();
+        }
+    }, [joinedClubs, profileInsightMutation]);
+
+    const handleCloseAI = useCallback(() => {
+        setShowAIInsight(false);
+    }, []);
 
     return (
         <main
@@ -33,8 +52,8 @@ export default function ProfilePage() {
                     </p>
                 </div>
 
-                {/* Profile Header */}
-                <ProfileHeader />
+                {/* Profile Header — receives only a stable callback, no AI state */}
+                <ProfileHeader onOpenAI={handleOpenAI} />
 
                 {/* Stats */}
                 <ProfileStats />
@@ -146,6 +165,17 @@ export default function ProfilePage() {
                     )}
                 </section>
             </div>
+
+            {/* AI Insight Modal — rendered at page level, isolated from header re-renders */}
+            <AIInsightCard
+                isOpen={showAIInsight}
+                onClose={handleCloseAI}
+                isPending={profileInsightMutation.isPending}
+                isError={profileInsightMutation.isError}
+                errorMessage={profileInsightMutation.error?.message}
+                data={profileInsightMutation.data}
+                hasNoClubs={!joinedClubs || joinedClubs.length === 0}
+            />
         </main>
     );
 }
